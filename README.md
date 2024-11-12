@@ -12,7 +12,7 @@
 
 ## Description
 
-To provide developers with a platform to advertise their services to individuals and/or small businesses.
+DevDemand is a platform for developers to showcase their skills and connect with potential clients, empowering individuals and small businesses to find the right freelance talent for their projects.
 
 ![Screenshot of Application]()
 
@@ -23,7 +23,7 @@ To provide developers with a platform to advertise their services to individuals
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
-- [API Endpoints](#api-endpoints)
+- [GraphQL Queries and Mutations](#graphql-queries-and-mutations)
 - [Usage](#usage)
 - [Tests](#tests)
 - [Contributors](#contributors)
@@ -37,9 +37,6 @@ To provide developers with a platform to advertise their services to individuals
 - **Developer Management**:
 
   - Create, update, and delete Developer Profiles
-
-- **Contact Management**:
-  - Create and Delete Contact messages to Developers
 
 ---
 
@@ -114,29 +111,102 @@ _To install this project locally, using your terminal application, please follow
    npm run start
    ```
 
-7. **Test the API using Insomnia with the following API Endpoints...**
+7. **Test the API using Insomnia with the following GraphQL Queries and Mutations...**
 
 ---
 
-## API Endpoints
+## GraphQL Queries and Mutations
 
-- **Developer Routes**:
-  - `GET` /api/developers - Get all Developers
-  - `GET` /api/developers/:devId - Get a single Developer by ID
-  - `POST` /api/developers - Create a new Developer
-  - `PUT` /api/developers/:devId - Update and existing Developer
-  - `DELETE` /api/developers/:devId - Delete a Developer and their associated Messages
-  - **Contact Messages to Developers Routes**:
-    - `POST` /api/developers/:devId/contacts/:contactId - Send a Contact Inquiry Message to a Developer
-    - `DELETE` /api/devlopers/:devId/contacts/:contactId - Delete a Contact Inquiry Message from a Developer
+- **Developer Queries**:
+
+  - Fetch all Developers
+
+    ```graphql
+    query {
+      developers {
+        id
+        firstName
+        lastName
+        location
+        experience
+        hourlyRate
+        skillset
+        bio
+      }
+    }
+    ```
+
+  - Fetch a single Developer by ID
+
+    ```graphql
+    query ($id: ID!) {
+      developer(id: $id) {
+        id
+        firstName
+        lastName
+        location
+        experience
+        hourlyRate
+        skillset
+        bio
+      }
+    }
+    ```
+
+- **Developer Mutations**
+
+  - Add a new Developer
+
+    ```graphql
+    mutation ($input: DeveloperInput!) {
+      addDeveloper(input: $input) {
+        id
+        firstName
+        lastName
+        location
+        experience
+        hourlyRate
+        skillset
+        bio
+      }
+    }
+    ```
+
+  - Update an existing Developer
+
+    ```graphql
+    mutation ($id: ID!, $input: DeveloperUpdateInput!) {
+      updateDeveloper(id: $id, input: $input) {
+        id
+        firstName
+        lastName
+        location
+        experience
+        hourlyRate
+        skillset
+        bio
+      }
+    }
+    ```
+
+  - Delete a Developer
+
+    ```graphql
+    mutation ($id: ID!) {
+      deleteDeveloper(id: $id) {
+        success
+        message
+      }
+    }
+    ```
 
 ---
 
 ## Usage
 
-- Once the server is running, use Insomnia to test the API routes at the base URL: http://localhost:3001
+- Once the server is running, use Insomnia or any GraphQL client to test the GraphQL Queries and Mutations at the base URL: http://localhost:3001
 
-- Use the above Developer and Contact `API Endpoints` to:
+- Use the above Developer Queries and Mutations to:
 
   - Create
   - Read
@@ -145,21 +215,18 @@ _To install this project locally, using your terminal application, please follow
 
 - Example Developer Object JSON:
 
-```json
-{
-  "id": "example",
-  "firstName": "Ian",
-  "lastName": "Ferguson",
-  "location": "Phoenix, AZ",
-  "experience": "TONS",
-  "hourlyRate": "$125",
-  "skillset": ["html", "JavaScript", "etc."],
-  "bio": "👋 Full-stack developer with 20+ years in automotive and medical industries, focused on building efficient, user-centered web applications.",
-  "contacts": [],
-  "__v": 0,
-  "contactCount": 0
-}
-```
+  ```json
+  {
+    "id": "example",
+    "firstName": "Ian",
+    "lastName": "Ferguson",
+    "location": "Phoenix, AZ",
+    "experience": "20 Years",
+    "hourlyRate": "$125",
+    "skillset": ["html", "JavaScript", "etc."],
+    "bio": "👋 Full-stack developer with 20+ years in automotive and medical industries, focused on building efficient, user-centered web applications."
+  }
+  ```
 
 ---
 
@@ -167,7 +234,7 @@ _To install this project locally, using your terminal application, please follow
 
 **Cypress**
 
-Coming soon...
+Testing functionality with Cypress will be added soon...
 
 ---
 
@@ -192,7 +259,7 @@ If you have any questions or need help, feel free to reach out to any of the con
 
 ## License
 
-This project is covered under the MIT License. The details of the MIT License can be found on their site [HERE](https://opensource.org/licenses/MIT). You can also see the full details of the [LICENSE](./LICENSE) for this specific project in the linked file.
+This project is licensed under the MIT License. The details of the MIT License can be found on their site [HERE](https://opensource.org/licenses/MIT). You can also see the full details of the [LICENSE](./LICENSE) for this specific project in the linked file.
 
 <div align="center">
 <em>Copyright © 2024 Team DevDemand - powered by relentless teamwork, overcommunication, and a little bit of fun</em>
