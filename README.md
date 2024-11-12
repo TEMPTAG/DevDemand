@@ -42,17 +42,70 @@ DevDemand is a platform for developers to showcase their skills and connect with
 
 ## Technologies Used
 
-- **React**
-- **GraphQL**
-- **Node.js**
-- **Express.js**
-- **MongoDB**
-- **Mongoose ODM**
-- **Render**
-- **Cypress**
-- **GitHub Actions**
-- **JWT**
-- **nodemon**
+### Packages Used:
+
+- [**bcrypt**](https://www.npmjs.com/package/bcrypt)
+  - A cryptographic hashing algorithm for storing passwords securely by converting passwords into secure, irreversible strings.
+- [**concurrently**](https://www.npmjs.com/package/concurrently)
+  - A Node package that enables running multiple commands simultaneously in the same terminal, streamlining workflows.
+- [**Cypress**](https://www.cypress.io/)
+  - An end-to-end testing framework for web applications that allows developers to write, execute, and debug tests for web app functionality.
+- [**dotenv**](https://www.npmjs.com/package/dotenv)
+  - A package that manages environment variables, making it easy to store and access sensitive information in .env files.
+- [**ESLint**](https://eslint.org/)
+  - A static code analysis tool that identifies and automatically fixes problems in JavaScript and TypeScript code, improving code quality.
+- [**Express.js**](https://expressjs.com/)
+  - A lightweight web application framework for Node.js that simplifies building server-side applications by providing routing and middleware.
+- [**JSDOM**](https://www.npmjs.com/package/jsdom)
+  - A library that simulates a web browser environment within Node, enabling browser-specific code testing without requiring an actual browser.
+- [**jwt-decode**](https://www.npmjs.com/package/jwt-decode)
+  - A package for decoding JSON Web Tokens (JWT) to retrieve payload data without validating the signature.
+- [**MongoDB**](https://www.mongodb.com/)
+  - A NoSQL database for storing and managing large volumes of unstructured data.
+- [**Mongoose**](https://mongoosejs.com/)
+  - An Object Data Modeling (ODM) library for MongoDB and Node.js that provides a schema-based solution to model application data.
+- [**msw (Mock Service Worker)**](https://mswjs.io/)
+  - A testing utility that intercepts network requests at the client-side and provides mock responses, enabling the testing of client-server interactions without a real backend.
+- [**nodemon**](https://www.npmjs.com/package/nodemon)
+  - A tool for automatically restarting a Node server upon detecting changes in the file system, enhancing development speed.
+- [**react-router-dom**](https://reactrouter.com/en/main)
+  - A routing library that enables seamless navigation and view management in React applications without reloading the entire page.
+- [**ts-node**](https://www.npmjs.com/package/ts-node)
+  - A TypeScript execution environment for running TypeScript code directly, streamlining development and debugging without precompiling.
+- [**TypeScript**](https://www.typescriptlang.org/)
+  - A typed superset of JavaScript that compiles to plain JavaScript, adding static typing and interfaces to improve code maintainability.
+- [**Vitest**](https://vitest.dev/)
+  - A fast unit testing framework for Vite projects that integrates smoothly with modern front-end development workflows.
+- [**Vite**](https://vite.dev/)
+  - A build tool and development server optimized for performance and efficiency, providing a fast developer experience.
+
+### Libraries Used:
+
+- [**Apollo Client**](https://www.apollographql.com/docs/react)
+  - A state management library for JavaScript applications, enabling seamless interaction with GraphQL APIs.
+- [**Apollo Server**](https://www.apollographql.com/docs/apollo-server)
+  - A GraphQL server for building APIs with schema definitions, resolvers, and query/mutation handling.
+- [**Bootstrap**](https://getbootstrap.com/)
+  - A front-end framework for building responsive and mobile-first applications with a grid system and pre-designed components.
+- [**GraphQL**](https://graphql.org/)
+  - A query language and runtime for APIs that allows clients to specify the data they need, promoting efficiency and flexibility in data fetching.
+- [**jsonwebtoken (JWT)**](https://www.npmjs.com/package/jsonwebtoken)
+  - A JSON-based standard used for securely transmitting information between a server and client, often for authentication purposes.
+- [**React**](https://react.dev/)
+  - A JavaScript library for building dynamic user interfaces, especially for single-page applications with stateful components.
+- [**react-bootstrap**](https://react-bootstrap.netlify.app/)
+  - A collection of Bootstrap components built specifically for React, simplifying the process of adding Bootstrap styles to React projects.
+- [**react-dom**](https://www.npmjs.com/package/react-dom)
+  - A package that provides the necessary methods for React to interact with the DOM in web applications.
+
+### Services Used:
+
+- [**GitHub Actions**](https://github.com/features/actions)
+  - A CI/CD tool that automates workflows, builds, and deployments directly within GitHub.
+- [**Node.js**](https://nodejs.org/en)
+  - A JavaScript runtime environment that enables server-side execution of JavaScript, allowing developers to build scalable network applications.
+- [**Render**](https://render.com/)
+  - A cloud platform for deploying web applications, databases, and static sites, offering hosting solutions for full-stack applications.
 
 ---
 
