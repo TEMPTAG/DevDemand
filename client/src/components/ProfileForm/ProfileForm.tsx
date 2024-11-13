@@ -8,8 +8,8 @@ export default function ProfileForm() {
         firstName: '',
         lastName: '',
         location: '',
-        hourlyRate: '',
-        skillset: '',
+        hourlyRate: 0,
+        skillset: [],
         bio: ''
     });
 
@@ -26,7 +26,18 @@ export default function ProfileForm() {
     // Handle change in form inputs
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        if (name === 'hourlyRate') {
+            setFormData({ ...formData, [name]: parseFloat(value) || 0 });
+        } else if (name === 'skillset') {
+        // For the 'skillset' field, split the input into an array of skill names
+            const skillsArray = value.split(',') // Split by comma
+                                        .map(skill => skill.trim()) // Trim whitespace
+                                        .filter(skill => skill.length > 0); // Remove empty strings
+            setFormData({ ...formData, [name]: skillsArray });
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     // Handle form submission
@@ -43,8 +54,8 @@ export default function ProfileForm() {
                 firstName: '',
                 lastName: '',
                 location: '',
-                hourlyRate: '',
-                skillset: '',
+                hourlyRate: 0,
+                skillset: [],
                 bio: ''
             });
         }
@@ -100,7 +111,7 @@ export default function ProfileForm() {
             <div className="form-group">
                 <label htmlFor="hourlyRate">Hourly Rate:</label>
                 <input
-                    type="text"
+                    type="number"
                     id="hourlyRate"
                     name="hourlyRate"
                     placeholder="Enter your hourly rate"
@@ -117,8 +128,8 @@ export default function ProfileForm() {
                     type="text"
                     id="skillset"
                     name="skillset"
-                    placeholder="Enter your skillset"
-                    value={formData.skillset}
+                    placeholder="Enter your skillset (i.e. HTML, CSS, Javascript)"
+                    value={formData.skillset.join(', ')} // Join array into a comma-separated string for display in the input
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="form-control"

@@ -15,7 +15,7 @@ interface DeveloperProps {
     };
 }
 
-const ProfileCard: React.FC<DeveloperProps> = ({ developer}) => {
+const ProfileCard: React.FC<DeveloperProps> = ({ developer }) => {
     return (
         <div className="profile-card">
             <h3>{developer.firstName} {developer.lastName}</h3>
