@@ -15,28 +15,22 @@ const validateProfileForm = (formData) => {
     // Validate first name
     if (!trimmedData.firstName) {
         errors.firstName = 'First name is required';
-    } else if (trimmedData.firstName.length < 2) {
-        errors.firstName = 'First name must be at least 2 characters';
-    } else if (trimmedData.firstName.length > 50) {
-        errors.firstName = 'First name must be less than 50 characters';
+    } else if (trimmedData.firstName.length < 2 || trimmedData.firstName.length > 50) {
+        errors.firstName = 'First name must be between 2 and 50 characters';
     }
 
     // Validate last name
     if (!trimmedData.lastName) {
         errors.lastName = 'Last name is required';
-    } else if (trimmedData.lastName.length < 2) {
-        errors.lastName = 'Last name must be at least 2 characters';
-    } else if (trimmedData.lastName.length > 50) {
-        errors.lastName = 'Last name must be less than 50 characters';
+    } else if (trimmedData.lastName.length < 2 || trimmedData.lastName.length > 50) {
+        errors.lastName = 'Last name must be between 2 and 50 characters';
     }
 
     // Validate location
     if (!trimmedData.location) {
         errors.location = 'Location is required';
-    } else if (trimmedData.location.length < 2) {
-        errors.location = 'Location must be at least 2 characters';
-    } else if (trimmedData.location.length > 50) {
-        errors.location = 'Location must be less than 50 characters';
+    } else if (trimmedData.location.length < 2 || trimmedData.location.length > 50) {
+        errors.location = 'Location must be between 2 and 50 characters';
     }
 
     // Validate hourly rate
@@ -52,20 +46,18 @@ const validateProfileForm = (formData) => {
     // Validate skillset
     if (!trimmedData.skillset) {
         errors.skillset = 'Skillset is required';
-    } else if (trimmedData.skillset.length < 2) {
-        errors.skillset = 'Skillset must be at least 2 characters';
+    } else if (trimmedData.skillset.length < 2 || trimmedData.skillset.length > 50) {
+        errors.skillset = 'Skillset must be between 2 and 50 characters';
     } 
 
     // Validate bio
     if (!trimmedData.bio) {
         errors.bio = 'Bio is required';
-    } else if (trimmedData.bio.length < 2) {
-        errors.bio = 'Bio must be at least 2 characters';
-    } else if (trimmedData.bio.length > 300) {
-        errors.bio = 'Bio must be less than 300 characters';
+    } else if (trimmedData.bio.length < 2 || trimmedData.bio.length > 300) {
+        errors.bio = 'Bio must be between 2 and 300 characters';
     }
 
     return errors;
 }
 
-export default validateProfileForm
+export default validateProfileForm;
