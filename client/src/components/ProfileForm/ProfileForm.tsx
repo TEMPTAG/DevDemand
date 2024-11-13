@@ -1,6 +1,6 @@
 import { useState } from 'react';
-// import validateForm from 'ValidateContactForm.jsx';
-// import 'ProfileForm.css';
+import validateProfileForm from './ValidateProfileForm.jsx';
+import './ProfileForm.css';
 
 export default function ProfileForm() {
     // State to hold form data
@@ -19,7 +19,7 @@ export default function ProfileForm() {
     // Handle input field validation when user leaves the field
     const handleBlur = (e) => {
         const { name, value } = e.target;
-        const newErrors = validateForm({ ...formData, [name]: value });
+        const newErrors = validateProfileForm({ ...formData, [name]: value });
         setErrors({ ...errors, [name]: newErrors[name] });
     };
 
@@ -34,7 +34,7 @@ export default function ProfileForm() {
         e.preventDefault();
 
         // Perform form validation
-        const validationErrors = validateForm(formData);
+        const validationErrors = validateProfileForm(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
         } else {
