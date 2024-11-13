@@ -1,0 +1,27 @@
+import React from 'react';
+import './ProfileCard.css';
+
+interface DeveloperProps {
+    developer: {
+        firstName: string;
+        lastName: string;
+        location: string;
+        hourlyRate: number;
+        skillset: string[];
+        bio: string;
+    };
+}
+
+const ProfileCard: React.FC<DeveloperProps> = ({ developer}) => {
+    return (
+        <div className="profile-card">
+            <h3>{developer.firstName} {developer.lastName}</h3>
+            <p>Location: {developer.location}</p>
+            <p>Hourly Rate: ${developer.hourlyRate}</p>
+            <p>Skillset: {developer.skillset.join(', ')}</p>
+            <p>Bio: {developer.bio}</p>
+        </div>
+    );
+};
+
+export default ProfileCard;
