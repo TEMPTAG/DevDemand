@@ -1,0 +1,61 @@
+# Workflow name
+name: Checking Tests
+
+# Trigger workflow on pull requests to the develop branch
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  # Job to run tests
+  test:
+    name: Checking Tests
+    runs-on: ubuntu-latest
+
+    # Set up MongoDB service for tests
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017 # Expose MongoDB port
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      # Checkout code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up the Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21.x
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the application
+      - name: Build App
+        run: npm run build
+
+      # Seed the database
+      - name: Seed database
+        run: npm run seed
+
+      # Start the server
+      - name: Start server
+        run: npm run start &
+
+      # Wait for the server to start
+      - name: Wait for server to start
+        run: npx wait-on http://localhost:3001
+
+      # Run cypress component tests
+      - name: Run cypress component tests
+        run: npm run test-component
