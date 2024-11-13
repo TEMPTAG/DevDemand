@@ -1,3 +1,6 @@
+// Renders the details of the developer data from the parent component
+// The parent component will fetch the developer data using the GraphQL query and pass it as props to this component
+
 import React from 'react';
 import './ProfileCard.css';
 
