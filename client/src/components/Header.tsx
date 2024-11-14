@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import auth from "../utils/auth";
+import Logo from "../assets/logos/DevDemandLogo.svg";
 
 const Navbar = () => {
   const [loginCheck, setLoginCheck] = useState(false);
@@ -33,7 +34,7 @@ const Navbar = () => {
           role="navigation"
         >
           <Link className="navbar-brand" to="/">
-            DEVDemand
+            <img src={Logo} alt="DEVDemand Logo" style={{ height: "80px" }} />
           </Link>
           <button
             className="navbar-toggler"
