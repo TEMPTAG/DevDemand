@@ -1,0 +1,17 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Condensed:wght@400;700&display=swap");
+
+/* Set default font for the body */
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.bg-primary {
+  background-color: #000b26 !important;
+}
+
+/* Set Roboto Condensed specifically for H1 with 700 Font Weight */
+h1 {
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 700;
+}

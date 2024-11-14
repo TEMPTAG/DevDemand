@@ -24,9 +24,9 @@ const Dashboard = () => {
   }
 
   return (
-    <>
+    <div className="jumbotron">
       {!loginCheck ? <h1>DevDemand Coming Soon...</h1> : <h1>Logged In...</h1>}
-    </>
+    </div>
   );
 };
 
