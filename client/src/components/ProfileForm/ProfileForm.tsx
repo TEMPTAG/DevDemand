@@ -31,6 +31,8 @@ export default function ProfileForm() {
             setFormData({ ...formData, [name]: parseFloat(value) || 0 });
         } else if (name === 'skillset') {
         // For the 'skillset' field, split the input into an array of skill names
+        // Test this for edge cases (including spaces) 
+        // Create a new function or create dropdown if necessary
             const skillsArray = value.split(',') // Split by comma
                                         .map(skill => skill.trim()) // Trim whitespace
                                         .filter(skill => skill.length > 0); // Remove empty strings
