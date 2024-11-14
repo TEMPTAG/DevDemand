@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import auth from "../utils/auth";
-import Logo from "../assets/logos/DevDemandLogo.svg";
+
+const Logo = "/assets/logos/DEVDemandLogo.svg";
 
 const Navbar = () => {
   const [loginCheck, setLoginCheck] = useState(false);
@@ -26,7 +27,7 @@ const Navbar = () => {
         className="text-center text-white bg-primary py-1"
         style={{ fontSize: "13px" }}
       >
-        Freelance Developers, On Demand—The Right Talent, Right Now.
+        Freelance Developers, On Demand | The Right Talent, Right Now
       </div>
       <div className="container-fluid mb-4 shadow">
         <nav
