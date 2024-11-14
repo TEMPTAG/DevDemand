@@ -23,6 +23,7 @@ const ProfileCard: React.FC<DeveloperProps> = ({ developer }) => {
             <p>Hourly Rate: ${developer.hourlyRate}</p>
             <p>Skillset: {developer.skillset.join(', ')}</p>
             <p>Bio: {developer.bio}</p>
+            {/* Add contact button here if needed */}
         </div>
     );
 };
