@@ -5,50 +5,67 @@ import auth from "../utils/auth";
 const Navbar = () => {
   const [loginCheck, setLoginCheck] = useState(false);
 
-  const checkLogin = () => {
-    if (auth.loggedIn()) {
-      setLoginCheck(true);
-    }
+  useEffect(() => {
+    const checkLogin = () => {
+      setLoginCheck(auth.loggedIn());
+    };
+    checkLogin();
+  }, []);
+
+  const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    auth.logout();
+    setLoginCheck(false);
+    window.location.assign("/");
   };
 
-  useEffect(() => {
-    console.log(loginCheck);
-    checkLogin();
-  }, [loginCheck]);
-
   return (
-    <div className="nav">
-      <div className="nav-title">
-        <Link to="/">DevDemand</Link>
+    <>
+      <div
+        className="text-center text-white bg-primary py-1"
+        style={{ fontSize: "13px" }}
+      >
+        Freelance Developers, On Demand—The Right Talent, Right Now.
       </div>
-      <ul>
-        {!loginCheck ? (
-          <li className="nav-item">
-            <button type="button">
-              <Link to="/login">Login</Link>
-            </button>
-          </li>
-        ) : (
-          <>
-            <li className="nav-item">
-              <button type="button" id="create-ticket-link">
-                <Link to="/login">Login</Link>
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                type="button"
-                onClick={() => {
-                  auth.logout();
-                }}
-              >
-                Logout
-              </button>
-            </li>
-          </>
-        )}
-      </ul>
-    </div>
+      <div className="container-fluid mb-4 shadow">
+        <nav
+          className="navbar navbar-expand-lg navbar-light bg-light"
+          role="navigation"
+        >
+          <Link className="navbar-brand" to="/">
+            DEVDemand
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainMenu"
+            aria-controls="mainMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="mainMenu">
+            <ul className="navbar-nav ms-auto mb-2 mb-l-0">
+              {!loginCheck ? (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Developer Login
+                  </Link>
+                </li>
+              ) : (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/" onClick={handleLogout}>
+                    Logout
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </>
   );
 };
 
