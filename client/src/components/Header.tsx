@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import auth from "../utils/auth";
 
-const Logo = "/assets/logos/DEVDemandLogo.svg";
+const Logo = "/assets/logos/DDHeaderLogo.svg";
 
 const Navbar = () => {
   const [loginCheck, setLoginCheck] = useState(false);
@@ -27,7 +27,8 @@ const Navbar = () => {
         className="text-center text-white bg-primary py-1"
         style={{ fontSize: "13px" }}
       >
-        Freelance Developers, On Demand | The Right Talent, Right Now
+        The Right Talent, Right Now - Browse Our Developer Database and Take
+        Your Project from Dream to Deployed!
       </div>
       <div className="container-fluid mb-4 shadow">
         <nav
@@ -35,7 +36,7 @@ const Navbar = () => {
           role="navigation"
         >
           <Link className="navbar-brand" to="/">
-            <img src={Logo} alt="DEVDemand Logo" style={{ height: "80px" }} />
+            <img src={Logo} alt="DEVDemand Logo" style={{ height: "100px" }} />
           </Link>
           <button
             className="navbar-toggler"
