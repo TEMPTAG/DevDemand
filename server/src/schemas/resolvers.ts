@@ -16,10 +16,7 @@ const resolvers = {
   Mutation: {
     login: async (_: any, { email, password }: { email: string; password: string }) => {
       // Find the developer by email
-      const developer = await Developer.findOne({ email }); // Assuming Mongoose usage
-
-      // Debugging logs
-      console.log("Developer found:", developer);
+      const developer = await Developer.findOne({ email });
 
       if (!developer) {
         throw new AuthenticationError('Developer not found');
@@ -27,9 +24,6 @@ const resolvers = {
 
       // Compare the provided password with the stored (hashed) password
       const isMatch = await bcrypt.compare(password, developer.password);
-
-      // Debugging logs
-      console.log("Password match:", isMatch);
 
       if (!isMatch) {
         throw new AuthenticationError('Invalid credentials');
@@ -42,16 +36,42 @@ const resolvers = {
         { expiresIn: '1h' }
       );
 
-      // Debugging logs
-      console.log("Generated token:", token);
-
       // Return the token and developer's details
       return {
         token,
         developer: {
-          _id: developer._id, // Include _id as required in schema
-          name: developer.name, // Assuming name exists in the Developer model
+          _id: developer._id,
+          name: developer.name,
           email: developer.email,
+        },
+      };
+    },
+
+    createUser: async (_: any, { name, email, password }: { name: string; email: string; password: string }) => {
+      // Check if email already exists
+      const existingDeveloper = await Developer.findOne({ email });
+      if (existingDeveloper) {
+        throw new AuthenticationError('Email is already in use');
+      }
+
+      // Create a new developer (the password is hashed by the pre('save') middleware in the model)
+      const newDeveloper = new Developer({ name, email, password });
+      await newDeveloper.save();
+
+      // Generate a JWT token
+      const token = jwt.sign(
+        { developerId: newDeveloper._id },
+        process.env.JWT_SECRET_KEY || 'secret',
+        { expiresIn: '1h' }
+      );
+
+      // Return the token and new developer's details
+      return {
+        token,
+        developer: {
+          _id: newDeveloper._id,
+          name: newDeveloper.name,
+          email: newDeveloper.email,
         },
       };
     },

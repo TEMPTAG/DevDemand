@@ -29,7 +29,7 @@ const server = new ApolloServer({
   plugins: [
     {
       async serverWillStart() {
-        console.log("Apollo Server is starting...");
+        console.log('Apollo Server is starting...');
       },
     },
   ],
@@ -40,14 +40,20 @@ const authenticateToken = async (req: any) => {
   const token = req.headers.authorization?.split(' ')[1]; // Extract token from the Authorization header
 
   if (!token) {
-    throw new Error('Authentication token is required');
+    console.warn('No token provided'); // Log a warning instead of throwing
+    return null;
   }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!); // Decode the JWT token
-    return decoded; // Return decoded user data (i.e., developer)
+    return decoded; // Return decoded user data
   } catch (err) {
-    throw new Error('Invalid or expired token');
+    if (err instanceof Error) {
+      console.error('Invalid or expired token:', err.message); // Log the error
+    } else {
+      console.error('Invalid or expired token:', err); // Log the error
+    }
+    return null; // Return null for invalid tokens
   }
 };
 
@@ -71,11 +77,13 @@ const startApolloServer = async () => {
   const app = express();
 
   // CORS setup to allow frontend (localhost:3000) to make requests to this backend (localhost:3001)
-  app.use(cors({
-    origin: 'http://localhost:3000', // Allow only frontend from this origin
-    methods: 'GET,POST', // Allow these HTTP methods
-    credentials: true, // Allow credentials if needed (cookies, authorization headers)
-  }));
+  app.use(
+    cors({
+      origin: 'http://localhost:3000', // Allow only frontend from this origin
+      methods: 'GET,POST', // Allow these HTTP methods
+      credentials: true, // Allow credentials if needed (cookies, authorization headers)
+    })
+  );
 
   // Middleware setup
   app.use(express.urlencoded({ extended: true }));
@@ -86,18 +94,12 @@ const startApolloServer = async () => {
     '/graphql',
     expressMiddleware(server, {
       context: async ({ req }) => {
-        // Skip authentication for the login mutation
-        if (req.body.operationName === 'login') {
-          return { user: null }; // No user context for login
-        }
-
         try {
-          // For all other queries, authenticate token
           const user = await authenticateToken(req);
-          return { user }; // Add user to context (available in resolvers)
+          return { user }; // Add user to context, even if it's null
         } catch (err) {
-          console.error("Error during token authentication:", err);
-          return { user: null }; // If token is invalid, pass null user context
+          console.error('Unexpected error during token authentication:', err);
+          return { user: null }; // Default to null user context on unexpected errors
         }
       },
     })

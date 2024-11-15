@@ -20,9 +20,10 @@ export const typeDefs = gql`
     developer: Developer!
   }
 
-  # Mutation type for login
+  # Mutation type for login and signup
   type Mutation {
     login(email: String!, password: String!): AuthPayload
+    createUser(name: String!, email: String!, password: String!): AuthPayload
   }
 `;
 
