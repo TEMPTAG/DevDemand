@@ -1,14 +1,30 @@
-const validateProfileForm = (formData) => {
-    const errors = {};
+interface FormData {
+    firstName: string;
+    lastName: string;
+    telephone: string;
+    email: string;
+    city: string;
+    state: string;
+    portfolioLink?: string;
+    githubLink?: string;
+    hourlyRate: number;
+    bio: string;
+  }
+
+const validateProfileForm = (formData: FormData) => {
+    const errors: { [key: string]: string } = {};
 
     // Trim whitespace from form data
-    const trimmedData = {
+    const trimmedData: FormData = {
         ...formData,
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
-        location: formData.location.trim(),
-        hourlyRate: formData.hourlyRate.trim(),
-        skillset: formData.skillset.trim(),
+        telephone: formData.telephone.trim(),
+        email: formData.email.trim(),
+        city: formData.city.trim(),
+        state: formData.state.trim(),
+        portfolioLink: formData.portfolioLink?.trim() ?? '',
+        githubLink: formData.githubLink?.trim() ?? '',
         bio: formData.bio.trim()
     };
 
@@ -26,30 +42,16 @@ const validateProfileForm = (formData) => {
         errors.lastName = 'Last name must be between 2 and 50 characters';
     }
 
-    // Validate location
-    if (!trimmedData.location) {
-        errors.location = 'Location is required';
-    } else if (trimmedData.location.length < 2 || trimmedData.location.length > 50) {
-        errors.location = 'Location must be between 2 and 50 characters';
-    }
-
     // Validate hourly rate
     const hourlyRate = trimmedData.hourlyRate;
     if (!trimmedData.hourlyRate) {
         errors.hourlyRate = 'Hourly rate is required';
     } else if (isNaN(hourlyRate) || hourlyRate < 0) {
         errors.hourlyRate = 'Hourly rate must be a positive number';
-    } else if (!/^\d+(\.\d{1,2})?$/.test(hourlyRate)) {
+    } else if (!/^\d+(\.\d{1,2})?$/.test(hourlyRate.toString())) {
         errors.hourlyRate = 'Hourly rate must be a number with up to 2 decimal places';
     }
-
-    // Validate skillset
-    if (!trimmedData.skillset) {
-        errors.skillset = 'Skillset is required';
-    } else if (trimmedData.skillset.length < 2 || trimmedData.skillset.length > 50) {
-        errors.skillset = 'Skillset must be between 2 and 50 characters';
-    } 
-
+    
     // Validate bio
     if (!trimmedData.bio) {
         errors.bio = 'Bio is required';

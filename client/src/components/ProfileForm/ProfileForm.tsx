@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import validateProfileForm from './ValidateProfileForm.tsx';
+import { states } from './States.ts';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
@@ -7,43 +8,52 @@ export default function ProfileForm() {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        location: '',
+        telephone: '',
+        email: '',
+        city: '',
+        state: '',
+        portfolioLink: '',
+        githubLink: '',
         hourlyRate: 0,
-        skillset: [], // change to portfolio link
         bio: ''
     });
 
-    // State to hold errors
-    const [errors, setErrors] = useState({});
+    interface Errors {
+        firstName?: string;
+        lastName?: string;
+        telephone?: string;
+        email?: string;
+        city?: string;
+        state?: string;
+        portfolioLink?: string;
+        githubLink?: string;
+        hourlyRate?: number;
+        bio?: string;
+      }
+      
+        // State to hold errors
+      const [errors, setErrors] = useState<Errors>({});
 
     // Handle input field validation when user leaves the field
-    const handleBlur = (e) => {
-        const { name, value } = e.target;
-        const newErrors = validateProfileForm({ ...formData, [name]: value });
+    const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
+        const { name, value } = e.target as HTMLInputElement;
+        const newErrors: { [key: string]: string} = validateProfileForm({ ...formData, [name]: value });
         setErrors({ ...errors, [name]: newErrors[name] });
     };
 
     // Handle change in form inputs
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleChange = (e: ChangeEvent<HTMLElement>) => {
+        const { name, value } = e.target as HTMLInputElement;
 
         if (name === 'hourlyRate') {
             setFormData({ ...formData, [name]: parseFloat(value) || 0 });
-        } else if (name === 'skillset') {
-        // For the 'skillset' field, split the input into an array of skill names
-        // Test this for edge cases (including spaces) 
-        // Create a new function or create dropdown if necessary
-            const skillsArray = value.split(',') // Split by comma
-                                        .map(skill => skill.trim()) // Trim whitespace
-                                        .filter(skill => skill.length > 0); // Remove empty strings
-            setFormData({ ...formData, [name]: skillsArray });
         } else {
             setFormData({ ...formData, [name]: value });
         }
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // Perform form validation
@@ -55,9 +65,13 @@ export default function ProfileForm() {
             setFormData({
                 firstName: '',
                 lastName: '',
-                location: '',
+                telephone: '',
+                email: '',
+                city: '',
+                state: '',
+                portfolioLink: '',
+                githubLink: '',
                 hourlyRate: 0,
-                skillset: [],
                 bio: ''
             });
         }
@@ -98,13 +112,86 @@ export default function ProfileForm() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="location">Location:</label>
+                    <label htmlFor="telephone">Telephone:</label>
+                    <input
+                        type="tel"
+                        id="telephone"
+                        name="telephone"
+                        placeholder="Enter your telephone number"
+                        value={formData.telephone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="city">City:</label>
                     <input
                         type="text"
-                        id="location"
-                        name="location"
-                        placeholder="Enter your location"
-                        value={formData.location}
+                        id="city"
+                        name="city"
+                        placeholder="Enter your city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="state">State:</label>
+                    <select
+                        id="state"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                    >
+                        <option value="">Select your state</option>
+                        {states.map((state) => (
+                            <option key={state.abbreviation} value={state.abbreviation}>{state.abbreviation}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="portfolioLink">Portfolio Link:</label>
+                    <input
+                        type="url"
+                        id="portfolioLink"
+                        name="portfolioLink"
+                        placeholder="Enter your portfolio link"
+                        value={formData.portfolioLink}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="githubLink">GitHub Link:</label>
+                    <input
+                        type="url"
+                        id="githubLink"
+                        name="githubLink"
+                        placeholder="Enter your GitHub link"
+                        value={formData.githubLink}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className="form-control"
@@ -121,20 +208,8 @@ export default function ProfileForm() {
                         value={formData.hourlyRate}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="skillset">Skillset:</label>
-                    <input
-                        type="text"
-                        id="skillset"
-                        name="skillset"
-                        placeholder="Enter your skillset (i.e. HTML, CSS, Javascript)"
-                        value={formData.skillset.join(', ')} // Join array into a comma-separated string for display in the input
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        step="0.01"
+                        min="0"
                         className="form-control"
                     />
                 </div>
@@ -161,9 +236,13 @@ export default function ProfileForm() {
                 <div className="form-errors">
                     {errors.firstName && <p className="form-error">{errors.firstName}</p>}
                     {errors.lastName && <p className="form-error">{errors.lastName}</p>}
-                    {errors.location && <p className="form-error">{errors.location}</p>}
+                    {errors.telephone && <p className="form-error">{errors.telephone}</p>}
+                    {errors.email && <p className="form-error">{errors.email}</p>}
+                    {errors.city && <p className="form-error">{errors.city}</p>}
+                    {errors.state && <p className="form-error">{errors.state}</p>}
+                    {errors.portfolioLink && <p className="form-error">{errors.portfolioLink}</p>}
+                    {errors.githubLink && <p className="form-error">{errors.githubLink}</p>}
                     {errors.hourlyRate && <p className="form-error">{errors.hourlyRate}</p>}
-                    {errors.skillset && <p className="form-error">{errors.skillset}</p>}
                     {errors.bio && <p className="form-error">{errors.bio}</p>}
                 </div>
             </form>
