@@ -4,9 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 interface JwtPayload {
-  _id: unknown;
-  username: string;
-  email: string,
+  email: string;
+  password: string,
 } 
 
 export const authenticateToken = ({ req }: any) => {
@@ -37,9 +36,9 @@ export const authenticateToken = ({ req }: any) => {
   return req;
 };
 
-export const signToken = (username: string, email: string, _id: unknown) => {
+export const signToken = (email: string, password: string) => {
   // Create a payload with the user information
-  const payload = { username, email, _id };
+  const payload = { email, password };
   const secretKey = process.env.JWT_SECRET_KEY || ''; // Get the secret key from environment variables
 
   // Sign the token with the payload and secret key, and set it to expire in 2 hours
