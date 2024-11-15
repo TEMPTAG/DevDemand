@@ -173,7 +173,7 @@ export default function ProfileForm() {
                 <div className="form-group">
                     <label htmlFor="portfolioLink">Portfolio Link:</label>
                     <input
-                        type="url"
+                        type="text"
                         id="portfolioLink"
                         name="portfolioLink"
                         placeholder="Enter your portfolio link"
@@ -187,7 +187,7 @@ export default function ProfileForm() {
                 <div className="form-group">
                     <label htmlFor="githubLink">GitHub Link:</label>
                     <input
-                        type="url"
+                        type="text"
                         id="githubLink"
                         name="githubLink"
                         placeholder="Enter your GitHub link"
@@ -199,7 +199,7 @@ export default function ProfileForm() {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="hourlyRate">Hourly Rate:</label>
+                    <label htmlFor="hourlyRate">Hourly Rate ($):</label>
                     <input
                         type="number"
                         id="hourlyRate"
