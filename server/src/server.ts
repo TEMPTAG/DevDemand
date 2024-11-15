@@ -6,11 +6,16 @@ import { typeDefs, resolvers } from './schemas/index.js';
 import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-// import { dot } from 'node:test/reporters';
 import dotenv from 'dotenv';
-
+import cors from 'cors';
 
 dotenv.config(); // Load environment variables from .env file
+
+// Check for required environment variables
+if (!process.env.JWT_SECRET_KEY || !process.env.MONGODB_URI) {
+  console.error('Missing environment variables. Please check your .env file.');
+  process.exit(1);
+}
 
 // Initialize file paths
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +25,7 @@ const __dirname = path.dirname(__filename);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true, // Enable introspection (for testing via GraphQL Playground/GraphiQL)
+  introspection: true, // Enable introspection for testing via GraphQL Playground/GraphiQL
   plugins: [
     {
       async serverWillStart() {
@@ -65,6 +70,13 @@ const startApolloServer = async () => {
 
   const app = express();
 
+  // CORS setup to allow frontend (localhost:3000) to make requests to this backend (localhost:3001)
+  app.use(cors({
+    origin: 'http://localhost:3000', // Allow only frontend from this origin
+    methods: 'GET,POST', // Allow these HTTP methods
+    credentials: true, // Allow credentials if needed (cookies, authorization headers)
+  }));
+
   // Middleware setup
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
@@ -79,9 +91,14 @@ const startApolloServer = async () => {
           return { user: null }; // No user context for login
         }
 
-        // For all other queries, authenticate token
-        const user = await authenticateToken(req);
-        return { user }; // Add user to context (available in resolvers)
+        try {
+          // For all other queries, authenticate token
+          const user = await authenticateToken(req);
+          return { user }; // Add user to context (available in resolvers)
+        } catch (err) {
+          console.error("Error during token authentication:", err);
+          return { user: null }; // If token is invalid, pass null user context
+        }
       },
     })
   );

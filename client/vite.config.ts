@@ -11,12 +11,7 @@ export default defineConfig({
     proxy: {
       "/graphql": {
         target: "http://localhost:3001",
-        secure: false,
-        changeOrigin: true,
-      },
-      "/api": {
-        target: "http://localhost:3001", // Change this to the API endpoint you want to proxy to
-        secure: false,
+        secure: true,
         changeOrigin: true,
       },
     },
