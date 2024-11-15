@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import Auth from "../utils/auth";
+import Auth from "../utils/auth"; // This will handle storing the token
 
 const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
@@ -13,7 +13,7 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -23,10 +23,30 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
     }
 
     try {
-      // Placeholder logic for logging in
       if (userFormData.email && userFormData.password) {
-        Auth.login("dummyToken"); // Mock login with a dummy token
-        handleModalClose();
+        // Send the login request to the server
+        const response = await fetch("http://localhost:3001/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: userFormData.email,
+            password: userFormData.password,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Invalid credentials");
+        }
+
+        // If login is successful, get the token from the response
+        const { token } = await response.json();
+        Auth.login(token); // Call your Auth utility to save the token
+
+        handleModalClose(); // Close the login modal
+
+        setUserFormData({ email: "", password: "" }); // Clear form data
       } else {
         setShowAlert(true);
       }
@@ -34,8 +54,6 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
       console.error(err);
       setShowAlert(true);
     }
-
-    setUserFormData({ email: "", password: "" });
   };
 
   return (

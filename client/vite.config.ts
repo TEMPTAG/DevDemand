@@ -14,6 +14,11 @@ export default defineConfig({
         secure: false,
         changeOrigin: true,
       },
+      "/api": {
+        target: "http://localhost:3001", // Change this to the API endpoint you want to proxy to
+        secure: false,
+        changeOrigin: true,
+      },
     },
   },
 });

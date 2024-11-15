@@ -1,23 +1,23 @@
 // import { useEffect, useState, useLayoutEffect } from "react";
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 
 import ErrorPage from "./ErrorPage";
 
-// import auth from "../utils/auth";
+import auth from "../utils/auth";
 
 const Dashboard = () => {
   const [error, _setError] = useState(false);
-  const [loginCheck, _setLoginCheck] = useState(false);
+  const [loginCheck, setLoginCheck] = useState(false);
 
-  //   const checkLogin = () => {
-  //     if (auth.loggedIn()) {
-  //       setLoginCheck(true);
-  //     }
-  //   };
+    const checkLogin = () => {
+      if (auth.loggedIn()) {
+        setLoginCheck(true);
+      }
+    };
 
-  //   useLayoutEffect(() => {
-  //     checkLogin();
-  //   }, []);
+    useLayoutEffect(() => {
+      checkLogin();
+    }, []);
 
   if (error) {
     return <ErrorPage />;
