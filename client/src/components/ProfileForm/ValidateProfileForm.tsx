@@ -42,6 +42,45 @@ const validateProfileForm = (formData: FormData) => {
         errors.lastName = 'Last name must be between 2 and 50 characters';
     }
 
+    if (!trimmedData.telephone) {
+        errors.telephone = 'Telephone is required';
+    } else if (!/^\d{10}$/.test(trimmedData.telephone)) {
+        errors.telephone = 'Telephone must be a 10-digit number';
+    }
+
+    // Validate email
+    if (!trimmedData.email) {
+        errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedData.email)) {
+        errors.email = 'Email must be a valid email address';
+    }
+
+    // Validate city
+    if (!trimmedData.city) {
+        errors.city = 'City is required';
+    } else if (trimmedData.city.length < 2 || trimmedData.city.length > 50) {
+        errors.city = 'City must be between 2 and 50 characters';
+    }
+
+    // Validate state
+    if (!trimmedData.state) {
+        errors.state = 'State is required';
+    }
+
+    // Validate portfolio link
+    if (!trimmedData.portfolioLink) {
+        errors.portfolioLink = 'Portfolio link is required';
+    } else if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.portfolioLink)) {
+        errors.portfolioLink = 'Portfolio link must be a valid URL';
+    }
+
+    // Validate GitHub link
+    if (!trimmedData.githubLink) {
+        errors.githubLink = 'GitHub link is required';
+    } else if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.githubLink)) {
+        errors.githubLink = 'GitHub link must be a valid URL';
+    }
+
     // Validate hourly rate
     const hourlyRate = trimmedData.hourlyRate;
     if (!trimmedData.hourlyRate) {
