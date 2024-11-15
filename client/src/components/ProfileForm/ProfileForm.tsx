@@ -9,7 +9,7 @@ export default function ProfileForm() {
         lastName: '',
         location: '',
         hourlyRate: 0,
-        skillset: [],
+        skillset: [], // change to portfolio link
         bio: ''
     });
 
