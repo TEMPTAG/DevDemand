@@ -68,18 +68,19 @@ const validateProfileForm = (formData: FormData) => {
     }
 
     // Validate portfolio link
-    if (!trimmedData.portfolioLink) {
-        errors.portfolioLink = 'Portfolio link is required';
-    } else if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.portfolioLink)) {
-        errors.portfolioLink = 'Portfolio link must be a valid URL';
+    if (trimmedData.portfolioLink) {
+        if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.portfolioLink)) {
+            errors.portfolioLink = 'Portfolio link must be a valid URL';
+        }
     }
 
     // Validate GitHub link
-    if (!trimmedData.githubLink) {
-        errors.githubLink = 'GitHub link is required';
-    } else if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.githubLink)) {
-        errors.githubLink = 'GitHub link must be a valid URL';
+    if (trimmedData.githubLink) {
+        if (!/^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(trimmedData.githubLink)) {
+            errors.githubLink = 'GitHub link must be a valid URL';
+        }
     }
+
 
     // Validate hourly rate
     const hourlyRate = trimmedData.hourlyRate;

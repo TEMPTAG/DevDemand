@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { states } from './States.ts';
+import { Form, InputGroup, Row, Col, Button, Container } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
@@ -29,15 +30,15 @@ export default function ProfileForm() {
         githubLink?: string;
         hourlyRate?: number;
         bio?: string;
-      }
-      
-        // State to hold errors
-      const [errors, setErrors] = useState<Errors>({});
+    }
+
+    // State to hold errors
+    const [errors, setErrors] = useState<Errors>({});
 
     // Handle input field validation when user leaves the field
     const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
         const { name, value } = e.target as HTMLInputElement;
-        const newErrors: { [key: string]: string} = validateProfileForm({ ...formData, [name]: value });
+        const newErrors: { [key: string]: string } = validateProfileForm({ ...formData, [name]: value });
         setErrors({ ...errors, [name]: newErrors[name] });
     };
 
@@ -78,174 +79,190 @@ export default function ProfileForm() {
     };
 
     return (
-        <div className="profile-form-container">
-            <form
-                onSubmit={handleSubmit}
-                className="profile-form"
-            >
-                <div className="form-group">
-                    <label htmlFor="firstName">First Name:</label>
-                    <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        placeholder="Enter your first name"
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        placeholder="Enter your last name"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="telephone">Telephone:</label>
-                    <input
+        <Container className="profile-form-container">
+            <Form onSubmit={handleSubmit} className="profile-form">
+                <Row className="mb-3">
+                    <Col>
+                        <Form.Group controlId="firstName">
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="firstName"
+                                placeholder="Enter your first name"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.firstName}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.firstName}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group controlId="lastName">
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="lastName"
+                                placeholder="Enter your last name"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.lastName}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.lastName}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                <Form.Group className="mb-3" controlId="telephone">
+                    <Form.Label>Telephone</Form.Label>
+                    <Form.Control
                         type="tel"
-                        id="telephone"
                         name="telephone"
                         placeholder="Enter your telephone number"
                         value={formData.telephone}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
+                        isInvalid={!!errors.telephone}
                     />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
+                    <Form.Control.Feedback type="invalid">
+                        {errors.telephone}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group className="mb-3" controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
                         type="email"
-                        id="email"
                         name="email"
                         placeholder="Enter your email"
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
+                        isInvalid={!!errors.email}
                     />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="city">City:</label>
-                    <input
-                        type="text"
-                        id="city"
-                        name="city"
-                        placeholder="Enter your city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="state">State:</label>
-                    <select
-                        id="state"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className="form-control"
-                    >
-                        <option value="">Select your state</option>
-                        {states.map((state) => (
-                            <option key={state.abbreviation} value={state.abbreviation}>{state.abbreviation}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="portfolioLink">Portfolio Link:</label>
-                    <input
-                        type="text"
-                        id="portfolioLink"
+                    <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                </Col>
+                </Row>
+                <Row className="mb-3">
+                    <Col>
+                        <Form.Group controlId="city">
+                            <Form.Label>City</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="city"
+                                placeholder="Enter your city"
+                                value={formData.city}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.city}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.city}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group controlId="state">
+                            <Form.Label>State</Form.Label>
+                            <Form.Select
+                                name="state"
+                                value={formData.state}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                isInvalid={!!errors.state}
+                            >
+                                <option value="">Select your state</option>
+                                {states.map((state) => (
+                                    <option key={state.abbreviation} value={state.abbreviation}>
+                                        {state.abbreviation}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.state}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Form.Group className="mb-3" controlId="portfolioLink">
+                    <Form.Label>Portfolio Link</Form.Label>
+                    <Form.Control
+                        type="url"
                         name="portfolioLink"
                         placeholder="Enter your portfolio link"
                         value={formData.portfolioLink}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
+                        isInvalid={!!errors.portfolioLink}
                     />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="githubLink">GitHub Link:</label>
-                    <input
-                        type="text"
-                        id="githubLink"
+                    <Form.Control.Feedback type="invalid">
+                        {errors.portfolioLink}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="githubLink">
+                    <Form.Label>GitHub Link</Form.Label>
+                    <Form.Control
+                        type="url"
                         name="githubLink"
                         placeholder="Enter your GitHub link"
                         value={formData.githubLink}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
+                        isInvalid={!!errors.githubLink}
                     />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="hourlyRate">Hourly Rate ($):</label>
-                    <input
-                        type="number"
-                        id="hourlyRate"
-                        name="hourlyRate"
-                        placeholder="Enter your hourly rate"
-                        value={formData.hourlyRate}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        step="0.01"
-                        min="0"
-                        className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="bio">Bio:</label>
-                    <textarea
-                        id="bio"
+                    <Form.Control.Feedback type="invalid">
+                        {errors.githubLink}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="hourlyRate">
+                    <Form.Label>Hourly Rate</Form.Label>
+                    <InputGroup>
+                        <InputGroup.Text>$</InputGroup.Text>
+                        <Form.Control
+                            type="number"
+                            name="hourlyRate"
+                            placeholder="Enter your hourly rate"
+                            className="no-spinner form-control"
+                            value={formData.hourlyRate}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={!!errors.hourlyRate}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.hourlyRate}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="bio">
+                    <Form.Label>Bio</Form.Label>
+                    <Form.Control
+                        as="textarea"
                         name="bio"
                         placeholder="Enter your bio"
                         value={formData.bio}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className="form-control"
+                        isInvalid={!!errors.bio}
+                        style={{ height: '100px' }}
                     />
-                </div>
-
-                <div className="form-group">
-                    {/* Update to dynamically load button */}
-                    <button type="submit" className="btn btn-primary">Submit</button> 
-                </div>
-
-                {/* Display form errors if any */}
-                <div className="form-errors">
-                    {errors.firstName && <p className="form-error">{errors.firstName}</p>}
-                    {errors.lastName && <p className="form-error">{errors.lastName}</p>}
-                    {errors.telephone && <p className="form-error">{errors.telephone}</p>}
-                    {errors.email && <p className="form-error">{errors.email}</p>}
-                    {errors.city && <p className="form-error">{errors.city}</p>}
-                    {errors.state && <p className="form-error">{errors.state}</p>}
-                    {errors.portfolioLink && <p className="form-error">{errors.portfolioLink}</p>}
-                    {errors.githubLink && <p className="form-error">{errors.githubLink}</p>}
-                    {errors.hourlyRate && <p className="form-error">{errors.hourlyRate}</p>}
-                    {errors.bio && <p className="form-error">{errors.bio}</p>}
-                </div>
-            </form>
-        </div>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.bio}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
+        </Container>
     );
 }
