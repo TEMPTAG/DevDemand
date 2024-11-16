@@ -1,55 +1,124 @@
-import express from "express";
-import path from "node:path"; // Import Node's path module to handle and transform file paths
-import type { Request, Response } from "express";
-import db from "./config/connection.js";
-import { ApolloServer } from "@apollo/server"; // Note: Import from @apollo/server-express
-import { expressMiddleware } from "@apollo/server/express4"; // Import Apollo's Express middleware for integrating ApolloServer with Express
-import { typeDefs, resolvers } from "./schemas/index.js"; // Import GraphQL type definitions (typeDefs) and resolvers (functions to resolve GraphQL queries)
-import { authenticateToken } from "./utils/auth.js"; // Import the authentication middleware for handling user authentication via tokens
-import { fileURLToPath } from "url";
+import express from 'express';
+import path from 'node:path';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { typeDefs, resolvers } from './schemas/index.js';
+import { fileURLToPath } from 'url';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
+dotenv.config(); // Load environment variables from .env file
+
+// Check for required environment variables
+if (!process.env.JWT_SECRET_KEY || !process.env.MONGODB_URI) {
+  console.error('Missing environment variables. Please check your .env file.');
+  process.exit(1);
+}
+
+// Initialize file paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Create an instance of ApolloServer with the typeDefs and resolvers
+// Apollo Server Setup
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true, // Enable introspection for testing via GraphQL Playground/GraphiQL
+  plugins: [
+    {
+      async serverWillStart() {
+        console.log('Apollo Server is starting...');
+      },
+    },
+  ],
 });
 
+// JWT Authentication Middleware
+const authenticateToken = async (req: any) => {
+  const token = req.headers.authorization?.split(' ')[1]; // Extract token from the Authorization header
+
+  if (!token) {
+    console.warn('No token provided'); // Log a warning instead of throwing
+    return null;
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!); // Decode the JWT token
+    return decoded; // Return decoded user data
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error('Invalid or expired token:', err.message); // Log the error
+    } else {
+      console.error('Invalid or expired token:', err); // Log the error
+    }
+    return null; // Return null for invalid tokens
+  }
+};
+
+// MongoDB connection setup
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI!);
+    console.log('MongoDB connected');
+    console.log('Connected to:', process.env.MONGODB_URI);
+  } catch (err) {
+    console.error('Error connecting to MongoDB', err);
+    process.exit(1); // Exit on connection error
+  }
+};
+
+// Start Apollo Server and Express Application
 const startApolloServer = async () => {
-  await server.start(); // Start the ApolloServer (required before applying middleware)
-  await db(); // Establish a connection to the database using the db() function
+  await server.start(); // Start ApolloServer
+  await connectDB(); // Connect to MongoDB
 
-  const PORT = process.env.PORT || 3001; // Set the port to an environment variable or default to 3001
-  const app = express(); // Create an Express application
+  const app = express();
 
-  app.use(express.urlencoded({ extended: true })); // Middleware to parse incoming URL-encoded form data (from forms, typically)
-  app.use(express.json()); // Middleware to parse incoming JSON request bodies (for APIs)
-
-  // Apply ApolloServer middleware to handle GraphQL requests at the /graphql endpoint
+  // CORS setup to allow frontend (localhost:3000) to make requests to this backend (localhost:3001)
   app.use(
-    "/graphql",
-    expressMiddleware(server as any, {
-      context: authenticateToken as any, // Pass the authenticateToken function to be used as context middleware
+    cors({
+      origin: 'http://localhost:3000', // Allow only frontend from this origin
+      methods: 'GET,POST', // Allow these HTTP methods
+      credentials: true, // Allow credentials if needed (cookies, authorization headers)
     })
   );
 
-  // Serve static assets (for example, a React build) if in production mode
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../../client/dist"))); // Serve static files from the React build directory
+  // Middleware setup
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
 
-    app.get("*", (_req: Request, res: Response) => {
-      res.sendFile(path.join(__dirname, "../../client/dist/index.html")); // Send index.html for all other routes (client-side routing)
+  // Apply Apollo server middleware to handle GraphQL requests
+  app.use(
+    '/graphql',
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        try {
+          const user = await authenticateToken(req);
+          return { user }; // Add user to context, even if it's null
+        } catch (err) {
+          console.error('Unexpected error during token authentication:', err);
+          return { user: null }; // Default to null user context on unexpected errors
+        }
+      },
+    })
+  );
+
+  // Serve static files in production (e.g., React build)
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
     });
   }
 
-  // Start the server and listen on the specified PORT
+  const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
-    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 };
 
-// Start the Apollo server by calling the startApolloServer function
+// Start the server
 startApolloServer();

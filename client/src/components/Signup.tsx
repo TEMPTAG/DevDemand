@@ -1,41 +1,91 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import Auth from "../utils/auth";
+import Auth from "../utils/auth"; // This will handle storing the token
 
 const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
-  const [userFormData, setUserFormData] = useState({ email: "", password: "" });
-  const [validated] = useState(false);
+  const [userFormData, setUserFormData] = useState({ name: "", email: "", password: "" });
+  const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
+  // Handle form input change (name, email, or password)
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  // Form submission handler with logging
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
+    setValidated(true); // Set the form to be validated on submission
+
+    // Validate form before proceeding
     if (form.checkValidity() === false) {
-      event.stopPropagation();
       return;
     }
 
     try {
-      // Placeholder logic for signing up
-      if (userFormData.email && userFormData.password) {
-        Auth.login("dummyToken"); // Mock sign-up with a dummy token
+      if (userFormData.name && userFormData.email && userFormData.password) {
+        // Construct GraphQL mutation for creating a new user
+        const mutation = `
+          mutation createUser($name: String!, $email: String!, $password: String!) {
+            createUser(name: $name, email: $email, password: $password) {
+              token
+              developer {
+                _id
+                name
+                email
+              }
+            }
+          }
+        `;
+
+        // Send the signup request to the server
+        const response = await fetch("http://localhost:3001/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: mutation,
+            variables: {
+              name: userFormData.name,
+              email: userFormData.email,
+              password: userFormData.password,
+            },
+          }),
+        });
+
+        // Handle the response
+        if (!response.ok) {
+          throw new Error("Signup failed");
+        }
+
+        const { data, errors } = await response.json();
+
+        // Check if there are any errors in the response
+        if (errors) {
+          throw new Error(errors[0].message);
+        }
+
+        // If signup is successful, get the token and save it using Auth utility
+        const { token } = data.createUser;
+        Auth.login(token); // Save token to localStorage or context
+
+        // Close the modal after successful signup
         handleModalClose();
+
+        // Clear form data after successful signup
+        setUserFormData({ name: "", email: "", password: "" });
       } else {
-        setShowAlert(true);
+        setShowAlert(true); // Show alert if any required fields are missing
       }
     } catch (err) {
-      console.error(err);
-      setShowAlert(true);
+      console.error('Error during signup:', err);
+      setShowAlert(true); // Display alert for signup failure
     }
-
-    setUserFormData({ email: "", password: "" });
   };
 
   return (
@@ -48,6 +98,21 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
       >
         Something went wrong with your signup!
       </Alert>
+
+      <Form.Group className="mb-3">
+        <Form.Label htmlFor="name">Name</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Your full name"
+          name="name"
+          onChange={handleInputChange}
+          value={userFormData.name}
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          Name is required!
+        </Form.Control.Feedback>
+      </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label htmlFor="email">Email</Form.Label>
@@ -78,8 +143,9 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
           Password is required!
         </Form.Control.Feedback>
       </Form.Group>
+
       <Button
-        disabled={!(userFormData.email && userFormData.password)}
+        disabled={!(userFormData.name && userFormData.email && userFormData.password)} // Disable button if no input
         type="submit"
         variant="success"
       >
