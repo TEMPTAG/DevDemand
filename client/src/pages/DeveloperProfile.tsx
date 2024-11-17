@@ -5,7 +5,7 @@
 import ProfileForm from "../components/ProfileForm/ProfileForm.tsx";
 // import auth from "../utils/auth";
 
-const Dashboard = () => {
+const DeveloperProfile = () => {
 //   const [error, _setError] = useState(false);
 //   const [loginCheck, _setLoginCheck] = useState(false);
 
@@ -25,9 +25,10 @@ const Dashboard = () => {
 
   return (
     <>
+      <h2>Developer Profile</h2>
       <ProfileForm />
     </>
   );
 };
 
-export default Dashboard;
+export default DeveloperProfile;

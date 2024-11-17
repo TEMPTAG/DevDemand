@@ -81,44 +81,38 @@ export default function ProfileForm() {
     return (
         <Container className="profile-form-container">
             <Form onSubmit={handleSubmit} className="profile-form">
-                <Row className="mb-3">
-                    <Col>
-                        <Form.Group controlId="firstName">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="firstName"
-                                placeholder="Enter your first name"
-                                value={formData.firstName}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={!!errors.firstName}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.firstName}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="lastName">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="lastName"
-                                placeholder="Enter your last name"
-                                value={formData.lastName}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={!!errors.lastName}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.lastName}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
+                <Form.Group className="mb-3" controlId="firstName">
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="firstName"
+                        placeholder="Enter your first name"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.firstName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.firstName}
+                    </Form.Control.Feedback>
+                </Form.Group>
+    
+                <Form.Group className="mb-3" controlId="lastName">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="lastName"
+                        placeholder="Enter your last name"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.lastName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.lastName}
+                    </Form.Control.Feedback>
+                </Form.Group>
+    
                 <Form.Group className="mb-3" controlId="telephone">
                     <Form.Label>Telephone</Form.Label>
                     <Form.Control
@@ -134,8 +128,7 @@ export default function ProfileForm() {
                         {errors.telephone}
                     </Form.Control.Feedback>
                 </Form.Group>
-                </Col>
-                <Col>
+    
                 <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -151,49 +144,44 @@ export default function ProfileForm() {
                         {errors.email}
                     </Form.Control.Feedback>
                 </Form.Group>
-                </Col>
-                </Row>
-                <Row className="mb-3">
-                    <Col>
-                        <Form.Group controlId="city">
-                            <Form.Label>City</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="city"
-                                placeholder="Enter your city"
-                                value={formData.city}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={!!errors.city}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.city}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="state">
-                            <Form.Label>State</Form.Label>
-                            <Form.Select
-                                name="state"
-                                value={formData.state}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                isInvalid={!!errors.state}
-                            >
-                                <option value="">Select your state</option>
-                                {states.map((state) => (
-                                    <option key={state.abbreviation} value={state.abbreviation}>
-                                        {state.abbreviation}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                            <Form.Control.Feedback type="invalid">
-                                {errors.state}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
+    
+                <Form.Group className="mb-3" controlId="city">
+                    <Form.Label>City</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="city"
+                        placeholder="Enter your city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.city}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.city}
+                    </Form.Control.Feedback>
+                </Form.Group>
+    
+                <Form.Group className="mb-3" controlId="state">
+                    <Form.Label>State</Form.Label>
+                    <Form.Select
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        isInvalid={!!errors.state}
+                    >
+                        <option value="">Select your state</option>
+                        {states.map((state) => (
+                            <option key={state.abbreviation} value={state.abbreviation}>
+                                {state.abbreviation}
+                            </option>
+                        ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                        {errors.state}
+                    </Form.Control.Feedback>
+                </Form.Group>
+    
                 <Form.Group className="mb-3" controlId="portfolioLink">
                     <Form.Label>Portfolio Link</Form.Label>
                     <Form.Control
@@ -209,6 +197,7 @@ export default function ProfileForm() {
                         {errors.portfolioLink}
                     </Form.Control.Feedback>
                 </Form.Group>
+    
                 <Form.Group className="mb-3" controlId="githubLink">
                     <Form.Label>GitHub Link</Form.Label>
                     <Form.Control
@@ -224,6 +213,7 @@ export default function ProfileForm() {
                         {errors.githubLink}
                     </Form.Control.Feedback>
                 </Form.Group>
+    
                 <Form.Group className="mb-3" controlId="hourlyRate">
                     <Form.Label>Hourly Rate</Form.Label>
                     <InputGroup>
@@ -243,6 +233,7 @@ export default function ProfileForm() {
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
+    
                 <Form.Group className="mb-3" controlId="bio">
                     <Form.Label>Bio</Form.Label>
                     <Form.Control
@@ -259,10 +250,12 @@ export default function ProfileForm() {
                         {errors.bio}
                     </Form.Control.Feedback>
                 </Form.Group>
+    
                 <Button variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>
         </Container>
     );
+    
 }
