@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 // import Login from "./pages/Login.tsx";
 import Developer from "./pages/DeveloperProfile.tsx";
+import ProfileCard from "./pages/ProfileCard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
         {
           path: "/developer",
           element: <Developer />,
+        },
+        {
+          path: "/profilecard",
+          element: <ProfileCard />,
         },
       {
         path: "*",

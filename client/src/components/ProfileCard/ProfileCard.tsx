@@ -5,11 +5,13 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';
+import { FaMapMarkerAlt, FaDollarSign, FaPhone, FaEnvelope, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import './ProfileCard.css';
 
 interface DeveloperProps {
     isLoading: boolean;
     developer: {
+        imageUrl: string;
         firstName: string;
         lastName: string;
         telephone: string;
@@ -28,63 +30,61 @@ const formatPhoneNumber = (number: string) => {
     return formattedNumber;
 };
 
-const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
+const ProfileCard: React.FC<DeveloperProps> = ({ isLoading = true, developer = {} }) => {
     return (
-        <Card className="profile-card">
-            {/* <Card.Img variant="top" src={developer.imageUrl || '/path/to/default-image.jpg'} /> */}
-            <Card.Body>
-                {isLoading ? (
-                    <>
-                        <Placeholder as={Card.Title} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder as={Card.Text} animation="glow">
-                            <Placeholder xs={6} />
-                        </Placeholder>
-                        <Placeholder.Button variant="primary" xs={6} animation="glow" />
-                    </>
-                ) : (
-                    <>
-                        <Card.Title>{developer.firstName} {developer.lastName}</Card.Title>
-                        <Card.Text>Location: {developer.city}, {developer.state}</Card.Text>
-                        <Card.Text>Hourly Rate: ${developer.hourlyRate}</Card.Text>
-                        <Card.Text>Telephone: {formatPhoneNumber(developer.telephone)}</Card.Text>
-                        <Card.Text>Email: {developer.email}</Card.Text>
-                        <Card.Text>
-                            Portfolio: {developer.portfolioLink ? (
-                            <Card.Link href={developer.portfolioLink} target="_blank">View Portfolio</Card.Link>
-                        ) : 'Portfolio not provided'}
-                        </Card.Text>
-                        <Card.Text>
-                            GitHub: {developer.githubLink ? (
-                                <Card.Link href={developer.githubLink} target="_blank">View GitHub</Card.Link>
-                            ) : 'GitHub not provided'}
-                        </Card.Text>
-                        <Card.Text>Bio: {developer.bio}</Card.Text>
-                        {/* Add link to contact page here if needed and remove telephone and email */}
-                        <Button variant="primary" href={`mailto:${developer.email}`}>Contact</Button>
-                    </>
-                )}
-            </Card.Body>
-        </Card>
+        <div className="d-flex justify-content-center">
+            <Card className="profile-card" style={{ maxWidth: '400px' }}>
+            <Card.Img variant="top" src={developer.imageUrl || "/assets/images/profile-placeholder.png" }/>
+                <Card.Body className="text-center">
+                    {isLoading ? (
+                        <>
+                            <Placeholder as={Card.Title} animation="glow">
+                                <Placeholder xs={6} />
+                            </Placeholder>
+                            <Placeholder as={Card.Text} animation="glow">
+                                <Placeholder xs={6} />
+                            </Placeholder>
+                            <Placeholder as={Card.Text} animation="glow">
+                                <Placeholder xs={6} />
+                            </Placeholder>
+                            <Placeholder as={Card.Text} animation="glow">
+                                <Placeholder xs={6} />
+                            </Placeholder>
+                        </>
+                    ) : (
+                        <>
+                            <Card.Title>{developer.firstName} {developer.lastName}</Card.Title>
+                            <Card.Text>
+                                <FaMapMarkerAlt /> {developer.city}, {developer.state}
+                                </Card.Text>
+                            <Card.Text> 
+                                <FaDollarSign /> {developer.hourlyRate} p/h</Card.Text>
+                            <Card.Text>
+                            <FaPhone style={{ transform: 'scaleX(-1)' }} /> {formatPhoneNumber(developer.telephone ?? '')}
+                                </Card.Text>
+                            <Card.Text>
+                                <FaEnvelope /> {developer.email}
+                                </Card.Text>
+                            <Card.Text>
+                                <FaExternalLinkAlt />{' '} 
+                                {developer.portfolioLink ? (
+                                <Card.Link href={developer.portfolioLink} target="_blank">View Portfolio</Card.Link>
+                            ) : 'Portfolio not provided'}
+                            </Card.Text>
+                            <Card.Text>
+                                <FaGithub />{' '}
+                                    {developer.githubLink ? (
+                                    <Card.Link href={developer.githubLink} target="_blank">View GitHub</Card.Link>
+                                ) : 'GitHub not provided'}
+                            </Card.Text>
+                            <Card.Text>{developer.bio}</Card.Text>
+                            {/* Add link to contact page here if needed and remove telephone and email */}
+                            <Button variant="primary" href={`mailto:${developer.email}`}>Contact</Button>
+                        </>
+                    )}
+                </Card.Body>
+            </Card>
+        </div>
     );
 }
 
