@@ -30,12 +30,11 @@ const formatPhoneNumber = (number: string) => {
     return formattedNumber;
 };
 
-const ProfileCard: React.FC<DeveloperProps> = ({ isLoading = true, developer = {} }) => {
+const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
     return (
-        <div className="d-flex justify-content-center">
-            <Card className="profile-card" style={{ maxWidth: '400px' }}>
+            <Card className="profile-card mx-auto" style={{ maxWidth: '400px' }}>
             <Card.Img variant="top" src={developer.imageUrl || "/assets/images/profile-placeholder.png" }/>
-                <Card.Body className="text-center">
+                <Card.Body>
                     {isLoading ? (
                         <>
                             <Placeholder as={Card.Title} animation="glow">
@@ -53,38 +52,45 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading = true, developer = {
                         </>
                     ) : (
                         <>
-                            <Card.Title>{developer.firstName} {developer.lastName}</Card.Title>
-                            <Card.Text>
-                                <FaMapMarkerAlt /> {developer.city}, {developer.state}
+                            <Card.Title className="text-center pb-3 fs-2">{developer.firstName} {developer.lastName}</Card.Title>
+
+                            <Card.Text className="d-flex flex-column align-items-center ">
+                            <Card.Text className="d-flex flex-column align-items-start ">
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaMapMarkerAlt className="me-3" /> {developer.city}, {developer.state}
                                 </Card.Text>
-                            <Card.Text> 
-                                <FaDollarSign /> {developer.hourlyRate} p/h</Card.Text>
-                            <Card.Text>
-                            <FaPhone style={{ transform: 'scaleX(-1)' }} /> {formatPhoneNumber(developer.telephone ?? '')}
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaDollarSign className="me-3" /> {developer.hourlyRate} p/h
                                 </Card.Text>
-                            <Card.Text>
-                                <FaEnvelope /> {developer.email}
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> {formatPhoneNumber(developer.telephone ?? '')}
                                 </Card.Text>
-                            <Card.Text>
-                                <FaExternalLinkAlt />{' '} 
-                                {developer.portfolioLink ? (
-                                <Card.Link href={developer.portfolioLink} target="_blank">View Portfolio</Card.Link>
-                            ) : 'Portfolio not provided'}
-                            </Card.Text>
-                            <Card.Text>
-                                <FaGithub />{' '}
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaEnvelope className="me-3" /> {developer.email}
+                                </Card.Text>
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaExternalLinkAlt className="me-3" />{' '}
+                                    {developer.portfolioLink ? (
+                                        <Card.Link href={developer.portfolioLink} target="_blank" className="text-decoration-none">View Portfolio</Card.Link>
+                                    ) : 'Portfolio not provided'}
+                                </Card.Text>
+                                <Card.Text className="d-flex align-items-center">
+                                    <FaGithub className="me-3" />{' '}
                                     {developer.githubLink ? (
-                                    <Card.Link href={developer.githubLink} target="_blank">View GitHub</Card.Link>
-                                ) : 'GitHub not provided'}
+                                        <Card.Link href={developer.githubLink} target="_blank" className="text-decoration-none">View GitHub</Card.Link>
+                                    ) : 'GitHub not provided'}
+                                </Card.Text>
                             </Card.Text>
-                            <Card.Text>{developer.bio}</Card.Text>
-                            {/* Add link to contact page here if needed and remove telephone and email */}
-                            <Button variant="primary" href={`mailto:${developer.email}`}>Contact</Button>
+                            </Card.Text>
+
+                            <Card.Text className="text-justify">{developer.bio}</Card.Text>
+                            <div className="text-center mt-3">
+                                <Button variant="primary" href={`mailto:${developer.email}`}>Contact {developer.firstName}</Button>
+                            </div>
                         </>
                     )}
                 </Card.Body>
             </Card>
-        </div>
     );
 }
 
