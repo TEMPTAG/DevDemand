@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { states } from './States.ts';
-import { Form, InputGroup, Row, Col, Button, Container } from 'react-bootstrap';
+import { Form, InputGroup, Button, Container } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
