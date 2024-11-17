@@ -5,7 +5,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';
-import { FaMapMarkerAlt, FaDollarSign, FaPhone, FaEnvelope, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaDollarSign, FaPhone, FaEnvelope, FaGithub, FaUserAlt } from 'react-icons/fa';
 import './ProfileCard.css';
 
 interface DeveloperProps {
@@ -63,13 +63,15 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
                                     <FaDollarSign className="me-3" /> {developer.hourlyRate} p/h
                                 </Card.Text>
                                 <Card.Text className="d-flex align-items-center">
-                                    <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> {formatPhoneNumber(developer.telephone ?? '')}
+                                    <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> 
+                                    <a href={`tel:${developer.telephone}`} className="text-decoration-none">{formatPhoneNumber(developer.telephone ?? '')}</a>
                                 </Card.Text>
                                 <Card.Text className="d-flex align-items-center">
-                                    <FaEnvelope className="me-3" /> {developer.email}
+                                    <FaEnvelope className="me-3" /> 
+                                    <a href={`mailto:${developer.email}`} className="text-decoration-none">{developer.email}</a>
                                 </Card.Text>
                                 <Card.Text className="d-flex align-items-center">
-                                    <FaExternalLinkAlt className="me-3" />{' '}
+                                    <FaUserAlt className="me-3" />{' '}
                                     {developer.portfolioLink ? (
                                         <Card.Link href={developer.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View Portfolio</Card.Link>
                                     ) : 'Portfolio not provided'}
@@ -85,7 +87,23 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
 
                             <Card.Text className="text-justify">{developer.bio}</Card.Text>
                             <div className="text-center mt-3">
-                                <Button variant="primary" href={`mailto:${developer.email}`}>Contact {developer.firstName}</Button>
+                                {/* Email button visible on tablet and above */}
+                                <Button 
+                                    variant="primary" 
+                                    href={`mailto:${developer.email}`} 
+                                    className="d-none d-md-block" // Hidden on small screens, visible on medium and above, with small size
+                                >
+                                    Contact {developer.firstName}
+                                </Button>
+
+                                {/* Phone number button visible only on mobile */}
+                                <Button 
+                                    variant="primary" 
+                                    href={`tel:${developer.telephone}`} 
+                                    className="d-md-none" // Visible only on small screens, with small size
+                                >
+                                    Call {developer.firstName}
+                                </Button>
                             </div>
                         </>
                     )}
