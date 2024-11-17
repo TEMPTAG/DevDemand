@@ -71,13 +71,13 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
                                 <Card.Text className="d-flex align-items-center">
                                     <FaExternalLinkAlt className="me-3" />{' '}
                                     {developer.portfolioLink ? (
-                                        <Card.Link href={developer.portfolioLink} target="_blank" className="text-decoration-none">View Portfolio</Card.Link>
+                                        <Card.Link href={developer.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View Portfolio</Card.Link>
                                     ) : 'Portfolio not provided'}
                                 </Card.Text>
                                 <Card.Text className="d-flex align-items-center">
                                     <FaGithub className="me-3" />{' '}
                                     {developer.githubLink ? (
-                                        <Card.Link href={developer.githubLink} target="_blank" className="text-decoration-none">View GitHub</Card.Link>
+                                        <Card.Link href={developer.githubLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View GitHub</Card.Link>
                                     ) : 'GitHub not provided'}
                                 </Card.Text>
                             </Card.Text>

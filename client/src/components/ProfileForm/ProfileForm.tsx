@@ -197,7 +197,7 @@ export default function ProfileForm() {
                 <Form.Group className="mb-3" controlId="portfolioLink">
                     <Form.Label>Portfolio Link</Form.Label>
                     <Form.Control
-                        type="url"
+                        type="text"
                         name="portfolioLink"
                         placeholder="Enter your portfolio link"
                         value={formData.portfolioLink}
@@ -212,7 +212,7 @@ export default function ProfileForm() {
                 <Form.Group className="mb-3" controlId="githubLink">
                     <Form.Label>GitHub Link</Form.Label>
                     <Form.Control
-                        type="url"
+                        type="text"
                         name="githubLink"
                         placeholder="Enter your GitHub link"
                         value={formData.githubLink}

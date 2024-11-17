@@ -33,8 +33,8 @@ const Dashboard = () => {
   email: 'johnsmith@email.com',
   city: 'New York',
   state: 'NY',
-  portfolioLink: 'portfolio.com',
-  githubLink: 'github.com',
+  portfolioLink: 'https://portfolio.com',
+  githubLink: 'https://github.com',
   hourlyRate: 100,
   bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam erat mi, pellentesque non orci vel, ultrices pulvinar risus. Curabitur eget lorem volutpat, feugiat tellus quis, pharetra nunc. Proin eget mi erat. Mauris id pulvinar neque. Quisque in mi orci. Fusce hendrerit a tellus sollicitudin placerat. In a placerat ex. Mauris cursus dui a gravida finibus. Vestibulum iaculis pulvinar ex, accumsan pharetra tortor.'
 }} />
