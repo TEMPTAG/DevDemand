@@ -2,10 +2,22 @@ import { ChangeEvent, useState } from 'react';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { Errors } from '../../models/Errors';
 import { states } from './States.ts';
+import Auth from '../../utils/auth.ts';
 import { Form, InputGroup, Button, Container } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
+    // Check if the user is logged in
+    // const isLoggedIn = Auth.loggedIn();
+
+    // if (!isLoggedIn) {
+    //     return (
+    //     <Container className="text-center mt-5">
+    //         <p>Please log in to access this page.</p>
+    //     </Container>
+    //     );
+    // }
+
     // State to hold form data
     const [formData, setFormData] = useState({
         firstName: '',
@@ -63,6 +75,8 @@ export default function ProfileForm() {
                 hourlyRate: 0,
                 bio: ''
             });
+            // Handle successful submission (e.g., send data to the server)
+            console.log('Form submitted successfully', formData);
         }
     };
 
