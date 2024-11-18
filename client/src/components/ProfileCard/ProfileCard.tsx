@@ -1,7 +1,7 @@
 // Renders the details of the developer data from the parent component
 // The parent component will fetch the developer data using the GraphQL query and pass it as props to this component
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';

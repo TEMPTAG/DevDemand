@@ -7,7 +7,7 @@ import { states } from './States.ts';
 // import Auth from '../../utils/auth.ts';
 // import { GET_DEV } from '../../utils/queries.ts';
 // import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
-import { Form, InputGroup, Button, Container, Spinner, FormGroup } from 'react-bootstrap';
+import { Form, InputGroup, Button, Container, Spinner } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
@@ -181,6 +181,7 @@ export default function ProfileForm() {
                 <div className="form-instructions text-center">
                     <p>{isProfileCreated ? "Please update the fields below to update your profile." : "Please complete the fields below to create your profile."}</p>
                 </div>
+
                 <Form.Group className="mb-4 text-center">
                     <Card.Img 
                         onClick={handleClick} 
