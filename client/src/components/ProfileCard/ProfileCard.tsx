@@ -54,38 +54,38 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
                         <>
                             <Card.Title className="text-center pb-3 fs-2">{developer.firstName} {developer.lastName}</Card.Title>
 
-                            <Card.Text className="d-flex flex-column align-items-center ">
-                            <Card.Text className="d-flex flex-column align-items-start ">
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaMapMarkerAlt className="me-3" /> {developer.city}, {developer.state}
-                                </Card.Text>
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaDollarSign className="me-3" /> {developer.hourlyRate} p/h
-                                </Card.Text>
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> 
-                                    <a href={`tel:${developer.telephone}`} className="text-decoration-none">{formatPhoneNumber(developer.telephone ?? '')}</a>
-                                </Card.Text>
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaEnvelope className="me-3" /> 
-                                    <a href={`mailto:${developer.email}`} className="text-decoration-none">{developer.email}</a>
-                                </Card.Text>
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaUserAlt className="me-3" />{' '}
-                                    {developer.portfolioLink ? (
-                                        <Card.Link href={developer.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View Portfolio</Card.Link>
-                                    ) : 'Portfolio not provided'}
-                                </Card.Text>
-                                <Card.Text className="d-flex align-items-center">
-                                    <FaGithub className="me-3" />{' '}
-                                    {developer.githubLink ? (
-                                        <Card.Link href={developer.githubLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View GitHub</Card.Link>
-                                    ) : 'GitHub not provided'}
-                                </Card.Text>
-                            </Card.Text>
-                            </Card.Text>
+                            <div className="d-flex flex-column align-items-center ">
+                                <div className="d-flex flex-column align-items-start ">
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaMapMarkerAlt className="me-3" /> {developer.city}, {developer.state}
+                                    </Card.Text>
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaDollarSign className="me-3" /> {developer.hourlyRate} p/h
+                                    </Card.Text>
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> 
+                                        <a href={`tel:${developer.telephone}`} className="text-decoration-none">{formatPhoneNumber(developer.telephone ?? '')}</a>
+                                    </Card.Text>
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaEnvelope className="me-3" /> 
+                                        <a href={`mailto:${developer.email}`} className="text-decoration-none">{developer.email}</a>
+                                    </Card.Text>
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaUserAlt className="me-3" />{' '}
+                                        {developer.portfolioLink ? (
+                                            <Card.Link href={developer.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View Portfolio</Card.Link>
+                                        ) : 'Portfolio not provided'}
+                                    </Card.Text>
+                                    <Card.Text className="d-flex align-items-center">
+                                        <FaGithub className="me-3" />{' '}
+                                        {developer.githubLink ? (
+                                            <Card.Link href={developer.githubLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View GitHub</Card.Link>
+                                        ) : 'GitHub not provided'}
+                                    </Card.Text>
+                                </div>
+                            </div>
 
-                            <Card.Text className="text-justify">{developer.bio}</Card.Text>
+                            <Card.Text className="text-justify mt-3" >{developer.bio}</Card.Text>
                             <div className="text-center mt-3">
                                 {/* Email button visible on tablet and above */}
                                 <Button 
