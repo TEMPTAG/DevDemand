@@ -8,7 +8,7 @@
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build": "npm install && npm run build",
+    "render-build": "npm install && npm run build && npm run seed",
     "test": "npx cypress run --browser electron",
     "test-component": "npx cypress run --component",
     "test-gui": "npx cypress open"
@@ -30,6 +30,7 @@
     "apollo-server-express": "^3.13.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "emailjs-com": "^3.2.0",
     "express-jwt": "^8.4.1",
     "graphql": "^16.9.0",
     "jsonwebtoken": "^9.0.2",
