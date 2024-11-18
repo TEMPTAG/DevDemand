@@ -1,31 +1,20 @@
-interface FormData {
-    firstName: string;
-    lastName: string;
-    telephone: string;
-    email: string;
-    city: string;
-    state: string;
-    portfolioLink?: string;
-    githubLink?: string;
-    hourlyRate: number;
-    bio: string;
-  }
+import { Developer } from '../../models/Developer';
 
-const validateProfileForm = (formData: FormData) => {
+const validateProfileForm = (developer: Developer) => {
     const errors: { [key: string]: string } = {};
 
     // Trim whitespace from form data
-    const trimmedData: FormData = {
-        ...formData,
-        firstName: formData.firstName.trim(),
-        lastName: formData.lastName.trim(),
-        telephone: formData.telephone.trim(),
-        email: formData.email.trim(),
-        city: formData.city.trim(),
-        state: formData.state.trim(),
-        portfolioLink: formData.portfolioLink?.trim() ?? '',
-        githubLink: formData.githubLink?.trim() ?? '',
-        bio: formData.bio.trim()
+    const trimmedData: Developer = {
+        ...developer,
+        firstName: developer.firstName.trim(),
+        lastName: developer.lastName.trim(),
+        telephone: developer.telephone.trim(),
+        email: developer.email.trim(),
+        city: developer.city.trim(),
+        state: developer.state.trim(),
+        portfolioLink: developer.portfolioLink?.trim() ?? '',
+        githubLink: developer.githubLink?.trim() ?? '',
+        bio: developer.bio.trim()
     };
 
     // Validate first name
