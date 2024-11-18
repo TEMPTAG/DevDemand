@@ -1,4 +1,5 @@
 export interface Developer {
+    imageUrl: string;
     firstName: string;
     lastName: string;
     telephone: string;

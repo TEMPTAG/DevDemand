@@ -1,4 +1,5 @@
-import { useEffect, ChangeEvent, useState } from 'react';
+import { useEffect, ChangeEvent, useState, useRef } from 'react';
+import Card from 'react-bootstrap/Card';
 import { useQuery, useMutation, gql } from '@apollo/client';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { Errors } from '../../models/Errors';
@@ -6,7 +7,7 @@ import { states } from './States.ts';
 // import Auth from '../../utils/auth.ts';
 // import { GET_DEV } from '../../utils/queries.ts';
 // import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
-import { Form, InputGroup, Button, Container, Spinner } from 'react-bootstrap';
+import { Form, InputGroup, Button, Container, Spinner, FormGroup } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
@@ -26,6 +27,7 @@ export default function ProfileForm() {
 
     // State to hold form data
     const [formData, setFormData] = useState({
+        imageUrl: '',
         firstName: '',
         lastName: '',
         telephone: '',
@@ -60,6 +62,7 @@ export default function ProfileForm() {
     //         .then(() => {
     //             // Reset form data after deletion
     //             setFormData({
+    //                 imageUrl: '',
     //                 firstName: '',
     //                 lastName: '',
     //                 telephone: '',
@@ -139,13 +142,66 @@ export default function ProfileForm() {
     //     );
     // }
 
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [developerPicture, setDeveloperPicture] = useState<File | undefined>(undefined);
+    const previewURL = developerPicture?URL.createObjectURL(developerPicture): "/assets/images/profile-placeholder.png"
+
+    function convertFileToBase64 (file: File | undefined): Promise<string> {
+        if (!file) {
+          return Promise.resolve('');
+        }
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (error) => reject(error);
+        });
+      };
+
+    function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target?.files?.[0];
+        setDeveloperPicture(file);
+        convertFileToBase64(file).then((base64) => {
+            console.log(base64);
+            setFormData({ ...formData, imageUrl: base64 });
+        });
+    }
+    console.log(formData);
+
+    function handleClick() {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    }
+
     return (
-        
         <Container className="profile-form-container">
+            
             <Form onSubmit={handleSubmit} className="profile-form">
-            <div className="form-instructions text-center">
-                <p>{isProfileCreated ? "Please update the fields below to update your profile." : "Please complete the fields below to create your profile."}</p>
-            </div>
+                <div className="form-instructions text-center">
+                    <p>{isProfileCreated ? "Please update the fields below to update your profile." : "Please complete the fields below to create your profile."}</p>
+                </div>
+                <Form.Group className="mb-4 text-center">
+                    <Card.Img 
+                        onClick={handleClick} 
+                        variant="top" 
+                        src={formData.imageUrl || previewURL }
+                        className='profile-picture'
+                        alt="Profile Picture"
+                        style={{ maxWidth: '250px', cursor: 'pointer' }}
+                    />
+                    <input 
+                        type="file" 
+                        accept=".jpeg,.jpeg,.png"
+                        onChange={handleFileUpload}
+                        style={{ display: 'none' }}
+                        ref={fileInputRef}
+                    />
+                    <Form.Text className="text-muted">
+                        <p> Click on the image to upload a new profile picture.</p>
+                    </Form.Text>
+                </Form.Group>
+
                 <Form.Group className="mb-3" controlId="firstName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control

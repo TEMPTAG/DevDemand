@@ -1,7 +1,7 @@
 // Renders the details of the developer data from the parent component
 // The parent component will fetch the developer data using the GraphQL query and pass it as props to this component
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import Card from 'react-bootstrap/Card';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from 'react-bootstrap/Button';
@@ -31,6 +31,7 @@ const formatPhoneNumber = (number: string) => {
 };
 
 const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
+  
     return (
             <Card className="profile-card mx-auto" style={{ maxWidth: '400px' }}>
             <Card.Img variant="top" src={developer.imageUrl || "/assets/images/profile-placeholder.png" }/>
