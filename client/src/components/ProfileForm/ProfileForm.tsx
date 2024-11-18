@@ -320,7 +320,10 @@ export default function ProfileForm() {
                         {errors.bio}
                     </Form.Control.Feedback>
                 </Form.Group>
-    
+                        
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
                 {/* <Button variant="primary" type="submit">
                     {data?.profile ? 'Update Profile' : 'Create Profile'}
                 </Button>
