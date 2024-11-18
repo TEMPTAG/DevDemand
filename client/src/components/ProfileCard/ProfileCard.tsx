@@ -91,7 +91,7 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
                                 <Button 
                                     variant="primary" 
                                     href={`mailto:${developer.email}`} 
-                                    className="d-none d-md-block" // Hidden on small screens, visible on medium and above, with small size
+                                    className="d-none d-md-block button-size" // Hidden on small screens, visible on medium and above
                                 >
                                     Contact {developer.firstName}
                                 </Button>
@@ -100,7 +100,7 @@ const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
                                 <Button 
                                     variant="primary" 
                                     href={`tel:${developer.telephone}`} 
-                                    className="d-md-none" // Visible only on small screens, with small size
+                                    className="d-md-none button-size" // Visible only on small screens, with small size
                                 >
                                     Call {developer.firstName}
                                 </Button>
