@@ -96,12 +96,7 @@ export default function ProfileForm() {
     // Handle change in form inputs
     const handleChange = (e: ChangeEvent<HTMLElement>) => {
         const { name, value } = e.target as HTMLInputElement;
-
-        if (name === 'hourlyRate') {
-            setFormData({ ...formData, [name]: parseFloat(value) || 0 });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+        setFormData({ ...formData, [name]: value });
     };
 
     // Handle form submission
