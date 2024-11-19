@@ -10,7 +10,6 @@ export const typeDefs = gql`
   # Developer type
   type Developer {
     _id: ID!        # Matches the database field directly
-    name: String!   # Assuming 'name' exists in your database
     email: String!
   }
 
@@ -23,7 +22,7 @@ export const typeDefs = gql`
   # Mutation type for login and signup
   type Mutation {
     login(email: String!, password: String!): AuthPayload
-    createUser(name: String!, email: String!, password: String!): AuthPayload
+    createUser(email: String!, password: String!): AuthPayload
   }
 `;
 

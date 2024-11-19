@@ -41,13 +41,12 @@ const resolvers = {
         token,
         developer: {
           _id: developer._id,
-          name: developer.name,
           email: developer.email,
         },
       };
     },
 
-    createUser: async (_: any, { name, email, password }: { name: string; email: string; password: string }) => {
+    createUser: async (_: any, { email, password }: { email: string; password: string }) => {
       // Check if email already exists
       const existingDeveloper = await Developer.findOne({ email });
       if (existingDeveloper) {
@@ -55,7 +54,7 @@ const resolvers = {
       }
 
       // Create a new developer (the password is hashed by the pre('save') middleware in the model)
-      const newDeveloper = new Developer({ name, email, password });
+      const newDeveloper = new Developer({ email, password });
       await newDeveloper.save();
 
       // Generate a JWT token
@@ -70,7 +69,6 @@ const resolvers = {
         token,
         developer: {
           _id: newDeveloper._id,
-          name: newDeveloper.name,
           email: newDeveloper.email,
         },
       };

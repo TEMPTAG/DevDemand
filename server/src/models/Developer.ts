@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 
 // Define the Developer interface
 export interface IDeveloper extends Document {
-  name: string;
   email: string;
   password: string;
   matchPassword(password: string): Promise<boolean>;
@@ -11,12 +10,6 @@ export interface IDeveloper extends Document {
 
 // Create the Developer schema
 const developerSchema: Schema<IDeveloper> = new Schema<IDeveloper>({
-  name: {
-    type: String,
-    required: [true, 'Name is required'], // Validation for name
-    trim: true, // Remove leading/trailing whitespace
-    minlength: [2, 'Name must be at least 2 characters'], // Minimum length
-  },
   email: {
     type: String,
     required: [true, 'Email is required'], // Validation for email
