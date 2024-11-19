@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import auth from "../utils/auth";
 import LoginForm from "./Login";
@@ -11,6 +11,7 @@ const Navbar = () => {
   const [loginCheck, setLoginCheck] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoginCheck(auth.loggedIn());
@@ -66,14 +67,18 @@ const Navbar = () => {
                   </Button>
                 </li>
               ) : (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/developer">
-                    My Account
-                  </Link>
-                  <Link className="nav-link" to="/" onClick={handleLogout}>
-                    Logout
-                  </Link>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/developer">
+                      My Account
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="nav-link" to="/" onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </div>
@@ -86,9 +91,19 @@ const Navbar = () => {
         </Modal.Header>
         <Modal.Body>
           {isLogin ? (
-            <LoginForm handleModalClose={toggleModal} />
+            <LoginForm
+              handleModalClose={() => {
+                toggleModal();
+                navigate("/developer"); // Redirect after login
+              }}
+            />
           ) : (
-            <SignupForm handleModalClose={toggleModal} />
+            <SignupForm
+              handleModalClose={() => {
+                toggleModal();
+                navigate("/developer"); // Redirect after signup
+              }}
+            />
           )}
         </Modal.Body>
         <Modal.Footer>

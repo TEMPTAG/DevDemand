@@ -1,119 +1,79 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-import Auth from "../utils/auth"; // This will handle storing the token
+import { useMutation } from "@apollo/client";
+import { LOGIN_DEV } from "../utils/mutations";
+import Auth from "../utils/auth";
 
 const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  // Handle form input change (email or password)
+  // Apollo Client mutation for logging in
+  const [loginDeveloper, { loading, error }] = useMutation(LOGIN_DEV);
+
+  // Handle form input change
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  // Form submission handler with logging
+  // Form submission handler
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    setValidated(true); // Set the form to be validated on submission
+    setValidated(true);
 
-    // Validate form before proceeding
     if (form.checkValidity() === false) {
       return;
     }
 
     try {
-      if (userFormData.email && userFormData.password) {
-        // Construct GraphQL mutation
-        const mutation = `
-          mutation login($email: String!, $password: String!) {
-            login(email: $email, password: $password) {
-              token
-              developer {
-                _id
-                email
-              }
-            }
-          }
-        `;
-
-        // Log user input before sending the request
-        console.log('Submitting login data:', userFormData);
-
-        // Send the login request to the server
-    // Determine the correct endpoint dynamically
-    const GRAPHQL_ENDPOINT =
-      process.env.NODE_ENV === "production"
-        ? "/graphql" // Relative path for production (server and client hosted together)
-        : "http://localhost:3001/graphql"; // Localhost for development
-
-    // Send the login request to the server
-    const response = await fetch(GRAPHQL_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: mutation,
+      // Call the login mutation
+      const { data } = await loginDeveloper({
         variables: {
           email: userFormData.email,
           password: userFormData.password,
         },
-      }),
-    });
+      });
 
-        // Handle the response
-        if (!response.ok) {
-          throw new Error("Invalid credentials");
-        }
+      // Extract the token and store it using the Auth utility
+      const { token } = data.login;
+      Auth.login(token);
 
-        const { data, errors } = await response.json();
-
-        // Log GraphQL response for debugging
-        console.log('GraphQL response data:', data);
-        console.log('GraphQL response errors:', errors);
-
-        // Check if there are any errors in the response
-        if (errors) {
-          throw new Error(errors[0].message);
-        }
-
-        // If login is successful, get the token and save it using Auth utility
-        const { token } = data.login;
-        Auth.login(token); // Save token to localStorage or context
-
-        // Log successful login
-        console.log('Login successful, token stored:', token);
-
-        // Close the modal after successful login
-        handleModalClose();
-
-        // Clear form data after successful login
-        setUserFormData({ email: "", password: "" });
-      } else {
-        setShowAlert(true); // Show alert if email or password is missing
-      }
+      // Close the modal and reset the form
+      handleModalClose();
+      setUserFormData({ email: "", password: "" });
     } catch (err) {
-      // Log and show error if login fails
-      console.error('Error during login:', err);
-      setShowAlert(true); // Display alert for login failure
+      console.error("Login failed:", err);
+      setShowAlert(true);
     }
   };
 
   return (
     <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-      <Alert
-        dismissible
-        onClose={() => setShowAlert(false)}
-        show={showAlert}
-        variant="danger"
-      >
-        Something went wrong with your login credentials!
-      </Alert>
+      {showAlert && (
+        <Alert
+          dismissible
+          onClose={() => setShowAlert(false)}
+          show={showAlert}
+          variant="danger"
+        >
+          Something went wrong with your login credentials!
+        </Alert>
+      )}
+      {error && (
+        <Alert
+          dismissible
+          onClose={() => setShowAlert(false)}
+          show={true}
+          variant="danger"
+        >
+          {error.message}
+        </Alert>
+      )}
 
       <Form.Group className="mb-3">
         <Form.Label htmlFor="email">Email</Form.Label>
@@ -146,11 +106,11 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
       </Form.Group>
 
       <Button
-        disabled={!(userFormData.email && userFormData.password)} // Disable button if no input
+        disabled={loading || !(userFormData.email && userFormData.password)}
         type="submit"
         variant="success"
       >
-        Login
+        {loading ? "Logging in..." : "Login"}
       </Button>
     </Form>
   );

@@ -1,19 +1,19 @@
-// use this to decode a token and get the user's information out of it
+// use this to decode a token and get the Developer's information out of it
 import { jwtDecode } from "jwt-decode";
 
-interface UserToken {
+interface DeveloperToken {
   email: string;
   exp: number;
 }
 
-// create a new class to instantiate for a user
+// create a new class to instantiate for a Developer
 class AuthService {
   // get user data
   getProfile() {
     return jwtDecode(this.getToken() || "");
   }
 
-  // check if user's logged in
+  // check if Developer is logged in
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken();
@@ -23,7 +23,7 @@ class AuthService {
   // check if token is expired
   isTokenExpired(token: string) {
     try {
-      const decoded = jwtDecode<UserToken>(token);
+      const decoded = jwtDecode<DeveloperToken>(token);
       if (decoded.exp < Date.now() / 1000) {
         return true;
       }
@@ -35,12 +35,12 @@ class AuthService {
   }
 
   getToken() {
-    // Retrieves the user token from localStorage
+    // Retrieves the Developer token from localStorage
     return localStorage.getItem("id_token");
   }
 
   login(idToken: string) {
-    // Saves user token to localStorage
+    // Saves user token to localStorage and redirects to the Developer's profile page
     localStorage.setItem("id_token", idToken);
     window.location.assign("/developer");
   }
