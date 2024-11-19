@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'node:path';
+import db from './config/connection.js';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { typeDefs, resolvers } from './schemas/index.js';
 import { fileURLToPath } from 'url';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
+import { authenticateToken } from './utils/auth.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -35,34 +35,11 @@ const server = new ApolloServer({
   ],
 });
 
-// JWT Authentication Middleware
-const authenticateToken = async (req: any) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Extract token from the Authorization header
-
-  if (!token) {
-    console.warn('No token provided'); // Log a warning instead of throwing
-    return null;
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!); // Decode the JWT token
-    return decoded; // Return decoded user data
-  } catch (err) {
-    if (err instanceof Error) {
-      console.error('Invalid or expired token:', err.message); // Log the error
-    } else {
-      console.error('Invalid or expired token:', err); // Log the error
-    }
-    return null; // Return null for invalid tokens
-  }
-};
-
 // MongoDB connection setup
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI!);
-    console.log('MongoDB connected');
-    console.log('Connected to:', process.env.MONGODB_URI);
+    await db();
+    console.log('Connected to MongoDB');
   } catch (err) {
     console.error('Error connecting to MongoDB', err);
     process.exit(1); // Exit on connection error
@@ -76,14 +53,17 @@ const startApolloServer = async () => {
 
   const app = express();
 
-  // CORS setup to allow frontend (localhost:3000) to make requests to this backend (localhost:3001)
-  app.use(
-    cors({
-      origin: 'http://localhost:3000', // Allow only frontend from this origin
-      methods: 'GET,POST', // Allow these HTTP methods
-      credentials: true, // Allow credentials if needed (cookies, authorization headers)
-    })
-  );
+ // CORS setup to allow specific origins
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000', // For local development
+      'https://devdemand.onrender.com', // For the deployed frontend
+    ],
+    methods: 'GET,POST', // Allow these HTTP methods
+    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
+  })
+);
 
   // Middleware setup
   app.use(express.urlencoded({ extended: true }));
@@ -93,17 +73,16 @@ const startApolloServer = async () => {
   app.use(
     '/graphql',
     expressMiddleware(server, {
-      context: async ({ req }) => {
-        try {
-          const user = await authenticateToken(req);
-          return { user }; // Add user to context, even if it's null
-        } catch (err) {
-          console.error('Unexpected error during token authentication:', err);
-          return { user: null }; // Default to null user context on unexpected errors
-        }
+      context: async () => {
+        return { user: null }; // Default to null user context
       },
     })
   );
+
+  // Example of a protected route
+  app.get('/developer', authenticateToken, (_req, res) => {
+    res.send('This is a protected route');
+  });
 
   // Serve static files in production (e.g., React build)
   if (process.env.NODE_ENV === 'production') {
