@@ -1,10 +1,13 @@
 export interface Developer {
-  email: string | null;
-  password: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  city: string | null;
-  state: string | null;
-  portfolio: string | null;
-  bio: string | null;
-}
+    imageUrl: string;
+    firstName: string;
+    lastName: string;
+    telephone: string;
+    email: string;
+    city: string;
+    state: string;
+    portfolioLink?: string;
+    githubLink?: string;
+    hourlyRate: number;
+    bio: string;
+  }

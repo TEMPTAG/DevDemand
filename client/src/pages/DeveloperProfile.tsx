@@ -1,13 +1,13 @@
 // import { useEffect, useState, useLayoutEffect } from "react";
-import { useState } from "react";
+// import { useState } from "react";
 
-import ErrorPage from "./ErrorPage";
-
+// import ErrorPage from "./ErrorPage";
+import ProfileForm from "../components/ProfileForm/ProfileForm.tsx";
 // import auth from "../utils/auth";
 
-const Developer = () => {
-  const [error, _setError] = useState(false);
-  const [_loginCheck, _setLoginCheck] = useState(false);
+const DeveloperProfile = () => {
+//   const [error, _setError] = useState(false);
+//   const [loginCheck, _setLoginCheck] = useState(false);
 
   //   const checkLogin = () => {
   //     if (auth.loggedIn()) {
@@ -19,15 +19,16 @@ const Developer = () => {
   //     checkLogin();
   //   }, []);
 
-  if (error) {
-    return <ErrorPage />;
-  }
+//   if (error) {
+//     return <ErrorPage />;
+//   }
 
   return (
-    <div>
-      <h1>Developer Bio Page</h1>
-    </div>
+    <>
+      <h2>Developer Profile</h2>
+      <ProfileForm />
+    </>
   );
 };
 
-export default Developer;
+export default DeveloperProfile;

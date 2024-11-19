@@ -37,3 +37,9 @@ h1 {
   background-color: white;
   color: #000b26;
 }
+
+h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  padding: 30px 0 40px 0;
+}
