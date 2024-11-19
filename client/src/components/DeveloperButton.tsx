@@ -20,7 +20,7 @@ const DeveloperButton: React.FC<DeveloperButtonProps> = ({
   return (
     <Button
       variant="light"
-      className="custom-btn d-flex align-items-center mb-2"
+      className="custom-btn d-flex align-items-center mb-2 shadow-sm"
       onClick={onClick}
       style={{
         border: "1px solid #ddd",

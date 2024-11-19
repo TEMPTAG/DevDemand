@@ -57,12 +57,19 @@ const Navbar = () => {
             <ul className="navbar-nav ms-auto mb-2 mb-l-0">
               {!loginCheck ? (
                 <li className="nav-item">
-                  <Button className="nav-link" variant="link" onClick={toggleModal}>
+                  <Button
+                    className="nav-link"
+                    variant="link"
+                    onClick={toggleModal}
+                  >
                     Developer Login
                   </Button>
                 </li>
               ) : (
                 <li className="nav-item">
+                  <Link className="nav-link" to="/developer">
+                    My Account
+                  </Link>
                   <Link className="nav-link" to="/" onClick={handleLogout}>
                     Logout
                   </Link>
