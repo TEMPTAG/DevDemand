@@ -1,5 +1,5 @@
 export interface Developer {
-  id: string;
+  _id: string;
   imageUrl: string;
   firstName: string;
   lastName: string;
