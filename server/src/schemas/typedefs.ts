@@ -1,28 +1,71 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
 
-export const typeDefs = gql`
-  # Root Query type is required by GraphQL
-  type Query {
-    # Query to get the current developer (for testing purposes)
-    currentDeveloper: Developer
-  }
-
-  # Developer type
+const typeDefs = gql`
+  # Developer type definition
   type Developer {
-    _id: ID!        # Matches the database field directly
+    id: ID!
     email: String!
+    imageUrl: String
+    firstName: String
+    lastName: String
+    telephone: String
+    city: String
+    state: String
+    portfolioLink: String
+    githubLink: String
+    hourlyRate: Float
+    bio: String
   }
 
-  # AuthPayload type
-  type AuthPayload {
+  # Auth payload for login/signup responses
+  type Auth {
     token: String!
     developer: Developer!
   }
 
-  # Mutation type for login and signup
+  # Queries
+  type Query {
+    # Get the authenticated developer's data
+    me: Developer
+
+    # Get a list of all developers
+    developers: [Developer]
+  }
+
+  # Input type for updating developer details
+  input UpdateDeveloperInput {
+    email: String!
+    imageUrl: String
+    firstName: String
+    lastName: String
+    telephone: String
+    city: String
+    state: String
+    portfolioLink: String
+    githubLink: String
+    hourlyRate: Float
+    bio: String
+    password: String
+  }
+
+  # Mutations
   type Mutation {
-    login(email: String!, password: String!): AuthPayload
-    createUser(email: String!, password: String!): AuthPayload
+    # Log in a developer
+    login(email: String!, password: String!): Auth
+
+    # Add a new developer (sign up)
+    addDeveloper(email: String!, password: String!): Auth
+
+    # Update a developer's profile
+    updateDeveloper(input: UpdateDeveloperInput!): Developer
+
+    # Delete a developer account
+    deleteDeveloper(id: ID!): Message
+  }
+
+  # Message response for deletions
+  type Message {
+    message: String!
   }
 `;
 
