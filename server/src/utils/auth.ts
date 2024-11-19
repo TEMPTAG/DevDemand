@@ -8,29 +8,37 @@ interface JwtPayload {
   email: string;
 }
 
-export const authenticateToken = ({ req }: any) => {
+export const authenticateToken = (req: any, _res: any, next: any) => {
+  // Ensure req and its properties are defined
+  if (!req || !req.headers) {
+    return next(new AuthenticationError('Invalid request object.'));
+  }
+
+  const body = req.body || {};
+  const query = req.query || {};
+  const headers = req.headers || {};
+
   // Extract token from headers or body/query
-  let token = req.body.token || req.query.token || req.headers.authorization;
+  let token = body.token || query.token || headers.authorization;
 
   // If the token is in the authorization header, split to get the actual token
-  if (req.headers.authorization) {
+  if (typeof headers.authorization === 'string') {
     token = token.split(' ').pop().trim();
   }
 
   // If no token is provided, throw an authentication error
   if (!token) {
-    throw new AuthenticationError('No token provided.');
+    return next(new AuthenticationError('No token provided.'));
   }
 
   // Try to verify the token and add user data to the request if valid
   try {
     const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
     req.user = data as JwtPayload; // Attach user data to the request
+    next();
   } catch (err) {
-    throw new AuthenticationError('Invalid or expired token.');
+    next(new AuthenticationError('Invalid or expired token.'));
   }
-
-  return req;
 };
 
 export const signToken = (email: string) => {
