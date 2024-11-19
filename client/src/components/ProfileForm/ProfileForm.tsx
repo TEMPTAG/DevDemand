@@ -4,24 +4,13 @@ import { useQuery, useMutation, gql } from '@apollo/client';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { Errors } from '../../models/Errors';
 import { states } from './States.ts';
-// import Auth from '../../utils/auth.ts';
+import Auth from '../../utils/auth.ts';
 // import { GET_DEV } from '../../utils/queries.ts';
 // import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
 import { Form, InputGroup, Button, Container, Spinner } from 'react-bootstrap';
 import './ProfileForm.css';
 
 export default function ProfileForm() {
-    // Check if the user is logged in
-    // const isLoggedIn = Auth.loggedIn();
-
-    // if (!isLoggedIn) {
-    //     return (
-    //     <Container className="text-center mt-5">
-    //         <p>Please log in to access this page.</p>
-    //     </Container>
-    //     );
-    // }
-
     // State to track if the profile is created or updated
     const [isProfileCreated, setIsProfileCreated] = useState(false);
 
