@@ -8,7 +8,7 @@ import App from "./App.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 // import Login from "./pages/Login.tsx";
-import Developer from "./pages/DeveloperProfile.tsx";
+import DeveloperProfile from "./pages/DeveloperProfile.tsx";
 import ProfileCard from "./pages/ProfileCard.tsx";
 
 const router = createBrowserRouter([
@@ -26,8 +26,8 @@ const router = createBrowserRouter([
       //     element: <Login />,
       //   },
         {
-          path: "/developer",
-          element: <Developer />,
+          path: "/developer-profile",
+          element: <DeveloperProfile />,
         },
         {
           path: "/profilecard",
