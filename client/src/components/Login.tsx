@@ -45,19 +45,26 @@ const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
         console.log('Submitting login data:', userFormData);
 
         // Send the login request to the server
-        const response = await fetch("http://localhost:3001/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            query: mutation,
-            variables: {
-              email: userFormData.email,
-              password: userFormData.password,
-            },
-          }),
-        });
+    // Determine the correct endpoint dynamically
+    const GRAPHQL_ENDPOINT =
+      process.env.NODE_ENV === "production"
+        ? "/graphql" // Relative path for production (server and client hosted together)
+        : "http://localhost:3001/graphql"; // Localhost for development
+
+    // Send the login request to the server
+    const response = await fetch(GRAPHQL_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: mutation,
+        variables: {
+          email: userFormData.email,
+          password: userFormData.password,
+        },
+      }),
+    });
 
         // Handle the response
         if (!response.ok) {

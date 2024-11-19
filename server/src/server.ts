@@ -53,14 +53,17 @@ const startApolloServer = async () => {
 
   const app = express();
 
-  // CORS setup to allow frontend (localhost:3000) to make requests to this backend (localhost:3001)
-  app.use(
-    cors({
-      origin: 'http://localhost:3000', // Allow only frontend from this origin
-      methods: 'GET,POST', // Allow these HTTP methods
-      credentials: true, // Allow credentials if needed (cookies, authorization headers)
-    })
-  );
+ // CORS setup to allow specific origins
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000', // For local development
+      'https://devdemand.onrender.com', // For the deployed frontend
+    ],
+    methods: 'GET,POST', // Allow these HTTP methods
+    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
+  })
+);
 
   // Middleware setup
   app.use(express.urlencoded({ extended: true }));

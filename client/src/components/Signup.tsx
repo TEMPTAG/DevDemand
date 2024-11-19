@@ -41,8 +41,14 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
           }
         `;
 
+        // Determine the correct endpoint dynamically
+        const GRAPHQL_ENDPOINT =
+          process.env.NODE_ENV === "production"
+            ? "/graphql" // Relative path for production (server and client hosted together)
+            : "http://localhost:3001/graphql"; // Localhost for development
+
         // Send the signup request to the server
-        const response = await fetch("http://localhost:3001/graphql", {
+        const response = await fetch(GRAPHQL_ENDPOINT, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
