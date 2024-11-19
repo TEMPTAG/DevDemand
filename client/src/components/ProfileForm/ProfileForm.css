@@ -1,0 +1,17 @@
+.profile-form-container {
+  padding-bottom: 20px;
+}
+
+/* Remove number input arrows for modern browsers */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: none; /* Standard */
+  margin: 0; /* Optional: removes default margin */
+}
+
