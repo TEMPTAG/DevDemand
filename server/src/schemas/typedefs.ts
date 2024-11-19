@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 const typeDefs = gql`
   # Developer type definition
   type Developer {
-    id: ID!
+    _id: ID!
     email: String!
     imageUrl: String
     firstName: String

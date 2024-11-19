@@ -4,7 +4,7 @@ import { gql } from "@apollo/client";
 export const GET_ME = gql`
   query me {
     me {
-      id
+      _id
       email
       firstName
       lastName
@@ -20,16 +20,20 @@ export const GET_ME = gql`
 
 // Query to get all developers (browse all)
 export const GET_DEVELOPERS = gql`
-  query getDevelopers {
+  query GetDevelopers {
     developers {
-      id
+      _id
+      imageUrl
       firstName
       lastName
+      telephone
+      email
       city
       state
+      portfolioLink
+      githubLink
       hourlyRate
       bio
-      imageUrl
     }
   }
 `;
@@ -38,7 +42,7 @@ export const GET_DEVELOPERS = gql`
 export const GET_DEVELOPER_BY_ID = gql`
   query getDeveloperById($id: ID!) {
     developer(id: $id) {
-      id
+      _id
       email
       firstName
       lastName

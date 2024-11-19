@@ -6,7 +6,7 @@ export const LOGIN_DEV = gql`
     login(email: $email, password: $password) {
       token
       developer {
-        id
+        _id
         email
       }
     }
@@ -19,7 +19,7 @@ export const ADD_DEV = gql`
     addDeveloper(email: $email, password: $password) {
       token
       developer {
-        id
+        _id
         email
       }
     }
@@ -30,7 +30,7 @@ export const ADD_DEV = gql`
 export const UPDATE_DEV = gql`
   mutation updateDeveloper($input: UpdateDeveloperInput!) {
     updateDeveloper(input: $input) {
-      id
+      _id
       firstName
       lastName
       email

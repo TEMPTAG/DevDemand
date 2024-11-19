@@ -2,15 +2,16 @@ import React from "react";
 import { Button, Row, Col, Image } from "react-bootstrap";
 
 export interface DeveloperButtonProps {
-  id: number;
+  _id: string;
   imageUrl: string;
   firstName: string;
   lastName: string;
   bio: string;
-  onClick: () => void;
+  onClick: (id: string) => void;
 }
 
 const DeveloperButton: React.FC<DeveloperButtonProps> = ({
+  _id,
   imageUrl,
   firstName,
   lastName,
@@ -21,7 +22,7 @@ const DeveloperButton: React.FC<DeveloperButtonProps> = ({
     <Button
       variant="light"
       className="custom-btn d-flex align-items-center mb-2 shadow-sm"
-      onClick={onClick}
+      onClick={() => onClick(_id)}
       style={{
         border: "1px solid #ddd",
         borderRadius: "8px",
@@ -48,7 +49,10 @@ const DeveloperButton: React.FC<DeveloperButtonProps> = ({
               {firstName} {lastName}
             </strong>
           </div>
-          <div style={{ fontSize: "0.8rem", color: "#555" }}>
+          <div
+            style={{ fontSize: "0.8rem", color: "#555" }}
+            title={bio} // Show full bio on hover
+          >
             {bio.length > 60 ? `${bio.substring(0, 60)}...` : bio}
           </div>
         </Col>

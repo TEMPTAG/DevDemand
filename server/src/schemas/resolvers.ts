@@ -33,35 +33,38 @@ interface DeleteDeveloperArgs {
 
 const resolvers = {
   Query: {
-    // Resolver for the "me" query, which returns the authenticated Developer's data
     me: async (_parent: any, _args: any, context: any) => {
       if (context.developer) {
-        return Developer.findOne({ _id: context.developer._id });
+        return Developer.findById(context.developer._id);
       }
       throw new AuthenticationError("You must be logged in.");
     },
 
     developers: async () => {
-      return await Developer.find({});
+      try {
+        return await Developer.find({});
+      } catch (error) {
+        throw new Error("Failed to fetch developers");
+      }
     },
   },
 
   Mutation: {
-    // Resolver for logging in a Developer
     login: async (_parent: any, { email, password }: LoginDeveloperArgs) => {
       const developer = await Developer.findOne({ email });
       if (!developer) {
-        throw new AuthenticationError("Invalid email.");
+        throw new AuthenticationError("Invalid email or password.");
       }
+
       const correctPw = await developer.isCorrectPassword(password);
       if (!correctPw) {
-        throw new AuthenticationError("Invalid password.");
+        throw new AuthenticationError("Invalid email or password.");
       }
+
       const token = signToken(developer.email, developer._id);
       return { token, developer };
     },
 
-    // Resolver for adding a new Developer (sign up)
     addDeveloper: async (
       _parent: any,
       { email, password }: AddDeveloperArgs
@@ -76,7 +79,6 @@ const resolvers = {
       return { token, developer };
     },
 
-    // Update developer profile
     updateDeveloper: async (
       _parent: any,
       { input }: UpdateDeveloperArgs,
@@ -101,7 +103,6 @@ const resolvers = {
       return updatedDeveloper;
     },
 
-    // Delete a developer account
     deleteDeveloper: async (
       _parent: any,
       { id }: DeleteDeveloperArgs,
@@ -113,7 +114,7 @@ const resolvers = {
         );
       }
 
-      if (context.developer._id !== id) {
+      if (context.developer._id.toString() !== id) {
         throw new AuthenticationError("You can only delete your own account.");
       }
 
@@ -127,5 +128,4 @@ const resolvers = {
   },
 };
 
-// Export the resolvers object for use in GraphQL schema
 export default resolvers;
