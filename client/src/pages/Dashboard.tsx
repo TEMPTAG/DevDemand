@@ -96,7 +96,7 @@ const Dashboard = () => {
     <Container className="mt-4">
       <Row>
         <Col xs={12} lg={4} className="mb-3">
-          <Card className="bg-light shadow border rounded">
+          <Card className="shadow border rounded">
             <Card.Body>
               <Card.Title>
                 <strong>Browse our Developers:</strong>
