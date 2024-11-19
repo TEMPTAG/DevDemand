@@ -56,9 +56,10 @@ const validateProfileForm = (developer: Developer) => {
         errors.state = 'State is required';
     }
 
+    const urlRegex = /^(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))$/i;
+
     // Validate portfolio link
     if (trimmedData.portfolioLink) {
-        const urlRegex = /^(https?:\/\/[^\s]+)/i;
         if (!urlRegex.test(trimmedData.portfolioLink)) {
             errors.portfolioLink = 'Portfolio link must be a valid URL starting with http:// or https://';
         }
@@ -66,7 +67,6 @@ const validateProfileForm = (developer: Developer) => {
     
     // Validate GitHub link
     if (trimmedData.githubLink) {
-        const urlRegex = /^(https?:\/\/[^\s]+)/i;
         if (!urlRegex.test(trimmedData.githubLink)) {
             errors.githubLink = 'GitHub link must be a valid URL starting with http:// or https://';
         }
