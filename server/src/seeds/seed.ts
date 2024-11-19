@@ -16,14 +16,12 @@ const seedDevelopers = async () => {
       {
         email: 'developer1@example.com',
         password: 'password123', // This will be hashed
-        name: 'Developer One',
         skills: ['JavaScript', 'Node.js', 'React'],
         bio: 'Full-stack developer with 5 years of experience.',
       },
       {
         email: 'developer2@example.com',
         password: 'password456',
-        name: 'Developer Two',
         skills: ['Python', 'Django', 'SQL'],
         bio: 'Backend developer with a focus on scalable systems.',
       },
