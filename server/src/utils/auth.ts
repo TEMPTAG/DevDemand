@@ -1,58 +1,51 @@
-import jwt from 'jsonwebtoken';
-import { GraphQLError } from 'graphql';
-import dotenv from 'dotenv';
+import jwt from "jsonwebtoken";
+import { GraphQLError } from "graphql";
+import dotenv from "dotenv";
+
 dotenv.config();
 
-// Define types for the JWT payload
-interface JwtPayload {
-  email: string;
-}
+// Function to authenticate a token (used in context for GraphQL requests)
+export const authenticateToken = ({ req }: any) => {
+  // Get the token from the request headers, query, or body
+  let token = req.body.token || req.query.token || req.headers.authorization;
 
-export const authenticateToken = (req: any, _res: any, next: any) => {
-  // Ensure req and its properties are defined
-  if (!req || !req.headers) {
-    return next(new AuthenticationError('Invalid request object.'));
+  // If the token is in the headers, remove the "Bearer " prefix
+  if (req.headers.authorization) {
+    token = token.split(" ").pop().trim();
   }
 
-  const body = req.body || {};
-  const query = req.query || {};
-  const headers = req.headers || {};
-
-  // Extract token from headers or body/query
-  let token = body.token || query.token || headers.authorization;
-
-  // If the token is in the authorization header, split to get the actual token
-  if (typeof headers.authorization === 'string') {
-    token = token.split(' ').pop().trim();
-  }
-
-  // If no token is provided, throw an authentication error
+  // If there is no token, return the request as is
   if (!token) {
-    return next(new AuthenticationError('No token provided.'));
+    return req;
   }
 
-  // Try to verify the token and add user data to the request if valid
   try {
-    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
-    req.user = data as JwtPayload; // Attach user data to the request
-    next();
+    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || "", {
+      maxAge: "2hr", // 2 hour expiration time for the Token
+    });
+    req.developer = data; // Set the Developer data from the token to the request object
   } catch (err) {
-    next(new AuthenticationError('Invalid or expired token.'));
+    console.log("Invalid token"); // Log an error if the token is invalid
   }
+
+  // Return the request object with the Developer data attached if authenticated, or the request object as is if not authenticated
+  return req;
 };
 
-export const signToken = (email: string) => {
-  // Only store non-sensitive user info in the token payload
-  const payload = { email };
+// Function to sign a token with an email, and _id
+export const signToken = (email: string, _id: unknown) => {
+  // Create a payload with the email, and _id
+  const payload = { email, _id };
+  const secretKey: any = process.env.JWT_SECRET_KEY; // Get the secret key from the environment variables
 
-  // Generate and return a signed JWT with an expiration time
-  return jwt.sign({ data: payload }, process.env.JWT_SECRET_KEY || '', { expiresIn: '2h' });
+  // Return a signed token with the payload and secret key
+  return jwt.sign({ data: payload }, secretKey, { expiresIn: "2h" });
 };
 
-// Custom AuthenticationError class for GraphQL errors
+// Custom error class for authentication errors
 export class AuthenticationError extends GraphQLError {
   constructor(message: string) {
-    super(message, { extensions: { code: 'UNAUTHENTICATED' } });
-    Object.defineProperty(this, 'name', { value: 'AuthenticationError' });
+    super(message, undefined, undefined, undefined, ["UNAUTHENTICATED"]);
+    Object.defineProperty(this, "name", { value: "AuthenticationError" });
   }
-};
+}

@@ -1,19 +1,19 @@
-// use this to decode a token and get the user's information out of it
-import { jwtDecode } from 'jwt-decode';
+// use this to decode a token and get the Developer's information out of it
+import { jwtDecode } from "jwt-decode";
 
-interface UserToken {
+interface DeveloperToken {
   email: string;
   exp: number;
 }
 
-// create a new class to instantiate for a user
+// create a new class to instantiate for a Developer
 class AuthService {
   // get user data
   getProfile() {
-    return jwtDecode(this.getToken() || '');
+    return jwtDecode(this.getToken() || "");
   }
 
-  // check if user's logged in
+  // check if Developer is logged in
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken();
@@ -23,11 +23,11 @@ class AuthService {
   // check if token is expired
   isTokenExpired(token: string) {
     try {
-      const decoded = jwtDecode<UserToken>(token);
+      const decoded = jwtDecode<DeveloperToken>(token);
       if (decoded.exp < Date.now() / 1000) {
         return true;
-      } 
-      
+      }
+
       return false;
     } catch (err) {
       return false;
@@ -35,21 +35,21 @@ class AuthService {
   }
 
   getToken() {
-    // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
+    // Retrieves the Developer token from localStorage
+    return localStorage.getItem("id_token");
   }
 
   login(idToken: string) {
-    // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+    // Saves user token to localStorage and redirects to the Developer's profile page
+    localStorage.setItem("id_token", idToken);
+    window.location.assign("/developer");
   }
 
   logout() {
     // Clear user token and profile data from localStorage
-    localStorage.removeItem('id_token');
+    localStorage.removeItem("id_token");
     // this will reload the page and reset the state of the application
-    window.location.assign('/');
+    window.location.assign("/");
   }
 }
 

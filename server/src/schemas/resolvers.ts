@@ -1,77 +1,129 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import Developer from '../models/Developer.js';
-import { AuthenticationError } from 'apollo-server-express';
-import dotenv from 'dotenv';
+import Developer from "../models/index.js";
+import { signToken, AuthenticationError } from "../utils/auth.js";
 
-dotenv.config();
+// Define types for the arguments used in mutations
+interface LoginDeveloperArgs {
+  email: string;
+  password: string;
+}
+
+interface AddDeveloperArgs {
+  email: string;
+  password: string;
+}
+
+interface UpdateDeveloperArgs {
+  input: {
+    imageUrl?: string;
+    firstName?: string;
+    lastName?: string;
+    telephone?: string;
+    city?: string;
+    state?: string;
+    portfolioLink?: string;
+    githubLink?: string;
+    hourlyRate?: number;
+    bio?: string;
+  };
+}
+
+interface DeleteDeveloperArgs {
+  id: string;
+}
 
 const resolvers = {
   Query: {
-    currentDeveloper: async (_parent: any, _args: any, context: any) => {
-      return context.user || null;
+    me: async (_parent: any, _args: any, context: any) => {
+      if (context.developer) {
+        return Developer.findById(context.developer._id);
+      }
+      throw new AuthenticationError("You must be logged in.");
+    },
+
+    developers: async () => {
+      try {
+        return await Developer.find({});
+      } catch (error) {
+        throw new Error("Failed to fetch developers");
+      }
     },
   },
 
   Mutation: {
-    login: async (_: any, { email, password }: { email: string; password: string }) => {
-      // Find the developer by email
+    login: async (_parent: any, { email, password }: LoginDeveloperArgs) => {
       const developer = await Developer.findOne({ email });
-
       if (!developer) {
-        throw new AuthenticationError('Developer not found');
+        throw new AuthenticationError("Invalid email or password.");
       }
 
-      // Compare the provided password with the stored (hashed) password
-      const isMatch = await bcrypt.compare(password, developer.password);
-
-      if (!isMatch) {
-        throw new AuthenticationError('Invalid credentials');
+      const correctPw = await developer.isCorrectPassword(password);
+      if (!correctPw) {
+        throw new AuthenticationError("Invalid email or password.");
       }
 
-      // Generate a JWT token
-      const token = jwt.sign(
-        { developerId: developer._id },
-        process.env.JWT_SECRET_KEY || 'secret',
-        { expiresIn: '1h' }
-      );
-
-      // Return the token and developer's details
-      return {
-        token,
-        developer: {
-          _id: developer._id,
-          email: developer.email,
-        },
-      };
+      const token = signToken(developer.email, developer._id);
+      return { token, developer };
     },
 
-    createUser: async (_: any, { email, password }: { email: string; password: string }) => {
-      // Check if email already exists
+    addDeveloper: async (
+      _parent: any,
+      { email, password }: AddDeveloperArgs
+    ) => {
       const existingDeveloper = await Developer.findOne({ email });
       if (existingDeveloper) {
-        throw new AuthenticationError('Email is already in use');
+        throw new AuthenticationError("Email is already registered.");
       }
 
-      // Create a new developer (the password is hashed by the pre('save') middleware in the model)
-      const newDeveloper = new Developer({ email, password });
-      await newDeveloper.save();
+      const developer = await Developer.create({ email, password });
+      const token = signToken(developer.email, developer._id);
+      return { token, developer };
+    },
 
-      // Generate a JWT token
-      const token = jwt.sign(
-        { developerId: newDeveloper._id },
-        process.env.JWT_SECRET_KEY || 'secret',
-        { expiresIn: '1h' }
+    updateDeveloper: async (
+      _parent: any,
+      { input }: UpdateDeveloperArgs,
+      context: any
+    ) => {
+      if (!context.developer) {
+        throw new AuthenticationError(
+          "You must be logged in to update your profile."
+        );
+      }
+
+      const updatedDeveloper = await Developer.findByIdAndUpdate(
+        context.developer._id,
+        { ...input },
+        { new: true, runValidators: true }
       );
 
-      // Return the token and new developer's details
-      return {
-        token,
-        developer: {
-          _id: newDeveloper._id,
-          email: newDeveloper.email,
-        },
-      };
+      if (!updatedDeveloper) {
+        throw new Error("Developer not found.");
+      }
+
+      return updatedDeveloper;
+    },
+
+    deleteDeveloper: async (
+      _parent: any,
+      { id }: DeleteDeveloperArgs,
+      context: any
+    ) => {
+      if (!context.developer) {
+        throw new AuthenticationError(
+          "You must be logged in to delete your account."
+        );
+      }
+
+      if (context.developer._id.toString() !== id) {
+        throw new AuthenticationError("You can only delete your own account.");
+      }
+
+      const deletedDeveloper = await Developer.findByIdAndDelete(id);
+      if (!deletedDeveloper) {
+        throw new Error("Developer not found.");
+      }
+
+      return { message: "Developer account deleted successfully." };
     },
   },
 };

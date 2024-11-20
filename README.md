@@ -12,9 +12,24 @@
 
 ## Description
 
-DevDemand is a platform for developers to showcase their skills and connect with potential clients, empowering individuals and small businesses to find the right freelance talent for their projects.
+DevDemand is a cutting-edge platform designed to connect freelance developers with individuals and small businesses in need of professional web and software development services. Whether you’re looking to build a website, enhance an application, or bring a bold new idea to life, DevDemand empowers you to find the right talent with ease.
 
-![Screenshot of Application]()
+At its core, DevDemand simplifies the process of discovering and hiring freelance developers. With our intuitive interface, you can browse through detailed developer profiles showcasing their skills, experience, and portfolios. Clients can make informed decisions by exploring each developer’s bio, hourly rates, Portfolios, GitHub projects, and more — all in one place.
+
+![Screenshot of Application](./client/public/assets/screenshots/DEVDemandHomepage.jpg)
+
+#### Why Choose DevDemand?
+
+- **Centralized Talent Hub**: A one-stop platform to browse developers with varied expertise, from front-end design to full-stack development.
+- **Tailored Search Results**: Easily find developers that match your project requirements by reviewing their skills, location, and rates.
+- **Direct Communication**: Streamlined contact options to connect directly with developers, enabling quicker project discussions and hiring decisions.
+- **Empowering Developers**: DevDemand provides a platform for freelance developers to showcase their unique skillsets and grow their professional network.
+
+#### Here’s what you can do on DevDemand:
+
+- Discover developers with specialized skills, like React, TypeScript, Node.js, and more.
+- View comprehensive profiles, including portfolios, GitHub links, and personal bios.
+- Contact and collaborate with developers to bring your project from dream to deployed.
 
 ---
 
@@ -34,78 +49,104 @@ DevDemand is a platform for developers to showcase their skills and connect with
 
 ## Features
 
-- **Developer Management**:
+#### Developer Management:
 
-  - Create, update, and delete Developer Profiles
+- Developers can sign up, log in, and update their profiles.
+- Clients can browse through developer profiles to find the perfect match for their projects.
+
+#### GraphQL API:
+
+- Efficiently fetch data and interact with developers’ information using powerful GraphQL queries and mutations.
+
+#### Responsive Design:
+
+- Optimized for both desktop and mobile viewing.
+
+#### End-to-End Security:
+
+- Uses JWT for secure authentication.
 
 ---
 
 ## Technologies Used
 
-### Packages Used:
+The **DevDemand** application leverages a comprehensive tech stack to deliver a seamless experience for developers and clients. Below are the key technologies, frameworks, libraries, and tools used in the project:
 
-- [**bcrypt**](https://www.npmjs.com/package/bcrypt)
-  - A cryptographic hashing algorithm for storing passwords securely by converting passwords into secure, irreversible strings.
-- [**concurrently**](https://www.npmjs.com/package/concurrently)
-  - A Node package that enables running multiple commands simultaneously in the same terminal, streamlining workflows.
-- [**Cypress**](https://www.cypress.io/)
-  - An end-to-end testing framework for web applications that allows developers to write, execute, and debug tests for web app functionality.
-- [**dotenv**](https://www.npmjs.com/package/dotenv)
-  - A package that manages environment variables, making it easy to store and access sensitive information in .env files.
-- [**ESLint**](https://eslint.org/)
-  - A static code analysis tool that identifies and automatically fixes problems in JavaScript and TypeScript code, improving code quality.
-- [**Express.js**](https://expressjs.com/)
-  - A lightweight web application framework for Node.js that simplifies building server-side applications by providing routing and middleware.
-- [**JSDOM**](https://www.npmjs.com/package/jsdom)
-  - A library that simulates a web browser environment within Node, enabling browser-specific code testing without requiring an actual browser.
-- [**jwt-decode**](https://www.npmjs.com/package/jwt-decode)
-  - A package for decoding JSON Web Tokens (JWT) to retrieve payload data without validating the signature.
-- [**MongoDB**](https://www.mongodb.com/)
-  - A NoSQL database for storing and managing large volumes of unstructured data.
-- [**Mongoose**](https://mongoosejs.com/)
-  - An Object Data Modeling (ODM) library for MongoDB and Node.js that provides a schema-based solution to model application data.
-- [**msw (Mock Service Worker)**](https://mswjs.io/)
-  - A testing utility that intercepts network requests at the client-side and provides mock responses, enabling the testing of client-server interactions without a real backend.
-- [**nodemon**](https://www.npmjs.com/package/nodemon)
-  - A tool for automatically restarting a Node server upon detecting changes in the file system, enhancing development speed.
-- [**react-router-dom**](https://reactrouter.com/en/main)
-  - A routing library that enables seamless navigation and view management in React applications without reloading the entire page.
-- [**ts-node**](https://www.npmjs.com/package/ts-node)
-  - A TypeScript execution environment for running TypeScript code directly, streamlining development and debugging without precompiling.
-- [**TypeScript**](https://www.typescriptlang.org/)
-  - A typed superset of JavaScript that compiles to plain JavaScript, adding static typing and interfaces to improve code maintainability.
-- [**Vitest**](https://vitest.dev/)
-  - A fast unit testing framework for Vite projects that integrates smoothly with modern front-end development workflows.
-- [**Vite**](https://vite.dev/)
-  - A build tool and development server optimized for performance and efficiency, providing a fast developer experience.
+### Back-End Technologies:
 
-### Libraries Used:
+#### Libraries and Frameworks
 
-- [**Apollo Client**](https://www.apollographql.com/docs/react)
-  - A state management library for JavaScript applications, enabling seamless interaction with GraphQL APIs.
-- [**Apollo Server**](https://www.apollographql.com/docs/apollo-server)
-  - A GraphQL server for building APIs with schema definitions, resolvers, and query/mutation handling.
-- [**Bootstrap**](https://getbootstrap.com/)
-  - A front-end framework for building responsive and mobile-first applications with a grid system and pre-designed components.
-- [**GraphQL**](https://graphql.org/)
-  - A query language and runtime for APIs that allows clients to specify the data they need, promoting efficiency and flexibility in data fetching.
-- [**jsonwebtoken (JWT)**](https://www.npmjs.com/package/jsonwebtoken)
-  - A JSON-based standard used for securely transmitting information between a server and client, often for authentication purposes.
-- [**React**](https://react.dev/)
-  - A JavaScript library for building dynamic user interfaces, especially for single-page applications with stateful components.
-- [**react-bootstrap**](https://react-bootstrap.netlify.app/)
-  - A collection of Bootstrap components built specifically for React, simplifying the process of adding Bootstrap styles to React projects.
-- [**react-dom**](https://www.npmjs.com/package/react-dom)
-  - A package that provides the necessary methods for React to interact with the DOM in web applications.
+- [**Apollo Server**](https://www.apollographql.com/docs/apollo-server): A powerful GraphQL server for building APIs with schema definitions and resolvers.
+- [**Express.js**](https://expressjs.com/): Simplifies server creation, routing, and middleware handling for Node.js applications.
 
-### Services Used:
+#### Runtime Environment
 
-- [**GitHub Actions**](https://github.com/features/actions)
-  - A CI/CD tool that automates workflows, builds, and deployments directly within GitHub.
-- [**Node.js**](https://nodejs.org/en)
-  - A JavaScript runtime environment that enables server-side execution of JavaScript, allowing developers to build scalable network applications.
-- [**Render**](https://render.com/)
-  - A cloud platform for deploying web applications, databases, and static sites, offering hosting solutions for full-stack applications.
+- [**Node.js**](https://nodejs.org/en): A JavaScript runtime environment used for executing server-side code and building scalable network applications.
+
+#### Database and ORM
+
+- [**MongoDB**](https://www.mongodb.com/): A NoSQL database for storing and managing developer profiles and user data.
+- [**Mongoose**](https://mongoosejs.com/): An Object Data Modeling (ODM) library that provides schema-based solutions for application data in MongoDB.
+
+#### Authentication
+
+- [**bcrypt**](https://www.npmjs.com/package/bcrypt): A library for hashing and securely storing user passwords.
+- [**jsonwebtoken (JWT)**](https://www.npmjs.com/package/jsonwebtoken): A standard for securely transmitting information between server and client, primarily used for authentication.
+
+#### Environment Management
+
+- [**dotenv**](https://www.npmjs.com/package/dotenv): Manages environment variables securely in .env files.
+
+### Front-End Technologies
+
+#### Libraries and Frameworks
+
+- [**React**](https://react.dev/): A JavaScript library for building dynamic, component-based user interfaces.
+- [**react-router-dom**](https://reactrouter.com/en/main): Provides routing capabilities for seamless navigation between pages.
+- [**react-bootstrap**](https://react-bootstrap.netlify.app/): A Bootstrap implementation for React components to streamline front-end design.
+- [**Bootstrap**](https://getbootstrap.com/): A front-end framework for building responsive, mobile-first designs using its grid system and pre-styled components.
+
+#### Rendering
+
+- [**react-dom**](https://www.npmjs.com/package/react-dom): Integrates React with the DOM, enabling React components to render efficiently within the browser.
+
+#### GraphQL and State Management
+
+- [**Apollo Client**](https://www.apollographql.com/docs/react): Simplifies state management and API interaction for GraphQL queries and mutations.
+- [**GraphQL**](https://graphql.org/): A flexible query language and runtime for APIs that lets clients request only the data they need.
+
+#### Testing and Debugging
+
+- [**Cypress**](https://www.cypress.io/): An end-to-end testing framework for ensuring application reliability.
+- [**Vitest**](https://vitest.dev/): A fast unit testing framework tailored for Vite projects.
+- [**msw (Mock Service Worker)**](https://mswjs.io/): A testing tool that intercepts network requests and provides mock responses for testing client-server interactions.
+- [**JSDOM**](https://www.npmjs.com/package/jsdom): Simulates a web browser environment for testing browser-specific code without a real browser.
+
+### Development Tools
+
+#### Build Tools
+
+- [**Vite**](https://vite.dev/): A modern build tool offering fast development and production-ready builds.
+- [**TypeScript**](https://www.typescriptlang.org/): A superset of JavaScript that introduces static typing and interfaces for improved code reliability.
+
+#### Utility Tools
+
+- [**nodemon**](https://www.npmjs.com/package/nodemon): Automatically restarts the server when file changes are detected, speeding up the development process.
+- [**concurrently**](https://www.npmjs.com/package/concurrently): Enables running multiple commands, such as client and server, simultaneously in the same terminal.
+
+#### Linting and Formatting
+
+- [**ESLint**](https://eslint.org/): Identifies and automatically fixes code issues, ensuring consistent quality across the codebase.
+
+#### Deployment and Hosting
+
+- [**Render**](https://render.com/): A cloud hosting platform used for deploying the production-ready application.
+- [**GitHub Actions**](https://github.com/features/actions): Automates CI/CD workflows, including testing and deployment.
+
+#### Other Dependencies
+
+- [**jwt-decode**](https://www.npmjs.com/package/jwt-decode): A utility for decoding JSON Web Tokens without validation.
+- [**ts-node**](https://www.npmjs.com/package/ts-node): Allows TypeScript code execution directly without requiring pre-compilation.
 
 ---
 
@@ -140,8 +181,10 @@ _To install this project locally, using your terminal application, please follow
 
 4. **Create an `.env` file in the root directory and add the following**:
 
-   ```
-   coming soon...
+   ```bash
+   MONGO_URI=<your_mongodb_uri>
+   JWT_SECRET=<your_jwt_secret>
+   PORT=3001
    ```
 
 5. **Seed the Database**:
@@ -175,15 +218,19 @@ _To install this project locally, using your terminal application, please follow
   - Fetch all Developers
 
     ```graphql
-    query {
+    query GetDevelopers {
       developers {
-        id
+        _id
+        imageUrl
         firstName
         lastName
-        location
-        experience
+        telephone
+        email
+        city
+        state
+        portfolioLink
+        githubLink
         hourlyRate
-        skillset
         bio
       }
     }
@@ -192,35 +239,68 @@ _To install this project locally, using your terminal application, please follow
   - Fetch a single Developer by ID
 
     ```graphql
-    query ($id: ID!) {
+    query getDeveloperById($id: ID!) {
       developer(id: $id) {
-        id
+        _id
+        email
         firstName
         lastName
-        location
-        experience
+        city
+        state
         hourlyRate
-        skillset
         bio
+        portfolioLink
+        githubLink
+        imageUrl
+      }
+    }
+    ```
+
+  - Fetch the currently logged-in Developer's Data
+
+    ```graphql
+    query me {
+      me {
+        _id
+        email
+        firstName
+        lastName
+        city
+        state
+        hourlyRate
+        bio
+        portfolioLink
+        githubLink
       }
     }
     ```
 
 - **Developer Mutations**
 
+  - Login a Developer
+
+    ```graphql
+    mutation login($email: String!, $password: String!) {
+      login(email: $email, password: $password) {
+        token
+        developer {
+          _id
+          email
+        }
+      }
+    }
+    ```
+
   - Add a new Developer
 
     ```graphql
-    mutation ($input: DeveloperInput!) {
-      addDeveloper(input: $input) {
-        id
-        firstName
-        lastName
-        location
-        experience
-        hourlyRate
-        skillset
-        bio
+    mutation addDeveloper($email: String!, $password: String!) {
+      addDeveloper(email: $email, password: $password) {
+        token
+        developer {
+          _id
+          email
+        }
       }
     }
     ```
@@ -228,15 +308,15 @@ _To install this project locally, using your terminal application, please follow
   - Update an existing Developer
 
     ```graphql
-    mutation ($id: ID!, $input: DeveloperUpdateInput!) {
-      updateDeveloper(id: $id, input: $input) {
-        id
+    mutation updateDeveloper($input: UpdateDeveloperInput!) {
+      updateDeveloper(input: $input) {
+        _id
         firstName
         lastName
-        location
-        experience
+        email
+        city
+        state
         hourlyRate
-        skillset
         bio
       }
     }
@@ -245,9 +325,8 @@ _To install this project locally, using your terminal application, please follow
   - Delete a Developer
 
     ```graphql
-    mutation ($id: ID!) {
+    mutation deleteDeveloper($id: ID!) {
       deleteDeveloper(id: $id) {
-        success
         message
       }
     }
@@ -270,14 +349,21 @@ _To install this project locally, using your terminal application, please follow
 
   ```json
   {
-    "id": "example",
+    "_id": "ObjectId('example')",
+    "email": "ianrocks@example.com",
+    "password": "(will be a hashed password)",
+    "imageUrl": "https://www.example.com",
     "firstName": "Ian",
     "lastName": "Ferguson",
-    "location": "Phoenix, AZ",
+    "telephone": "888-888-8888",
+    "city": "Mesa",
+    "state": "AZ",
     "experience": "20 Years",
-    "hourlyRate": "$125",
-    "skillset": ["html", "JavaScript", "etc."],
-    "bio": "👋 Full-stack developer with 20+ years in automotive and medical industries, focused on building efficient, user-centered web applications."
+    "portfolioLink": "https://www.ianportfoliolinkexample.com",
+    "githubLink": "https://www.iansgithublink.com",
+    "hourlyRate": 150,
+    "bio": "👋 Full-stack developer with 20+ years in automotive and medical industries, focused on building efficient, user-centered web applications.",
+    "__v": "0"
   }
   ```
 
@@ -295,7 +381,7 @@ Testing functionality with Cypress will be added soon...
 
 ![GitHub contributors](https://img.shields.io/github/contributors/TEMPTAG/DevDemand?color=green) ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/TEMPTAG/DevDemand)
 
-|             Team 4 |                                                  |                                                                   |                                           |                                                                                                                                   |
+|     DevDemand Team |                                                  |                                                                   |                                           |                                                                                                                                   |
 | -----------------: | ------------------------------------------------ | ----------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------: |
 |    **Axel Paxton** | [Email](mailto:axep504@gmail.com)                | [LinkedIn](https://www.linkedin.com/in/axel-paxton-125999311/)    | [GitHub](https://github.com/Axe-P)        |        ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/TEMPTAG/DevDemand?authorFilter=Axe-P&color=blue) |
 |   **Ian Ferguson** | [Email](mailto:iansterlingferguson@gmail.com)    | [LinkedIn](https://www.linkedin.com/in/ianferguson/)              | [GitHub](https://github.com/TEMPTAG)      |      ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/TEMPTAG/DevDemand?authorFilter=TEMPTAG&color=blue) |

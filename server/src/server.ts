@@ -1,103 +1,60 @@
-import express from 'express';
-import path from 'node:path';
-import db from './config/connection.js';
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
-import { typeDefs, resolvers } from './schemas/index.js';
-import { fileURLToPath } from 'url';
-import { authenticateToken } from './utils/auth.js';
-import dotenv from 'dotenv';
-import cors from 'cors';
+import express from "express";
+import path from "node:path";
+import type { Request, Response } from "express";
+import db from "./config/connection.js";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { typeDefs, resolvers } from "./schemas/index.js";
+import { authenticateToken } from "./utils/auth.js";
+import { fileURLToPath } from "url";
 
-dotenv.config(); // Load environment variables from .env file
-
-// Check for required environment variables
-if (!process.env.JWT_SECRET_KEY || !process.env.MONGODB_URI) {
-  console.error('Missing environment variables. Please check your .env file.');
-  process.exit(1);
-}
-
-// Initialize file paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Apollo Server Setup
+// Create a new Apollo Server instance with the provided typeDefs and resolvers
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true, // Enable introspection for testing via GraphQL Playground/GraphiQL
-  plugins: [
-    {
-      async serverWillStart() {
-        console.log('Apollo Server is starting...');
-      },
-    },
-  ],
 });
 
-// MongoDB connection setup
-const connectDB = async () => {
-  try {
-    await db();
-    console.log('Connected to MongoDB');
-  } catch (err) {
-    console.error('Error connecting to MongoDB', err);
-    process.exit(1); // Exit on connection error
-  }
-};
-
-// Start Apollo Server and Express Application
+// Function to start the Apollo Server and Express application, and connect to the database
 const startApolloServer = async () => {
-  await server.start(); // Start ApolloServer
-  await connectDB(); // Connect to MongoDB
+  await server.start();
+  await db();
 
+  // Set the port to the environment variable PORT, or 3001 if it's not set, and create a new Express application instance
+  const PORT = process.env.PORT || 3001;
   const app = express();
 
- // CORS setup to allow specific origins
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000', // For local development
-      'https://devdemand.onrender.com', // For the deployed frontend
-    ],
-    methods: 'GET,POST', // Allow these HTTP methods
-    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
-  })
-);
-
-  // Middleware setup
+  // Middleware to parse incoming request bodies in URL-encoded format and JSON format
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  // Apply Apollo server middleware to handle GraphQL requests
+  // Apply Apollo Server's middleware to the /graphql endpoint, and attach the context (authentication) to every request to /graphql
   app.use(
-    '/graphql',
-    expressMiddleware(server, {
-      context: async () => {
-        return { user: null }; // Default to null user context
-      },
+    "/graphql",
+    expressMiddleware(server as any, {
+      context: authenticateToken as any,
     })
   );
 
-  // Example of a protected route
-  app.get('/developer', authenticateToken, (_req, res) => {
-    res.send('This is a protected route');
-  });
+  // Serve static assets in production mode (React frontend)
+  if (process.env.NODE_ENV === "production") {
+    // Serve the compiled frontend assets from the /dist directory
+    app.use(express.static(path.join(__dirname, "../../client/dist")));
 
-  // Serve static files in production (e.g., React build)
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../client/dist')));
-
-    app.get('*', (_req, res) => {
-      res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+    // Route all unmatched requests to the frontend's index.html (for React Router to handle client-side routing)
+    app.get("*", (_req: Request, res: Response) => {
+      res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
     });
   }
 
-  const PORT = process.env.PORT || 3001;
+  // Start the server and listen on the specified port
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`API Server running on port ${PORT}`);
+    console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
   });
 };
 
-// Start the server
+// Start the Apollo Server and Express application
 startApolloServer();

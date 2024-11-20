@@ -3,7 +3,7 @@ import { Card, Button, Row, Col, Modal, Form } from "react-bootstrap";
 import emailjs from "emailjs-com";
 
 export interface DeveloperCardProps {
-  id: number;
+  _id: string;
   imageUrl: string;
   firstName: string;
   lastName: string;
@@ -84,7 +84,10 @@ const DeveloperCard: React.FC<DeveloperCardProps> = ({
 
   return (
     <>
-      <Card className="mb-4 p-3 shadow" style={{ width: "100%" }}>
+      <Card
+        className="mb-4 p-3 shadow border rounded"
+        style={{ width: "100%" }}
+      >
         <Row>
           <Col xs={12} md={4} className="text-center">
             <Card.Img
