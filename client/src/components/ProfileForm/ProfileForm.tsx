@@ -1,15 +1,14 @@
-import { useEffect, ChangeEvent, useState, useRef } from 'react';
+import React, { useEffect, ChangeEvent, useState, useRef } from 'react';
 import Card from 'react-bootstrap/Card';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import validateProfileForm from './ValidateProfileForm.tsx';
 import { Errors } from '../../models/Errors';
 import { states } from './States.ts';
 import Auth from '../../utils/auth.ts';
-// import { GET_DEV } from '../../utils/queries.ts';
-// import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
+import { GET_ME } from '../../utils/queries.ts';
+import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
 import { Form, InputGroup, Button, Container, Spinner, Modal } from 'react-bootstrap';
 import './ProfileForm.css';
-import { set } from 'mongoose';
 
 export default function ProfileForm() {
     // State to track if the profile is created or updated
@@ -17,6 +16,7 @@ export default function ProfileForm() {
 
     // State to hold form data
     const [formData, setFormData] = useState({
+        _id: '',
         imageUrl: '',
         firstName: '',
         lastName: '',
@@ -39,57 +39,39 @@ export default function ProfileForm() {
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
-    const handleDeleteConfirmed = () => {
-
-        console.log('Profile deleted');
-        setShowModal(false);
+    const handleDelete = () => {
+        handleShowModal();
+    };
+    
+    const handleDeleteConfirmed = async () => {
+        try {
+            await deleteDev({ variables: { id: formData._id } });
+            console.log('Profile deleted successfully');
+            Auth.logout();
+        } catch (err) {
+            console.error('Error deleting profile:', err);
+        } finally {
+            handleCloseModal();
+        }
     };
 
     // Apollo hooks
-    // const { loading, error, data, refetch } = useQuery(GET_DEV);
-    // const [updateDev] = useMutation(UPDATE_DEV, {
-    //     refetchQueries: [{ query: GET_DEV }],
-    // });
-    // const [deleteDev] = useMutation(DELETE_DEV, {
-    //     onCompleted: () => {
-    //         refetch();
-    //     }
-    // })
-
-    // const handleDelete = () => {
-    //     if (window.confirm("Are you sure you want to delete your profile?")) { // replace with a modal
-    //         deleteDev({
-    //             variables: { profileId: data.profile.id }
-    //         })
-    //         .then(() => {
-    //             // Reset form data after deletion
-    //             setFormData({
-    //                 imageUrl: '',
-    //                 firstName: '',
-    //                 lastName: '',
-    //                 telephone: '',
-    //                 email: '',
-    //                 city: '',
-    //                 state: '',
-    //                 portfolioLink: '',
-    //                 githubLink: '',
-    //                 hourlyRate: 0,
-    //                 bio: ''
-    //             });
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error deleting profile:', error);
-    //             alert('There was an error deleting the profile.');
-    //         });
-    //     }
-    // };
+    const { loading, error, data, refetch } = useQuery(GET_ME);
+    const [updateDev] = useMutation(UPDATE_DEV, {
+        refetchQueries: [{ query: GET_ME }],
+    });
+    const [deleteDev] = useMutation(DELETE_DEV, {
+        onCompleted: () => {
+            refetch();
+        }
+    })
 
     // Populate form data when query completes
-    // useEffect(() => {
-    //     if (data && data.profile) {
-    //         setFormData(data.profile);
-    //     }
-    // }, [data]);
+    useEffect(() => {
+        if (data?.me) {
+            setFormData(data.me);
+        }
+    }, [data]);
 
     // Handle input field validation when user leaves the field
     const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
@@ -108,41 +90,39 @@ export default function ProfileForm() {
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-         // After profile creation, update the state
-         setIsProfileCreated(true);
-
         // Perform form validation
         const validationErrors = validateProfileForm(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        // } else {
-        //     try {
-        //         await updateDev({
-        //             variables: { profileInput: formData },
-        //         });
-        //         console.log('Profile updated successfully');
-        //     } catch (error) {
-        //         console.error('Error updating profile:', error);
-        //     }
+        }
+
+        try {
+            await updateDev({
+                variables: { input: formData },
+            });
+            setIsProfileCreated(true);
+            console.log('Profile updated successfully');
+        } catch (error) {
+            console.error('Error updating profile:', error);
         }
     };
 
-    // if (loading) {
-    //     return (
-    //         <Container className="text-center mt-5">
-    //             <Spinner animation="border" />
-    //             <p>Loading your profile...</p>
-    //         </Container>
-    //     );
-    // }
+    if (loading) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" />
+                <p>Loading your profile...</p>
+            </Container>
+        );
+    }
 
-    // if (error) {
-    //     return (
-    //         <Container className="text-center mt-5">
-    //             <p>Error loading your profile. Please try again later.</p>
-    //         </Container>
-    //     );
-    // }
+    if (error) {
+        return (
+            <Container className="text-center mt-5">
+                <p>Error loading your profile. Please try again later.</p>
+            </Container>
+        );
+    }
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [developerPicture, setDeveloperPicture] = useState<File | undefined>(undefined);
@@ -375,13 +355,14 @@ export default function ProfileForm() {
                     </Form.Control.Feedback>
                 </Form.Group>
                         
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
                 {/* <Button variant="primary" type="submit">
+                    Submit
+                </Button> */}
+                <Button variant="primary" type="submit">
                     {data?.profile ? 'Update Profile' : 'Create Profile'}
                 </Button>
-                    {data?.profile && (
+                {data?.profile && (
+                    <React.Fragment>
                 <Button variant="danger" type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
                     Delete Profile
                 </Button>
@@ -399,8 +380,8 @@ export default function ProfileForm() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-            )} */}
+                    </React.Fragment>
+            )}
             </Form>
         </Container>
     );
