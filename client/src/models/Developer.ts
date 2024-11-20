@@ -1,6 +1,6 @@
 export interface Developer {
   _id: string;
-  imageUrl: string;
+  imageUrl?: string;
   firstName: string;
   lastName: string;
   telephone: string;

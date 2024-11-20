@@ -6,8 +6,8 @@ import ProfileForm from "../components/ProfileForm/ProfileForm.tsx";
 // import auth from "../utils/auth";
 
 const DeveloperProfile = () => {
-//   const [error, _setError] = useState(false);
-//   const [loginCheck, _setLoginCheck] = useState(false);
+  //   const [error, _setError] = useState(false);
+  //   const [loginCheck, _setLoginCheck] = useState(false);
 
   //   const checkLogin = () => {
   //     if (auth.loggedIn()) {
@@ -19,9 +19,9 @@ const DeveloperProfile = () => {
   //     checkLogin();
   //   }, []);
 
-//   if (error) {
-//     return <ErrorPage />;
-//   }
+  //   if (error) {
+  //     return <ErrorPage />;
+  //   }
 
   return (
     <>

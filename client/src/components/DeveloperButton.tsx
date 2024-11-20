@@ -8,6 +8,7 @@ export interface DeveloperButtonProps {
   lastName: string;
   bio: string;
   onClick: (id: string) => void;
+  isActive: boolean;
 }
 
 const DeveloperButton: React.FC<DeveloperButtonProps> = ({
@@ -17,11 +18,14 @@ const DeveloperButton: React.FC<DeveloperButtonProps> = ({
   lastName,
   bio,
   onClick,
+  isActive,
 }) => {
   return (
     <Button
       variant="light"
-      className="custom-btn d-flex align-items-center mb-2 shadow-sm"
+      className={`custom-btn d-flex align-items-center mb-2 shadow-sm ${
+        isActive ? "active-btn" : ""
+      }`}
       onClick={() => onClick(_id)}
       style={{
         border: "1px solid #ddd",

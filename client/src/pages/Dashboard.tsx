@@ -74,6 +74,7 @@ const Dashboard = () => {
                     lastName={dev.lastName}
                     bio={dev.bio}
                     onClick={(id) => setSelectedDeveloper(id)}
+                    isActive={dev._id === selectedDeveloper}
                   />
                 ))}
               </div>
