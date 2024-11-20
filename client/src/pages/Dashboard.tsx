@@ -3,13 +3,13 @@ import { Container, Row, Col, Card, Spinner } from "react-bootstrap";
 import { useQuery } from "@apollo/client";
 import { GET_DEVELOPERS } from "../utils/queries";
 import ErrorPage from "./ErrorPage";
-import DeveloperCard, { DeveloperCardProps } from "../components/DeveloperCard";
+import DeveloperCard from "../components/ProfileCard/ProfileCard";
 import DeveloperButton from "../components/DeveloperButton";
 
 const Logo = "/assets/logos/DEVDemandLogo.svg";
 const RoundLogo = "/assets/logos/DDRoundLogo.svg";
 
-const shuffleArray = (array: DeveloperCardProps[]) => {
+const shuffleArray = (array: any[]) => {
   return array
     .map((item) => ({ ...item, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -18,7 +18,7 @@ const shuffleArray = (array: DeveloperCardProps[]) => {
 
 const Dashboard = () => {
   const { loading, error, data } = useQuery(GET_DEVELOPERS);
-  const [developers, setDevelopers] = useState<DeveloperCardProps[]>([]);
+  const [developers, setDevelopers] = useState<any[]>([]);
   const [selectedDeveloper, setSelectedDeveloper] = useState<string | null>(
     null
   );
@@ -26,8 +26,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (data?.developers) {
       const validDevelopers = data.developers.filter(
-        (dev: DeveloperCardProps) =>
-          dev.firstName && dev.lastName && dev.email && dev.bio
+        (dev: any) => dev.firstName && dev.lastName && dev.email && dev.bio
       );
       setDevelopers(shuffleArray(validDevelopers));
     }
@@ -89,9 +88,10 @@ const Dashboard = () => {
         >
           {selectedDeveloper ? (
             <DeveloperCard
-              {...(developers.find(
-                (dev) => dev._id === selectedDeveloper
-              ) as DeveloperCardProps)}
+              isLoading={loading}
+              developer={
+                developers.find((dev) => dev._id === selectedDeveloper) || {}
+              }
             />
           ) : (
             <Card className="border-0 text-center">

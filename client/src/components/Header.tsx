@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import auth from "../utils/auth";
-import LoginForm from "./Login";
-import SignupForm from "./Signup";
+import LoginForm from "./Modals/Login";
+import SignupForm from "./Modals/Signup";
 
 const Logo = "/assets/logos/DDHeaderLogo.svg";
 

@@ -1,116 +1,149 @@
-// Renders the details of the developer data from the parent component
-// The parent component will fetch the developer data using the GraphQL query and pass it as props to this component
+import React, { useState } from "react";
+import { Card, Placeholder, Row, Col } from "react-bootstrap";
+import {
+  FaMapMarkerAlt,
+  FaDollarSign,
+  FaPhone,
+  FaEnvelope,
+  FaGithub,
+  FaUserAlt,
+} from "react-icons/fa";
+import EmailModal from "../Modals/EmailModal";
 
-import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Placeholder from 'react-bootstrap/Placeholder';
-import Button from 'react-bootstrap/Button';
-import { FaMapMarkerAlt, FaDollarSign, FaPhone, FaEnvelope, FaGithub, FaUserAlt } from 'react-icons/fa';
-import './ProfileCard.css';
-
-interface DeveloperProps {
-    isLoading: boolean;
-    developer: {
-        imageUrl: string;
-        firstName: string;
-        lastName: string;
-        telephone: string;
-        email: string;
-        city: string;
-        state: string;
-        portfolioLink?: string;
-        githubLink?: string;
-        hourlyRate: number;
-        bio: string;
-    };
+export interface DeveloperCardProps {
+  isLoading: boolean;
+  developer: {
+    _id: string;
+    imageUrl: string;
+    firstName: string;
+    lastName: string;
+    telephone: string;
+    email: string;
+    city: string;
+    state: string;
+    portfolioLink?: string;
+    githubLink?: string;
+    hourlyRate: number;
+    bio: string;
+  };
 }
 
-const formatPhoneNumber = (number: string) => {
-    const formattedNumber = number.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-    return formattedNumber;
+const DeveloperCard: React.FC<DeveloperCardProps> = ({
+  isLoading,
+  developer,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => setShowModal(false);
+  const handleModalShow = () => setShowModal(true);
+
+  return (
+    <Card className="profile-card mx-auto border shadow p-3 mb-4">
+      {isLoading ? (
+        <Placeholder as={Card.Body} animation="glow">
+          <Placeholder xs={12} />
+        </Placeholder>
+      ) : (
+        <Row>
+          {/* Image and Name Section */}
+          <Col md={7} className="d-flex flex-column align-items-center">
+            <Card.Img
+              variant="top"
+              src={
+                developer.imageUrl || "/assets/images/profile-placeholder.png"
+              }
+              className="rounded shadow mb-3"
+              style={{
+                maxWidth: "400px",
+                objectFit: "cover",
+              }}
+            />
+            <Card.Title
+              className="text-center"
+              style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+            >
+              {developer.firstName} {developer.lastName}
+            </Card.Title>
+          </Col>
+
+          {/* Links and Info Section */}
+          <Col md={5} className="d-flex flex-column justify-content-center">
+            <Card.Text className="d-flex align-items-center">
+              <FaMapMarkerAlt className="me-3" /> {developer.city},{" "}
+              {developer.state}
+            </Card.Text>
+            <Card.Text className="d-flex align-items-center">
+              <FaDollarSign className="me-3" /> ${developer.hourlyRate}/hr
+            </Card.Text>
+            <Card.Text className="d-flex align-items-center">
+              <FaPhone style={{ transform: "scaleX(-1)" }} className="me-3" />
+              <a
+                href={`tel:${developer.telephone}`}
+                className="text-decoration-none"
+              >
+                Call {developer.firstName}
+              </a>
+            </Card.Text>
+            <Card.Text className="d-flex align-items-center">
+              <FaEnvelope className="me-3" />
+              <Card.Link
+                onClick={handleModalShow}
+                style={{
+                  cursor: "pointer",
+                }}
+                className="text-decoration-none"
+              >
+                Email {developer.firstName}
+              </Card.Link>
+            </Card.Text>
+            <Card.Text className="d-flex align-items-center">
+              <FaUserAlt className="me-3" />
+              {developer.portfolioLink ? (
+                <Card.Link
+                  href={developer.portfolioLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-decoration-none"
+                >
+                  View Portfolio
+                </Card.Link>
+              ) : (
+                "Portfolio not provided"
+              )}
+            </Card.Text>
+            <Card.Text className="d-flex align-items-center">
+              <FaGithub className="me-3" />
+              {developer.githubLink ? (
+                <Card.Link
+                  href={developer.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-decoration-none"
+                >
+                  View GitHub
+                </Card.Link>
+              ) : (
+                "GitHub not provided"
+              )}
+            </Card.Text>
+          </Col>
+
+          {/* Bio Section */}
+          <Col xs={12} className="mt-3">
+            <Card.Text>{developer.bio}</Card.Text>
+          </Col>
+        </Row>
+      )}
+
+      {/* Email Modal */}
+      <EmailModal
+        showModal={showModal}
+        handleClose={handleModalClose}
+        recipientEmail={developer.email}
+        recipientName={`${developer.firstName} ${developer.lastName}`}
+      />
+    </Card>
+  );
 };
 
-const ProfileCard: React.FC<DeveloperProps> = ({ isLoading, developer }) => {
-  
-    return (
-            <Card className="profile-card mx-auto" style={{ maxWidth: '400px' }}>
-            <Card.Img variant="top" src={developer.imageUrl || "/assets/images/profile-placeholder.png" }/>
-                <Card.Body>
-                    {isLoading ? (
-                        <>
-                            <Placeholder as={Card.Title} animation="glow">
-                                <Placeholder xs={6} />
-                            </Placeholder>
-                            <Placeholder as={Card.Text} animation="glow">
-                                <Placeholder xs={6} />
-                            </Placeholder>
-                            <Placeholder as={Card.Text} animation="glow">
-                                <Placeholder xs={6} />
-                            </Placeholder>
-                            <Placeholder as={Card.Text} animation="glow">
-                                <Placeholder xs={6} />
-                            </Placeholder>
-                        </>
-                    ) : (
-                        <>
-                            <Card.Title className="text-center pb-3 fs-2">{developer.firstName} {developer.lastName}</Card.Title>
-
-                            <div className="d-flex flex-column align-items-center ">
-                                <div className="d-flex flex-column align-items-start ">
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaMapMarkerAlt className="me-3" /> {developer.city}, {developer.state}
-                                    </Card.Text>
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaDollarSign className="me-3" /> {developer.hourlyRate} p/h
-                                    </Card.Text>
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaPhone style={{ transform: 'scaleX(-1)' }} className="me-3" /> 
-                                        <a href={`tel:${developer.telephone}`} className="text-decoration-none">{formatPhoneNumber(developer.telephone ?? '')}</a>
-                                    </Card.Text>
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaEnvelope className="me-3" /> 
-                                        <a href={`mailto:${developer.email}`} className="text-decoration-none">{developer.email}</a>
-                                    </Card.Text>
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaUserAlt className="me-3" />{' '}
-                                        {developer.portfolioLink ? (
-                                            <Card.Link href={developer.portfolioLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View Portfolio</Card.Link>
-                                        ) : 'Portfolio not provided'}
-                                    </Card.Text>
-                                    <Card.Text className="d-flex align-items-center">
-                                        <FaGithub className="me-3" />{' '}
-                                        {developer.githubLink ? (
-                                            <Card.Link href={developer.githubLink} target="_blank" rel="noopener noreferrer" className="text-decoration-none">View GitHub</Card.Link>
-                                        ) : 'GitHub not provided'}
-                                    </Card.Text>
-                                </div>
-                            </div>
-
-                            <Card.Text className="text-justify mt-3" >{developer.bio}</Card.Text>
-                            <div className="text-center mt-3">
-                                {/* Email button visible on tablet and above */}
-                                <Button 
-                                    variant="primary" 
-                                    href={`mailto:${developer.email}`} 
-                                    className="d-none d-md-block button-size" // Hidden on small screens, visible on medium and above
-                                >
-                                    Contact {developer.firstName}
-                                </Button>
-
-                                {/* Phone number button visible only on mobile */}
-                                <Button 
-                                    variant="primary" 
-                                    href={`tel:${developer.telephone}`} 
-                                    className="d-md-none button-size" // Visible only on small screens, with small size
-                                >
-                                    Call {developer.firstName}
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                </Card.Body>
-            </Card>
-    );
-}
-
-export default ProfileCard;
+export default DeveloperCard;
