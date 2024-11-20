@@ -359,28 +359,28 @@ export default function ProfileForm() {
                     Submit
                 </Button> */}
                 <Button variant="primary" type="submit">
-                    {data?.profile ? 'Update Profile' : 'Create Profile'}
+                    {data?.me ? 'Update Profile' : 'Create Profile'}
                 </Button>
-                {data?.profile && (
-                    <React.Fragment>
-                <Button variant="danger" type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
-                    Delete Profile
-                </Button>
-                <Modal show={showModal} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirm Delete</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure you want to delete your profile? This action cannot be undone.</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Cancel
-                    </Button>
-                    <Button variant="danger" onClick={handleDeleteConfirmed}>
-                        Delete
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-                    </React.Fragment>
+                {data?.me && (
+                    <>
+                        <Button variant="danger" type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
+                            Delete Profile
+                        </Button>
+                        <Modal show={showModal} onHide={handleCloseModal} centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Confirm Delete</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure you want to delete your profile? This action cannot be undone.</Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleCloseModal}>
+                                    Cancel
+                                </Button>
+                                <Button variant="danger" onClick={handleDeleteConfirmed}>
+                                    Delete
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
             )}
             </Form>
         </Container>
