@@ -3,8 +3,8 @@ import { Container, Row, Col, Card, Spinner } from "react-bootstrap";
 import { useQuery } from "@apollo/client";
 import { GET_DEVELOPERS } from "../utils/queries";
 import ErrorPage from "./ErrorPage";
-import DeveloperCard from "../components/ProfileCard/ProfileCard";
-import DeveloperButton from "../components/DeveloperButton";
+import DeveloperCard from "../components/DashboardComponents/ProfileCard";
+import DeveloperButton from "../components/DashboardComponents/DeveloperButton";
 
 const Logo = "/assets/logos/DEVDemandLogo.svg";
 const RoundLogo = "/assets/logos/DDRoundLogo.svg";
@@ -57,7 +57,8 @@ const Dashboard = () => {
   return (
     <Container className="mt-4">
       <Row>
-        <Col xs={12} lg={4} className="mb-3">
+        {/* Developer List Section */}
+        <Col xs={12} lg={4} className="mb-3 order-last order-lg-first">
           <Card className="shadow border rounded">
             <Card.Body>
               <Card.Title>
@@ -81,6 +82,7 @@ const Dashboard = () => {
           </Card>
         </Col>
 
+        {/* Developer Details Section */}
         <Col
           xs={12}
           lg={8}
@@ -96,10 +98,12 @@ const Dashboard = () => {
           ) : (
             <Card className="border-0 text-center">
               <Card.Body>
+                {/* Hide RoundLogo on small screens */}
                 <Card.Img
                   src={RoundLogo}
                   alt="Round DevDemand Logo"
                   style={{ height: "400px" }}
+                  className="d-none d-lg-block"
                 />
                 <Card.Title as="h1">
                   Welcome to{" "}
