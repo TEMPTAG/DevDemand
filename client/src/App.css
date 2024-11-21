@@ -1,13 +1,21 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Condensed:wght@400;700&display=swap");
 
+:root {
+  --dark-bg-color: #000b26;
+  --light-bg-color: #ffffff;
+  --dark-text-color: #000b26;
+  --light-text-color: #ffffff;
+  --accent-color: #908275;
+}
+
 /* Set default font for the body */
 body {
   font-family: "Roboto", sans-serif;
 }
 
 .bg-primary {
-  background-color: #000b26 !important;
+  background-color: var(--dark-bg-color) !important;
 }
 
 /* Set Roboto Condensed specifically for H1 with 700 Font Weight */
@@ -16,9 +24,15 @@ h1 {
   font-weight: 700;
 }
 
+h2 {
+  font-size: 2.5rem;
+  text-align: center;
+  padding: 30px 0 40px 0;
+}
+
 .custom-btn {
-  background-color: #000b26;
-  color: white;
+  background-color: var(--dark-bg-color);
+  color: var(--light-text-color);
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -29,17 +43,16 @@ h1 {
 }
 
 .custom-btn:hover {
-  background-color: white;
-  color: #000b26;
+  background-color: var(--light-bg-color);
+  color: var(--dark-text-color);
 }
 
 .custom-btn:active {
-  background-color: white;
-  color: #000b26;
+  background-color: var(--light-bg-color);
+  color: var(--dark-text-color);
 }
 
-h2 {
-  font-size: 2.5rem;
-  text-align: center;
-  padding: 30px 0 40px 0;
+.custom-btn.active-btn {
+  background-color: var(--light-bg-color);
+  color: var(--dark-text-color);
 }

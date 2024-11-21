@@ -36,8 +36,12 @@ export const UPDATE_DEV = gql`
       email
       city
       state
+      telephone
+      portfolioLink
+      githubLink
       hourlyRate
       bio
+      imageUrl
     }
   }
 `;

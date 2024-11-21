@@ -2,16 +2,16 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
-import { ADD_DEV } from "../utils/mutations";
-import Auth from "../utils/auth";
+import { LOGIN_DEV } from "../../utils/mutations";
+import Auth from "../../utils/auth";
 
-const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
+const LoginForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [validated, setValidated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  // Apollo Client mutation for signing up
-  const [addDeveloper, { loading, error }] = useMutation(ADD_DEV);
+  // Apollo Client mutation for logging in
+  const [loginDeveloper, { loading, error }] = useMutation(LOGIN_DEV);
 
   // Handle form input change
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -31,8 +31,8 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
     }
 
     try {
-      // Call the addDeveloper mutation
-      const { data } = await addDeveloper({
+      // Call the login mutation
+      const { data } = await loginDeveloper({
         variables: {
           email: userFormData.email,
           password: userFormData.password,
@@ -40,14 +40,14 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
       });
 
       // Extract the token and store it using the Auth utility
-      const { token } = data.addDeveloper;
+      const { token } = data.login;
       Auth.login(token);
 
       // Close the modal and reset the form
       handleModalClose();
       setUserFormData({ email: "", password: "" });
     } catch (err) {
-      console.error("Signup failed:", err);
+      console.error("Login failed:", err);
       setShowAlert(true);
     }
   };
@@ -61,7 +61,7 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
           show={showAlert}
           variant="danger"
         >
-          Something went wrong with your signup!
+          Something went wrong with your login credentials!
         </Alert>
       )}
       {error && (
@@ -79,7 +79,7 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
         <Form.Label htmlFor="email">Email</Form.Label>
         <Form.Control
           type="email"
-          placeholder="Your email address"
+          placeholder="Your email"
           name="email"
           onChange={handleInputChange}
           value={userFormData.email}
@@ -109,11 +109,12 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
         disabled={loading || !(userFormData.email && userFormData.password)}
         type="submit"
         variant="success"
+        className="custom-btn"
       >
-        {loading ? "Signing up..." : "Sign Up"}
+        {loading ? "Logging in..." : "Login"}
       </Button>
     </Form>
   );
 };
 
-export default SignupForm;
+export default LoginForm;
