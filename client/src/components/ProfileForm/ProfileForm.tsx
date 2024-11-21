@@ -14,8 +14,10 @@ export default function ProfileForm() {
     // State to track if the profile is created or updated
     const [isProfileCreated, setIsProfileCreated] = useState(false);
 
+    const { loading, error, data, refetch } = useQuery(GET_ME);
+
     // State to hold form data
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState(data.me ?? {
         _id: '',
         imageUrl: '',
         firstName: '',
@@ -56,7 +58,6 @@ export default function ProfileForm() {
     };
 
     // Apollo hooks
-    const { loading, error, data, refetch } = useQuery(GET_ME);
     const [updateDev] = useMutation(UPDATE_DEV, {
         refetchQueries: [{ query: GET_ME }],
     });
@@ -65,13 +66,6 @@ export default function ProfileForm() {
             refetch();
         }
     })
-
-    // Populate form data when query completes
-    useEffect(() => {
-        if (data?.me) {
-            setFormData(data.me);
-        }
-    }, [data]);
 
     // Handle input field validation when user leaves the field
     const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
