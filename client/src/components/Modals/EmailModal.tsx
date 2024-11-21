@@ -120,7 +120,7 @@ const EmailModal: React.FC<EmailModalProps> = ({
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" className="custom-btn">
             Send Email
           </Button>
         </Modal.Footer>

@@ -109,6 +109,7 @@ const SignupForm = ({ handleModalClose }: { handleModalClose: () => void }) => {
         disabled={loading || !(userFormData.email && userFormData.password)}
         type="submit"
         variant="success"
+        className="custom-btn"
       >
         {loading ? "Signing up..." : "Sign Up"}
       </Button>
