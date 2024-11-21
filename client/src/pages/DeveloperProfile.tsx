@@ -1,4 +1,4 @@
-import ProfileForm from "../components/ProfileForm/ProfileForm.tsx";
+import ProfileForm from "../components/ProfileForm/ProfileForm";
 import Auth from "../utils/auth";
 import { Container } from "react-bootstrap";
 
