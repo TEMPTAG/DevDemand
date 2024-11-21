@@ -101,4 +101,45 @@ const validateProfileForm = (developer: Developer) => {
   return errors;
 };
 
+    // Validate state
+    if (!trimmedData.state) {
+        errors.state = 'State is required';
+    }
+
+    const urlRegex = /^(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))$/i;
+
+    // Validate portfolio link
+    if (trimmedData.portfolioLink) {
+        if (!urlRegex.test(trimmedData.portfolioLink)) {
+            errors.portfolioLink = 'Portfolio link must be a valid URL starting with http:// or https://';
+        }
+    }
+    
+    // Validate GitHub link
+    if (trimmedData.githubLink) {
+        if (!urlRegex.test(trimmedData.githubLink)) {
+            errors.githubLink = 'GitHub link must be a valid URL starting with http:// or https://';
+        }
+    }
+
+    // Validate hourly rate
+    const hourlyRate = trimmedData.hourlyRate;
+    if (!trimmedData.hourlyRate) {
+        errors.hourlyRate = 'Hourly rate is required';
+    } else if (isNaN(hourlyRate) || hourlyRate < 0) {
+        errors.hourlyRate = 'Hourly rate must be a positive number';
+    } else if (!/^\d+(\.\d{1,2})?$/.test(hourlyRate.toString())) {
+        errors.hourlyRate = 'Hourly rate must be a number with up to 2 decimal places';
+    }
+    
+    // Validate bio
+    if (!trimmedData.bio) {
+        errors.bio = 'Bio is required';
+    } else if (trimmedData.bio.length < 2 || trimmedData.bio.length > 300) {
+        errors.bio = 'Bio must be between 2 and 300 characters';
+    }
+
+    return errors;
+}
+
 export default validateProfileForm;

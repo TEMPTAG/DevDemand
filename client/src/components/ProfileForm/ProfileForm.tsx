@@ -1,29 +1,19 @@
-import { useEffect, ChangeEvent, useState, useRef } from "react";
-import Card from "react-bootstrap/Card";
-import { useQuery, useMutation, gql } from "@apollo/client";
-import validateProfileForm from "./ValidateProfileForm.tsx";
-import { Errors } from "../../models/Errors";
-import { states } from "./States.ts";
-// import Auth from '../../utils/auth.ts';
+import { useEffect, ChangeEvent, useState, useRef } from 'react';
+import Card from 'react-bootstrap/Card';
+import { useQuery, useMutation, gql } from '@apollo/client';
+import validateProfileForm from './ValidateProfileForm.tsx';
+import { Errors } from '../../models/Errors';
+import { states } from './States.ts';
+import Auth from '../../utils/auth.ts';
 // import { GET_DEV } from '../../utils/queries.ts';
 // import { UPDATE_DEV, DELETE_DEV } from '../../utils/mutations.ts';
-import { Form, InputGroup, Button, Container, Spinner } from "react-bootstrap";
-import "./ProfileForm.css";
+import { Form, InputGroup, Button, Container, Spinner, Modal } from 'react-bootstrap';
+import './ProfileForm.css';
+import { set } from 'mongoose';
 
 export default function ProfileForm() {
-  // Check if the user is logged in
-  // const isLoggedIn = Auth.loggedIn();
-
-  // if (!isLoggedIn) {
-  //     return (
-  //     <Container className="text-center mt-5">
-  //         <p>Please log in to access this page.</p>
-  //     </Container>
-  //     );
-  // }
-
-  // State to track if the profile is created or updated
-  const [isProfileCreated, setIsProfileCreated] = useState(false);
+    // State to track if the profile is created or updated
+    const [isProfileCreated, setIsProfileCreated] = useState(false);
 
   // State to hold form data
   const [formData, setFormData] = useState({
@@ -105,9 +95,28 @@ export default function ProfileForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    // State to hold delete confirmation modal
+    const [showModal, setShowModal] = useState(false);
+
+    const handleShowModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
+
+    const handleDeleteConfirmed = () => {
+
+        console.log('Profile deleted');
+        setShowModal(false);
+    };
+
+    // Apollo hooks
+    // const { loading, error, data, refetch } = useQuery(GET_DEV);
+    // const [updateDev] = useMutation(UPDATE_DEV, {
+    //     refetchQueries: [{ query: GET_DEV }],
+    // });
+    // const [deleteDev] = useMutation(DELETE_DEV, {
+    //     onCompleted: () => {
+    //         refetch();
+    //     }
+    // })
 
     // After profile creation, update the state
     setIsProfileCreated(true);
@@ -390,9 +399,24 @@ export default function ProfileForm() {
                     {data?.profile ? 'Update Profile' : 'Create Profile'}
                 </Button>
                     {data?.profile && (
-                <Button type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
+                <Button variant="danger" type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
                     Delete Profile
                 </Button>
+                <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete your profile? This action cannot be undone.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteConfirmed}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
             )} */}
       </Form>
     </Container>

@@ -1,27 +1,18 @@
-// import { useEffect, useState, useLayoutEffect } from "react";
-// import { useState } from "react";
-
-// import ErrorPage from "./ErrorPage";
 import ProfileForm from "../components/ProfileForm/ProfileForm.tsx";
-// import auth from "../utils/auth";
+import Auth from "../utils/auth";
+import { Container } from "react-bootstrap";
 
 const DeveloperProfile = () => {
-  //   const [error, _setError] = useState(false);
-  //   const [loginCheck, _setLoginCheck] = useState(false);
+  // Check if the user is logged in
+  const isLoggedIn = Auth.loggedIn();
 
-  //   const checkLogin = () => {
-  //     if (auth.loggedIn()) {
-  //       setLoginCheck(true);
-  //     }
-  //   };
-
-  //   useLayoutEffect(() => {
-  //     checkLogin();
-  //   }, []);
-
-  //   if (error) {
-  //     return <ErrorPage />;
-  //   }
+  if (!isLoggedIn) {
+    return (
+      <Container className="text-center mt-5">
+        <p>Please log in to access this page.</p>
+      </Container>
+    );
+  }
 
   return (
     <>
