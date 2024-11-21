@@ -31,6 +31,7 @@ const validateProfileForm = (developer: Developer) => {
         errors.lastName = 'Last name must be between 2 and 50 characters';
     }
 
+    // Validate telephone
     if (!trimmedData.telephone) {
         errors.telephone = 'Telephone is required';
     } else if (!/^\d{10}$/.test(trimmedData.telephone)) {
