@@ -411,7 +411,7 @@ export default function ProfileForm() {
                 {/* <Button variant="primary" type="submit">
                     Submit
                 </Button> */}
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" className="custom-btn">
                     {data?.me ? 'Update Profile' : 'Create Profile'}
                 </Button>
                 {data?.me && (
