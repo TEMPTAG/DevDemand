@@ -30,12 +30,15 @@ export const ADD_DEV = gql`
 export const UPDATE_DEV = gql`
   mutation updateDeveloper($input: UpdateDeveloperInput!) {
     updateDeveloper(input: $input) {
-      _id
+      imageUrl
       firstName
       lastName
+      telephone
       email
       city
       state
+      portfolioLink
+      githubLink
       hourlyRate
       bio
     }

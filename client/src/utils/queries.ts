@@ -5,15 +5,17 @@ export const GET_ME = gql`
   query me {
     me {
       _id
-      email
+      imageUrl
       firstName
       lastName
+      telephone
+      email
       city
       state
-      hourlyRate
-      bio
       portfolioLink
       githubLink
+      hourlyRate
+      bio
     }
   }
 `;

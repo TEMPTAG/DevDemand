@@ -42,7 +42,7 @@ class AuthService {
   login(idToken: string) {
     // Saves user token to localStorage and redirects to the Developer's profile page
     localStorage.setItem("id_token", idToken);
-    window.location.assign("/developer");
+    window.location.assign("/developer-profile");
   }
 
   logout() {

@@ -34,8 +34,8 @@ const validateProfileForm = (developer: Developer) => {
     // Validate telephone
     if (!trimmedData.telephone) {
         errors.telephone = 'Telephone is required';
-    } else if (!/^\d{10}$/.test(trimmedData.telephone)) {
-        errors.telephone = 'Telephone must be a 10-digit number';
+    } else if (!/^\d{3}-\d{3}-\d{4}$/.test(trimmedData.telephone)) {
+        errors.telephone = 'Telephone must be in the format 000-000-0000';
     }
 
     // Validate email

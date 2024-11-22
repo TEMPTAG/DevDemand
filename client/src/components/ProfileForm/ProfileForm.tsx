@@ -1,4 +1,5 @@
 import React, { useEffect, ChangeEvent, useState, useRef } from 'react';
+import { Developer } from '../../models/Developer';
 import Card from 'react-bootstrap/Card';
 import { useQuery, useMutation } from '@apollo/client';
 import validateProfileForm from './ValidateProfileForm.tsx';
@@ -17,7 +18,7 @@ export default function ProfileForm() {
     const { loading, error, data, refetch } = useQuery(GET_ME);
 
     // State to hold form data
-    const [formData, setFormData] = useState(data.me ?? {
+    const [formData, setFormData] = useState<Developer>({
         _id: '',
         imageUrl: '',
         firstName: '',
@@ -28,9 +29,46 @@ export default function ProfileForm() {
         state: '',
         portfolioLink: '',
         githubLink: '',
-        hourlyRate: 0,
+        hourlyRate: 1,
         bio: ''
     });
+
+    useEffect(() => {
+        if (data) {
+            console.log("me", data.me);
+            const { _id, imageUrl, firstName, lastName, telephone, email, city, state, portfolioLink, githubLink, hourlyRate, bio } = data.me;
+            const parsedHourlyRate: number = Number(hourlyRate);
+            setFormData({
+                _id,
+                imageUrl,
+                firstName,
+                lastName,
+                telephone,
+                email,
+                city,
+                state,
+                portfolioLink,
+                githubLink,
+                hourlyRate: parsedHourlyRate,
+                bio
+            });
+        } else {
+            setFormData({
+                _id: '',
+                imageUrl: '',
+                firstName: '',
+                lastName: '',
+                telephone: '',
+                email: '',
+                city: '',
+                state: '',
+                portfolioLink: '',
+                githubLink: '',
+                hourlyRate: 1,
+                bio: ''
+            });
+        }
+    }, [data]);
 
     // State to hold errors
     const [errors, setErrors] = useState<Errors>({});
@@ -67,6 +105,13 @@ export default function ProfileForm() {
         }
     })
 
+    // Format the telephone number
+    const formatTelephone = (telephone: string | number): string => {
+        const str = telephone.toString(); // Ensure it's a string
+        return str.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    };
+    
+
     // Handle input field validation when user leaves the field
     const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
         const { name, value } = e.target as HTMLInputElement;
@@ -77,7 +122,10 @@ export default function ProfileForm() {
     // Handle change in form inputs
     const handleChange = (e: ChangeEvent<HTMLElement>) => {
         const { name, value } = e.target as HTMLInputElement;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prev) => ({
+            ...prev,
+            [name]: name === "hourlyRate" ? Number(value) : value,
+        }));
     };
 
     // Handle form submission
@@ -90,6 +138,12 @@ export default function ProfileForm() {
             setErrors(validationErrors);
         }
 
+        // Format the telephone number
+        const formattedData = {
+            ...formData,
+            telephone: formatTelephone(formData.telephone),
+        };
+        
         try {
             await updateDev({
                 variables: { input: formData },
@@ -118,49 +172,47 @@ export default function ProfileForm() {
         );
     }
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [developerPicture, setDeveloperPicture] = useState<File | undefined>(undefined);
-    const previewURL = developerPicture?URL.createObjectURL(developerPicture): "/assets/images/profile-placeholder.png"
+    // const fileInputRef = useRef<HTMLInputElement>(null);
+    // const [developerPicture, setDeveloperPicture] = useState<File | undefined>(undefined);
+    // const previewURL = developerPicture ? URL.createObjectURL(developerPicture) : "/assets/images/profile-placeholder.png"
 
-    function convertFileToBase64 (file: File | undefined): Promise<string> {
-        if (!file) {
-          return Promise.resolve('');
-        }
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = (error) => reject(error);
-        });
-      };
+    // function convertFileToBase64 (file: File | undefined): Promise<string> {
+    //     if (!file) {
+    //       return Promise.resolve('');
+    //     }
+    //     return new Promise((resolve, reject) => {
+    //       const reader = new FileReader();
+    //       reader.readAsDataURL(file);
+    //       reader.onload = () => resolve(reader.result as string);
+    //       reader.onerror = (error) => reject(error);
+    //     });
+    //   };
 
-    function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target?.files?.[0];
-        setDeveloperPicture(file);
-        convertFileToBase64(file).then((base64) => {
-            console.log(base64);
-            setFormData({ ...formData, imageUrl: base64 });
-        });
-    }
-    console.log(formData);
+    // function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    //     const file = e.target?.files?.[0];
+    //     setDeveloperPicture(file);
+    //     convertFileToBase64(file).then((base64) => {
+    //         console.log(base64);
+    //         setFormData({ ...formData, imageUrl: base64 });
+    //     });
+    // }
 
-    function handleClick() {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    }
+    // function handleClick() {
+    //     if (fileInputRef.current) {
+    //         fileInputRef.current.click();
+    //     }
+    // }
 
     return (
         <Container className="profile-form-container">
-            
             <Form onSubmit={handleSubmit} className="profile-form">
                 <div className="form-instructions text-center">
                     <p>{isProfileCreated ? "Please update the fields below to update your profile." : "Please complete the fields below to create your profile."}</p>
                 </div>
 
-                <Form.Group className="mb-4 text-center">
+                {/* <Form.Group className="mb-4 text-center">
                     <Card.Img 
-                        onClick={handleClick} 
+                        // onClick={handleClick} 
                         variant="top" 
                         src={formData.imageUrl || previewURL }
                         className='profile-picture'
@@ -177,7 +229,7 @@ export default function ProfileForm() {
                     <Form.Text className="text-muted">
                         <p> Click on the image to upload a new profile picture.</p>
                     </Form.Text>
-                </Form.Group>
+                </Form.Group> */}
 
                 <Form.Group className="mb-3" controlId="firstName">
                     <Form.Label>First Name</Form.Label>
