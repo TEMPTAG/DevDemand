@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-// Query to get the currently logged-in developer's data
+// Query for logged-in developer
 export const GET_ME = gql`
   query me {
     me {
@@ -20,7 +20,7 @@ export const GET_ME = gql`
   }
 `;
 
-// Query to get all developers (browse all)
+// Query to browse all developers
 export const GET_DEVELOPERS = gql`
   query GetDevelopers {
     developers {
@@ -40,27 +40,22 @@ export const GET_DEVELOPERS = gql`
   }
 `;
 
-// Query to get a specific developer by ID
+// Query to fetch a specific developer by ID
 export const GET_DEVELOPER_BY_ID = gql`
   query getDeveloperById($id: ID!) {
     developer(id: $id) {
       _id
-      email
+      imageUrl
       firstName
       lastName
+      telephone
+      email
       city
       state
-      hourlyRate
-      bio
       portfolioLink
       githubLink
-      imageUrl
+      hourlyRate
+      bio
     }
   }
 `;
-
-export default {
-  GET_ME,
-  GET_DEVELOPERS,
-  GET_DEVELOPER_BY_ID,
-};

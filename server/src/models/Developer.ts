@@ -48,7 +48,6 @@ const developerSchema = new Schema<DeveloperDocument>({
   telephone: {
     type: String,
     default: null,
-    match: [/^\d{3}-\d{3}-\d{4}$/, "Please enter a valid telephone number"],
   },
   city: {
     type: String,

@@ -41,6 +41,7 @@ export const UPDATE_DEV = gql`
       githubLink
       hourlyRate
       bio
+      imageUrl
     }
   }
 `;
