@@ -47,19 +47,31 @@ export default function ProfileForm() {
             console.log("me", data.me); // Log the fetched profile data for debugging
             const { _id, imageUrl, firstName, lastName, telephone, email, city, state, portfolioLink, githubLink, hourlyRate, bio } = data.me;
             const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
+            const id = _id || '';
+            const image = imageUrl || '';
+            const fName = firstName || '';
+            const lName = lastName || '';
+            const tPhone = telephone || '';
+            const eMail = email || '';
+            const cCity = city || '';
+            const sState = state || '';
+            const pLink = portfolioLink || '';
+            const gLink = githubLink || '';
+            const bInfo = bio || '';
+
             setFormData({
-                _id,
-                imageUrl,
-                firstName,
-                lastName,
-                telephone,
-                email,
-                city,
-                state,
-                portfolioLink,
-                githubLink,
+                _id: id,
+                imageUrl: image,
+                firstName: fName,
+                lastName: lName,
+                telephone: tPhone,
+                email: eMail,
+                city: cCity,
+                state: sState,
+                portfolioLink: pLink,
+                githubLink: gLink,
                 hourlyRate: parsedHourlyRate,
-                bio
+                bio: bInfo
             });
         } else {
             // Reset form data if no data is returned

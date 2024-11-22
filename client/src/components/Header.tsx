@@ -69,7 +69,7 @@ const Navbar = () => {
               ) : (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/developer-profile">
+                    <Link className="nav-link" to="/developer">
                       My Account
                     </Link>
                   </li>
@@ -94,14 +94,14 @@ const Navbar = () => {
             <LoginForm
               handleModalClose={() => {
                 toggleModal();
-                navigate("/developer-profile"); // Redirect after login
+                navigate("/developer"); // Redirect after login
               }}
             />
           ) : (
             <SignupForm
               handleModalClose={() => {
                 toggleModal();
-                navigate("/developer-profile"); // Redirect after signup
+                navigate("/developer"); // Redirect after signup
               }}
             />
           )}
