@@ -3,13 +3,13 @@ import { Container, Row, Col, Card, Spinner } from "react-bootstrap";
 import { useQuery } from "@apollo/client";
 import { GET_DEVELOPERS } from "../utils/queries";
 import ErrorPage from "./ErrorPage";
-import DeveloperCard, { DeveloperCardProps } from "../components/DeveloperCard";
-import DeveloperButton from "../components/DeveloperButton";
+import DeveloperCard from "../components/DashboardComponents/ProfileCard";
+import DeveloperButton from "../components/DashboardComponents/DeveloperButton";
 
 const Logo = "/assets/logos/DEVDemandLogo.svg";
 const RoundLogo = "/assets/logos/DDRoundLogo.svg";
 
-const shuffleArray = (array: DeveloperCardProps[]) => {
+const shuffleArray = (array: any[]) => {
   return array
     .map((item) => ({ ...item, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
@@ -18,7 +18,7 @@ const shuffleArray = (array: DeveloperCardProps[]) => {
 
 const Dashboard = () => {
   const { loading, error, data } = useQuery(GET_DEVELOPERS);
-  const [developers, setDevelopers] = useState<DeveloperCardProps[]>([]);
+  const [developers, setDevelopers] = useState<any[]>([]);
   const [selectedDeveloper, setSelectedDeveloper] = useState<string | null>(
     null
   );
@@ -26,8 +26,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (data?.developers) {
       const validDevelopers = data.developers.filter(
-        (dev: DeveloperCardProps) =>
-          dev.firstName && dev.lastName && dev.email && dev.bio
+        (dev: any) => dev.firstName && dev.lastName && dev.email && dev.bio
       );
       setDevelopers(shuffleArray(validDevelopers));
     }
@@ -58,7 +57,8 @@ const Dashboard = () => {
   return (
     <Container className="mt-4">
       <Row>
-        <Col xs={12} lg={4} className="mb-3">
+        {/* Developer List Section */}
+        <Col xs={12} lg={4} className="mb-3 order-last order-lg-first">
           <Card className="shadow border rounded">
             <Card.Body>
               <Card.Title>
@@ -74,6 +74,7 @@ const Dashboard = () => {
                     lastName={dev.lastName}
                     bio={dev.bio}
                     onClick={(id) => setSelectedDeveloper(id)}
+                    isActive={dev._id === selectedDeveloper}
                   />
                 ))}
               </div>
@@ -81,6 +82,7 @@ const Dashboard = () => {
           </Card>
         </Col>
 
+        {/* Developer Details Section */}
         <Col
           xs={12}
           lg={8}
@@ -88,17 +90,20 @@ const Dashboard = () => {
         >
           {selectedDeveloper ? (
             <DeveloperCard
-              {...(developers.find(
-                (dev) => dev._id === selectedDeveloper
-              ) as DeveloperCardProps)}
+              isLoading={loading}
+              developer={
+                developers.find((dev) => dev._id === selectedDeveloper) || {}
+              }
             />
           ) : (
             <Card className="border-0 text-center">
               <Card.Body>
+                {/* Hide RoundLogo on small screens */}
                 <Card.Img
                   src={RoundLogo}
                   alt="Round DevDemand Logo"
                   style={{ height: "400px" }}
+                  className="d-none d-lg-block"
                 />
                 <Card.Title as="h1">
                   Welcome to{" "}
