@@ -26,7 +26,17 @@ const Dashboard = () => {
   useEffect(() => {
     if (data?.developers) {
       const validDevelopers = data.developers.filter(
-        (dev: any) => dev.firstName && dev.lastName && dev.email && dev.bio
+        (dev: any) =>
+          dev.firstName &&
+          dev.lastName &&
+          dev.email &&
+          dev.bio &&
+          dev.imageUrl &&
+          dev.telephone &&
+          dev.city &&
+          dev.state &&
+          dev.portfolioLink &&
+          dev.githubLink
       );
       setDevelopers(shuffleArray(validDevelopers));
     }
