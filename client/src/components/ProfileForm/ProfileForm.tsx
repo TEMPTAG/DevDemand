@@ -13,14 +13,19 @@ import './ProfileForm.css';
 
 export default function ProfileForm() {
 
-    // Ref for the file input
+    // Reference to the file input element for profile picture upload
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // State to hold the uploaded profile picture
     const [developerPicture, setDeveloperPicture] = useState<File | undefined>(undefined);
+
+    // Preview URL for the uploaded profile picture
     const previewURL = developerPicture ? URL.createObjectURL(developerPicture) : "/assets/images/profile-placeholder.png"
 
+    // GraphQL query to fetch the developer's profile
     const { loading, error, data, refetch } = useQuery(GET_ME);
 
-    // State to hold form data
+    // State to hold form data, initialized with default values
     const [formData, setFormData] = useState<Developer>({
         _id: '',
         imageUrl: '',
@@ -32,15 +37,16 @@ export default function ProfileForm() {
         state: '',
         portfolioLink: '',
         githubLink: '',
-        hourlyRate: 1,
+        hourlyRate: 0,
         bio: ''
     });
 
+    // Update the form data when the query result changes
     useEffect(() => {
         if (data) {
-            console.log("me", data.me);
+            console.log("me", data.me); // Log the fetched profile data for debugging
             const { _id, imageUrl, firstName, lastName, telephone, email, city, state, portfolioLink, githubLink, hourlyRate, bio } = data.me;
-            const parsedHourlyRate: number = Number(hourlyRate);
+            const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
             setFormData({
                 _id,
                 imageUrl,
@@ -56,6 +62,7 @@ export default function ProfileForm() {
                 bio
             });
         } else {
+            // Reset form data if no data is returned
             setFormData({
                 _id: '',
                 imageUrl: '',
@@ -67,25 +74,28 @@ export default function ProfileForm() {
                 state: '',
                 portfolioLink: '',
                 githubLink: '',
-                hourlyRate: 1,
+                hourlyRate: 0,
                 bio: ''
             });
         }
-    }, [data]);
+    }, [data]); // Re-run the effect when data changes
 
-    // State to hold errors
+    // State to hold validation errors for the form fields
     const [errors, setErrors] = useState<Errors>({});
 
-    // State to hold delete confirmation modal
+     // State to manage the visibility of the delete confirmation modal
     const [showModal, setShowModal] = useState(false);
 
+    // Functions to handle the modal visibility
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    // Trigger the delete confirmation modal when user clicks delete
     const handleDelete = () => {
         handleShowModal();
     };
     
+    // Function to handle deletion confirmation and actually delete the profile
     const handleDeleteConfirmed = async () => {
         try {
             await deleteDev({ variables: { id: formData._id } });
@@ -98,13 +108,13 @@ export default function ProfileForm() {
         }
     };
 
-    // Apollo hooks
+    // Apollo mutation hooks for updating and deleting developer profiles
     const [updateDev] = useMutation(UPDATE_DEV, {
-        refetchQueries: [{ query: GET_ME }],
+        refetchQueries: [{ query: GET_ME }], // Refetch the user data after mutation
     });
     const [deleteDev] = useMutation(DELETE_DEV, {
         onCompleted: () => {
-            refetch();
+            refetch(); // Refetch data after profile deletion
         }
     })
 
