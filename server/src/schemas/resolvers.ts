@@ -14,10 +14,12 @@ interface AddDeveloperArgs {
 
 interface UpdateDeveloperArgs {
   input: {
-    imageUrl?: string;
+    _id: string;
     firstName?: string;
     lastName?: string;
+    imageUrl?: string;
     telephone?: string;
+    email?: string;
     city?: string;
     state?: string;
     portfolioLink?: string;
