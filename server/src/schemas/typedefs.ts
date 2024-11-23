@@ -13,7 +13,7 @@ const typeDefs = gql`
     state: String
     portfolioLink: String
     githubLink: String
-    hourlyRate: Float
+    hourlyRate: Int
     bio: String
   }
 
@@ -34,18 +34,18 @@ const typeDefs = gql`
 
   # Input type for updating developer details
   input UpdateDeveloperInput {
-    email: String!
+    _id: ID
     imageUrl: String
     firstName: String
     lastName: String
     telephone: String
+    email: String!
     city: String
     state: String
     portfolioLink: String
     githubLink: String
     hourlyRate: Float
     bio: String
-    password: String
   }
 
   # Mutations
