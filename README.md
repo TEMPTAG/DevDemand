@@ -242,16 +242,17 @@ _To install this project locally, using your terminal application, please follow
     query getDeveloperById($id: ID!) {
       developer(id: $id) {
         _id
-        email
+        imageUrl
         firstName
         lastName
+        telephone
+        email
         city
         state
-        hourlyRate
-        bio
         portfolioLink
         githubLink
-        imageUrl
+        hourlyRate
+        bio
       }
     }
     ```
@@ -262,15 +263,17 @@ _To install this project locally, using your terminal application, please follow
     query me {
       me {
         _id
-        email
+        imageUrl
         firstName
         lastName
+        telephone
+        email
         city
         state
-        hourlyRate
-        bio
         portfolioLink
         githubLink
+        hourlyRate
+        bio
       }
     }
     ```
@@ -310,14 +313,18 @@ _To install this project locally, using your terminal application, please follow
     ```graphql
     mutation updateDeveloper($input: UpdateDeveloperInput!) {
       updateDeveloper(input: $input) {
-        _id
+        imageUrl
         firstName
         lastName
+        telephone
         email
         city
         state
+        portfolioLink
+        githubLink
         hourlyRate
         bio
+        imageUrl
       }
     }
     ```

@@ -1,36 +1,52 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Modal, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, Modal, Button } from "react-bootstrap"; // Import React-Bootstrap components
 import auth from "../utils/auth";
 import LoginForm from "./Modals/Login";
 import SignupForm from "./Modals/Signup";
 
+// Logo image path
 const Logo = "/assets/logos/DDHeaderLogo.svg";
 
-const Navbar = () => {
+// Navbar component
+const Header: React.FC = () => {
+  // State to check login status
   const [loginCheck, setLoginCheck] = useState(false);
+
+  // State to control modal visibility
   const [showModal, setShowModal] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+
+  // State to toggle between Login and Signup forms
+  const [isLogin, setIsLogin] = useState(true);
+
+  // React Router's navigate function for redirection
   const navigate = useNavigate();
 
+  // Check login status when the component mounts
   useEffect(() => {
     setLoginCheck(auth.loggedIn());
   }, []);
 
+  // Handle logout logic
   const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    auth.logout();
-    setLoginCheck(false);
-    window.location.assign("/");
+    auth.logout(); // Call the logout function from the auth utility
+    setLoginCheck(false); // Update the login state
+    window.location.assign("/"); // Redirect to the home page
   };
 
+  // Toggle modal visibility
   const toggleModal = () => setShowModal(!showModal);
 
+  // Switch modal content to the Signup form
   const switchToSignup = () => setIsLogin(false);
+
+  // Switch modal content to the Login form
   const switchToLogin = () => setIsLogin(true);
 
   return (
     <>
+      {/* Top banner message */}
       <div
         className="text-center text-white bg-primary py-1"
         style={{ fontSize: "13px" }}
@@ -38,80 +54,89 @@ const Navbar = () => {
         The Right Talent, Right Now - Browse Our Developer Database and Take
         Your Project from Dream to Deployed!
       </div>
-      <div className="container-fluid mb-4 shadow">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <Link className="navbar-brand" to="/">
+
+      {/* Navbar */}
+      <Navbar bg="light" expand="lg" className="mb-4 shadow">
+        <Container>
+          {/* Logo and brand link */}
+          <Navbar.Brand as={Link} to="/">
             <img src={Logo} alt="DEVDemand Logo" style={{ height: "100px" }} />
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#mainMenu"
-            aria-controls="mainMenu"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="mainMenu">
-            <ul className="navbar-nav ms-auto mb-2 mb-l-0">
+          </Navbar.Brand>
+
+          {/* Responsive toggle button */}
+          <Navbar.Toggle aria-controls="mainMenu" />
+
+          {/* Navbar links */}
+          <Navbar.Collapse id="mainMenu">
+            <Nav className="ms-auto">
               {!loginCheck ? (
-                <li className="nav-item">
+                // Show Developer Login button if not logged in
+                <Nav.Item>
                   <Button
-                    className="nav-link"
                     variant="link"
+                    className="nav-link"
                     onClick={toggleModal}
                   >
                     Developer Login
                   </Button>
-                </li>
+                </Nav.Item>
               ) : (
+                // Show My Account and Logout links if logged in
                 <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/developer">
+                  <Nav.Item>
+                    <Nav.Link as={Link} to="/developer">
                       My Account
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="nav-link" to="/" onClick={handleLogout}>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link as={Link} to="/" onClick={handleLogout}>
                       Logout
-                    </Link>
-                  </li>
+                    </Nav.Link>
+                  </Nav.Item>
                 </>
               )}
-            </ul>
-          </div>
-        </nav>
-      </div>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
+      {/* Login/Signup Modal */}
       <Modal show={showModal} onHide={toggleModal}>
+        {/* Modal Header */}
         <Modal.Header closeButton>
           <Modal.Title>{isLogin ? "Login" : "Sign Up"}</Modal.Title>
         </Modal.Header>
+
+        {/* Modal Body */}
         <Modal.Body>
           {isLogin ? (
+            // Login Form
             <LoginForm
               handleModalClose={() => {
                 toggleModal();
-                navigate("/developer"); // Redirect after login
+                navigate("/developer"); // Redirect after successful login
               }}
             />
           ) : (
+            // Signup Form
             <SignupForm
               handleModalClose={() => {
                 toggleModal();
-                navigate("/developer"); // Redirect after signup
+                navigate("/developer"); // Redirect after successful signup
               }}
             />
           )}
         </Modal.Body>
+
+        {/* Modal Footer */}
         <Modal.Footer>
           {isLogin ? (
+            // Link to switch to Signup form
             <Button variant="link" onClick={switchToSignup}>
               Don’t have an account? Sign Up
             </Button>
           ) : (
+            // Link to switch to Login form
             <Button variant="link" onClick={switchToLogin}>
               Already have an account? Login
             </Button>
@@ -122,4 +147,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;
