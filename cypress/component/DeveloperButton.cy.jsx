@@ -1,53 +1,39 @@
 import React from 'react';
 import { mount } from 'cypress/react18';
 import DeveloperButton from '../../client/src/components/DashboardComponents/DeveloperButton';
-import mockDevelopers from '../fixtures/mockSeed.json';
+// import mockDevelopers from '../fixtures/mockSeed.json';
 import '@testing-library/cypress/add-commands';
 
-describe('Developer Button Component', () => {
+// cy.intercept('POST', 'http://localhost:3000/graphql', (req) =>
+  describe('Developer Button Component', () => {
     beforeEach(() => {
-        // cy.intercept('POST', 'http://localhost:3000/graphql', (req) =>
       cy.intercept({
-          method: 'POST',
-          url: '/graphql'
-        },
-        {
-          fixture: 'mockSeed.json',
-          statusCode: 200
-        }
-        ).as('mockDevelopers');
-      });
-  
-    it('should render a developer button', () => {
-      mount(<DeveloperButton />);
-      cy.get('button').should('exist');
-    //   cy.get('button').contains('').click();
+        method: 'POST',
+        url: '/graphql'
+      },
+      {
+        fixture: 'mockSeed.json',
+        statusCode: 200
+      }).as('mockDevelopers');
     });
   
-    // it('should answer questions and complete the quiz', () => {
-    //   cy.mount(<Quiz />);
-    //   cy.get('button').contains('Start Quiz').click();
+    it('should render a developer button', () => {
+      const developer = {
+        _id: "00000000001",
+        imageUrl: "https://avatar.iran.liara.run/public",
+        firstName: "John",
+        lastName: "Doe",
+        bio: "Hello! I'm JD, a full-stack developer. I work hard. Front-end and Back-end.",
+        onClick: cy.stub(),
+        isActive: false
+      };
   
-    //   // Answer questions
-    //   cy.get('button').contains('1').click();
-  
-    //   // Verify the quiz completion
-    //   cy.get('.alert-success').should('be.visible').and('contain', 'Your score');
-    // });
-  
-    // it('should restart the quiz after completion', () => {
-    //   cy.mount(<Quiz />);
-    //   cy.get('button').contains('Start Quiz').click();
-  
-    //   // Answer questions
-    //   cy.get('button').contains('1').click();
-  
-    //   // Restart the quiz
-    //   cy.get('button').contains('Take New Quiz').click();
-  
-    //   // Verify the quiz is restarted
-    //   cy.get('.card').should('be.visible');
-    //   cy.get('h2').should('not.be.empty');
-    // });
+      mount(<DeveloperButton {...developer} />);
+      cy.get('button').should('exist');
+      cy.get('img[src*="avatar.iran.liara.run"]').should('exist');
+      cy.contains("John Doe").should('exist');
+      cy.wait(2000);
+      cy.contains("Hello! I'm JD, a full-stack developer. I work hard. Front-end and Back-end.").should('exist');
+    });
   });
   
