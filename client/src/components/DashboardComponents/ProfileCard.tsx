@@ -80,7 +80,7 @@ const DeveloperCard: React.FC<DeveloperCardProps> = ({
             md={5}
             className="d-flex flex-column align-items-center justify-content-center"
           >
-            <Card.Text className="d-flex flex-column align-items-start ">
+            <Card.Text className="d-flex flex-column align-items-start m-3">
               {/* Developer's Location - City & State */}
               <Card.Text className="d-flex align-items-center">
                 <FaMapMarkerAlt className="me-3" /> {developer.city},{" "}
