@@ -6,23 +6,32 @@ import ErrorPage from "./ErrorPage";
 import DeveloperCard from "../components/DashboardComponents/ProfileCard";
 import DeveloperButton from "../components/DashboardComponents/DeveloperButton";
 
+// Paths for logo images
 const Logo = "/assets/logos/DEVDemandLogo.svg";
 const RoundLogo = "/assets/logos/DDRoundLogo.svg";
 
+// Utility function to shuffle an array randomly
 const shuffleArray = (array: any[]) => {
   return array
-    .map((item) => ({ ...item, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ sort, ...rest }) => rest);
+    .map((item) => ({ ...item, sort: Math.random() })) // Add a random sort key to each item
+    .sort((a, b) => a.sort - b.sort) // Sort items based on the random key
+    .map(({ sort, ...rest }) => rest); // Remove the sort key
 };
 
+// Main Dashboard component
 const Dashboard = () => {
+  // Apollo Client's useQuery hook to fetch developer data
   const { loading, error, data } = useQuery(GET_DEVELOPERS);
+
+  // State to store the list of developers
   const [developers, setDevelopers] = useState<any[]>([]);
+
+  // State to track the currently selected developer
   const [selectedDeveloper, setSelectedDeveloper] = useState<string | null>(
     null
   );
 
+  // useEffect to process and shuffle developer data once it's fetched
   useEffect(() => {
     if (data?.developers) {
       const validDevelopers = data.developers.filter(
@@ -36,17 +45,19 @@ const Dashboard = () => {
           dev.city &&
           dev.state &&
           dev.portfolioLink &&
-          dev.githubLink
+          dev.githubLink // Ensure developer data is complete
       );
-      setDevelopers(shuffleArray(validDevelopers));
+      setDevelopers(shuffleArray(validDevelopers)); // Shuffle and update the developer list
     }
   }, [data]);
 
+  // Render error page if there is a query error
   if (error) {
     console.error("Error fetching developers:", error);
     return <ErrorPage />;
   }
 
+  // Show a loading spinner while data is being fetched
   if (loading) {
     return (
       <div className="text-center mt-5">
@@ -56,6 +67,7 @@ const Dashboard = () => {
     );
   }
 
+  // Display a message if no developers are available
   if (developers.length === 0) {
     return (
       <div className="text-center mt-5">
@@ -75,16 +87,17 @@ const Dashboard = () => {
                 <strong>Browse our Developers:</strong>
               </Card.Title>
               <div className="d-flex flex-column">
+                {/* Render DeveloperButton for each developer */}
                 {developers.map((dev) => (
                   <DeveloperButton
-                    key={dev._id}
-                    _id={dev._id}
-                    imageUrl={dev.imageUrl}
-                    firstName={dev.firstName}
-                    lastName={dev.lastName}
-                    bio={dev.bio}
-                    onClick={(id) => setSelectedDeveloper(id)}
-                    isActive={dev._id === selectedDeveloper}
+                    key={dev._id} // Unique key for each developer
+                    _id={dev._id} // Developer's ID
+                    imageUrl={dev.imageUrl} // Developer's profile image
+                    firstName={dev.firstName} // Developer's first name
+                    lastName={dev.lastName} // Developer's last name
+                    bio={dev.bio} // Developer's bio
+                    onClick={(id) => setSelectedDeveloper(id)} // Set selected developer on click
+                    isActive={dev._id === selectedDeveloper} // Highlight if active
                   />
                 ))}
               </div>
@@ -99,16 +112,18 @@ const Dashboard = () => {
           className="d-flex flex-column justify-content-center align-items-center"
         >
           {selectedDeveloper ? (
+            // Show selected developer's detailed profile
             <DeveloperCard
-              isLoading={loading}
+              isLoading={loading} // Pass loading state
               developer={
-                developers.find((dev) => dev._id === selectedDeveloper) || {}
+                developers.find((dev) => dev._id === selectedDeveloper) || {} // Find developer by ID
               }
             />
           ) : (
+            // Default view when no developer is selected
             <Card className="border-0 text-center">
               <Card.Body>
-                {/* Hide RoundLogo on small screens */}
+                {/* Display RoundLogo on large screens */}
                 <Card.Img
                   src={RoundLogo}
                   alt="Round DevDemand Logo"
