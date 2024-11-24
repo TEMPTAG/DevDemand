@@ -1,0 +1,17 @@
+[
+    {  
+        "_id": "00000000001",
+        "email": "test@test.com",
+        "password": "password123",
+        "imageUrl": "https://avatar.iran.liara.run/public",
+        "firstName": "John",
+        "lastName": "Doe",
+        "telephone": "888-888-8888",
+        "city": "New York",
+        "state": "NY",
+        "portfolioLink": "https://placehold.co/",
+        "githubLink": "https://placehold.co/",
+        "hourlyRate": 150,
+        "bio": "Hello! I'm JD, a full-stack developer. I work hard. Front-end and Back-end."
+    }
+]

@@ -8,7 +8,10 @@ export default defineConfig({
       framework: 'react',
       bundler: 'vite',
       viteConfig,
+      // bundler: "webpack",
     },
+    // Possible specPattern values that may help file to work
+    // specPattern: "cypress/component/*/.cy.jsx",
   },
 
   e2e: {
