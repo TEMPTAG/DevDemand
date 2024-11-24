@@ -41,6 +41,9 @@ export default function ProfileForm() {
         bio: ''
     });
 
+    // State to hold form confirmation or error message
+    const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
     // Update the form data when the query result changes
     useEffect(() => {
         if (data) {
@@ -154,18 +157,23 @@ export default function ProfileForm() {
         const validationErrors = validateProfileForm(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            setMessage({ text: 'Please check the highlighted fields', type: 'error' });
+            return;
         }
         
         try {
             await updateDev({
                 variables: { input: formData },
             });
+            setMessage({ text: 'Profile updated successfully', type: 'success' });
             console.log('Profile updated successfully');
         } catch (error) {
+            setMessage({ text: 'Error updating profile', type: 'error' });
             console.error('Error updating profile:', error);
         }
     };
 
+    // Display loading state when fetching data
     if (loading) {
         return (
             <Container className="text-center mt-5">
@@ -175,6 +183,7 @@ export default function ProfileForm() {
         );
     }
 
+    // Display error state when there is an issue loading data
     if (error) {
         return (
             <Container className="text-center mt-5">
@@ -183,6 +192,7 @@ export default function ProfileForm() {
         );
     }
 
+    // Convert the selected file to a Base64 string for uploading
     function convertFileToBase64 (file: File | undefined): Promise<string> {
         if (!file) {
           return Promise.resolve('');
@@ -195,6 +205,7 @@ export default function ProfileForm() {
         });
       };
 
+    // Trigger file input dialog when the profile picture is clicked
     function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target?.files?.[0];
         setDeveloperPicture(file);
@@ -238,6 +249,7 @@ export default function ProfileForm() {
                     </Form.Text>
                 </Form.Group>
 
+                {/* Render input fields for developer profile */}
                 <Form.Group className="mb-3" controlId="firstName">
                     <Form.Label>First Name</Form.Label>
                     <Form.Control
@@ -407,18 +419,17 @@ export default function ProfileForm() {
                         {errors.bio}
                     </Form.Control.Feedback>
                 </Form.Group>
-                        
-                {/* <Button variant="primary" type="submit">
-                    Submit
-                </Button> */}
+
                 <Button variant="primary" type="submit" className="custom-btn">
                     {data?.me ? 'Update Profile' : 'Create Profile'}
                 </Button>
+
                 {data?.me && (
                     <>
                         <Button variant="danger" type="button" onClick={handleDelete} style={{ marginLeft: '10px' }}>
                             Delete Profile
                         </Button>
+                        
                         <Modal show={showModal} onHide={handleCloseModal} centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>Confirm Delete</Modal.Title>
@@ -434,7 +445,20 @@ export default function ProfileForm() {
                             </Modal.Footer>
                         </Modal>
                     </>
+                )}
+                
+                {/* Display profile update message */}
+                <div style={{ display: 'block', width: '100%',  paddingTop: '10px' }}>
+                {message && (
+                    <Form.Text
+                        className={`form-message ${message.type}`}
+                        style={{ color: message.type === 'success' ? 'green' : 'red', 
+                        }}
+                    >
+                        {message.text}
+                    </Form.Text>
             )}
+            </div>
             </Form>
         </Container>
     );
