@@ -1,40 +1,35 @@
-# Workflow name
-name: Deploy To Render
+name: Deploy to Render
 
-# Trigger workflow on push and pull requests to the main branch
 on:
   push:
-    branches: [main] # Run the workflow when there is a push to the main branch
+    branches:
+      - main
   pull_request:
     branches:
-      - main # Run the workflow for pull requests targeting the main branch
+      - main
 
 jobs:
-  # Continuous Integration job for deployment
-  ci:
-    name: Deploy To Render
+  deploy:
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: mongo:5.0
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
-      # Step 1: Check out the repository code
-      - uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v3
 
-        # Step 2: Deploy to Render, only on main branch
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
       - name: Deploy
-        # Only run this step if the branch is main
         if: github.ref == 'refs/heads/main'
-        # Use secret for Render deploy hook URL
         env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
-          curl "$deploy_url"
+            curl "$DEPLOY_URL"
