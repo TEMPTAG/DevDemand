@@ -1,61 +1,47 @@
-# Workflow name
-name: Checking Tests
+name: Cypress Tests
 
-# Trigger workflow on pull requests to the develop branch
 on:
   pull_request:
     branches:
       - develop
 
 jobs:
-  # Job to run tests
   test:
-    name: Checking Tests
     runs-on: ubuntu-latest
 
-    # Set up MongoDB service for tests
-    services:
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017 # Expose MongoDB port
-        options: >-
-          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      # Checkout code from the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v3
 
-      # Set up the Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 21.x
+          node-version: '20'
 
-      # Install dependencies
       - name: Install dependencies
         run: npm install
+        env:
+          CI: true
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
-      # Build the application
-      - name: Build App
-        run: npm run build
+      - name: Start the server and run Cypress tests
+        run: |
+          npm run build && npm run develop &
+          sleep 5
+          npm run test-component
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
-      # Seed the database
-      - name: Seed database
-        run: npm run seed
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
 
-      # Start the server
-      - name: Start server
-        run: npm run start &
-
-      # Wait for the server to start
-      - name: Wait for server to start
-        run: npx wait-on http://localhost:3001
-
-      # Run cypress component tests
-      - name: Run cypress component tests
-        run: npm run test-component
+      - name: Upload test videos
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
