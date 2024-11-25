@@ -49,7 +49,6 @@ export default function ProfileForm() {
         if (data) {
             console.log("me", data.me); // Log the fetched profile data for debugging
             const { _id, imageUrl, firstName, lastName, telephone, email, city, state, portfolioLink, githubLink, hourlyRate, bio } = data.me;
-            const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
             const id = _id || '';
             const image = imageUrl || '';
             const fName = firstName || '';
@@ -60,6 +59,7 @@ export default function ProfileForm() {
             const sState = state || '';
             const pLink = portfolioLink || '';
             const gLink = githubLink || '';
+            const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
             const bInfo = bio || '';
 
             setFormData({
@@ -208,6 +208,19 @@ export default function ProfileForm() {
     // Trigger file input dialog when the profile picture is clicked
     function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target?.files?.[0];
+        // Validate file size
+    if (file && file.size > 1 * 1024 * 1024) {  // 1MB limit
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            imageUrl: "Profile image size must be less than 1MB.",
+        }));
+        return;  // Stop further processing if validation fails
+    } else {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            imageUrl: "",  // Clear the error if validation passes
+        }));
+    }
         setDeveloperPicture(file);
         convertFileToBase64(file).then((base64) => {
             console.log(base64);
@@ -247,6 +260,8 @@ export default function ProfileForm() {
                     <Form.Text className="text-muted">
                         <p>Click on the image to upload a new profile picture.</p>
                     </Form.Text>
+                    {errors.imageUrl && <div className="text-danger">{errors.imageUrl}</div>}
+
                 </Form.Group>
 
                 {/* Render input fields for developer profile */}

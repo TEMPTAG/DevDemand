@@ -6,6 +6,7 @@ const validateProfileForm = (developer: Developer) => {
     // Trim whitespace from form data
     const trimmedData: Developer = {
         ...developer,
+        imageUrl: developer.imageUrl,
         firstName: developer.firstName.trim(),
         lastName: developer.lastName.trim(),
         telephone: developer.telephone.trim(),
@@ -16,6 +17,11 @@ const validateProfileForm = (developer: Developer) => {
         githubLink: developer.githubLink?.trim() ?? '',
         bio: developer.bio.trim()
     };
+
+    // Validate image 
+    if (!trimmedData.imageUrl) {
+        errors.imageUrl = "Profile image is required.";
+    }
 
     // Validate first name
     if (!trimmedData.firstName) {
