@@ -73,7 +73,7 @@ const DeveloperCard: React.FC<DeveloperCardProps> = ({
               {developer.state}
             </Card.Text>
             <Card.Text className="d-flex align-items-center">
-              <FaDollarSign className="me-3" /> ${developer.hourlyRate}/hr
+              <FaDollarSign className="me-3" /> ${developer.hourlyRate.toFixed(2)}/hr
             </Card.Text>
             <Card.Text className="d-flex align-items-center">
               <FaPhone style={{ transform: "scaleX(-1)" }} className="me-3" />
