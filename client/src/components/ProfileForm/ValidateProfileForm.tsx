@@ -66,17 +66,17 @@ const validateProfileForm = (developer: Developer) => {
     const urlRegex = /^(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))$/i;
 
     // Validate portfolio link
-    if (trimmedData.portfolioLink) {
-        if (!urlRegex.test(trimmedData.portfolioLink)) {
-            errors.portfolioLink = 'Portfolio link must be a valid URL starting with http:// or https://';
-        }
+    if (!trimmedData.portfolioLink) {
+        errors.portfolioLink = 'Portfolio link is required';
+    } else if (!urlRegex.test(trimmedData.portfolioLink)) {
+        errors.portfolioLink = 'Portfolio link must be a valid URL starting with http:// or https://';
     }
-    
+
     // Validate GitHub link
-    if (trimmedData.githubLink) {
-        if (!urlRegex.test(trimmedData.githubLink)) {
-            errors.githubLink = 'GitHub link must be a valid URL starting with http:// or https://';
-        }
+    if (!trimmedData.githubLink) {
+        errors.githubLink = 'GitHub link is required';
+    } else if (!urlRegex.test(trimmedData.githubLink)) {
+        errors.githubLink = 'GitHub link must be a valid URL starting with http:// or https://';
     }
 
     // Validate hourly rate
