@@ -392,7 +392,7 @@ export default function ProfileForm() {
                             name="hourlyRate"
                             placeholder="Enter your hourly rate"
                             className="no-spinner form-control"
-                            value={formData.hourlyRate}
+                            value={formData.hourlyRate || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={!!errors.hourlyRate}

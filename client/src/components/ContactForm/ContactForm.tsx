@@ -1,10 +1,11 @@
+// Contact Form for basis of contact modal and future development as internal messaging system
 import { useState } from React;
 import ValidateContactForm from './ValidateContactForm.tsx';
 import './ContactForm.css';
 
 export default function ContactForm() {
     const [contactForm, setContactForm] = useState({
-        developerID: '', // this will need to be supplied
+        developerID: '',
         firstName: '',
         lastName: '',
         telephone: '',
