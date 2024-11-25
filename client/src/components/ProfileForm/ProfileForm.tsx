@@ -59,7 +59,7 @@ export default function ProfileForm() {
             const sState = state || '';
             const pLink = portfolioLink || '';
             const gLink = githubLink || '';
-            const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
+            const parsedHourlyRate = hourlyRate || '';
             const bInfo = bio || '';
 
             setFormData({
@@ -209,11 +209,11 @@ export default function ProfileForm() {
     function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target?.files?.[0];
         // Validate file size
-    if (file && file.size > 1 * 1024 * 1024) {  // 1MB limit
-        setErrors((prevErrors) => ({
-            ...prevErrors,
-            imageUrl: "Profile image size must be less than 1MB.",
-        }));
+        if (file && file.size > 1 * 1024 * 1024) {  // 1MB limit
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                imageUrl: "Profile image size must be less than 1MB.",
+            }));
         return;  // Stop further processing if validation fails
     } else {
         setErrors((prevErrors) => ({
@@ -445,6 +445,7 @@ export default function ProfileForm() {
                             Delete Profile
                         </Button>
                         
+                        {/* Delete profile modal */}
                         <Modal show={showModal} onHide={handleCloseModal} centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>Confirm Delete</Modal.Title>
@@ -464,16 +465,16 @@ export default function ProfileForm() {
                 
                 {/* Display profile update message */}
                 <div style={{ display: 'block', width: '100%',  paddingTop: '10px' }}>
-                {message && (
-                    <Form.Text
-                        className={`form-message ${message.type}`}
-                        style={{ color: message.type === 'success' ? 'green' : 'red', 
-                        }}
-                    >
-                        {message.text}
-                    </Form.Text>
-            )}
-            </div>
+                    {message && (
+                        <Form.Text
+                            className={`form-message ${message.type}`}
+                            style={{ color: message.type === 'success' ? 'green' : 'red', 
+                            }}
+                        >
+                            {message.text}
+                        </Form.Text>
+                    )}
+                </div>
             </Form>
         </Container>
     );
