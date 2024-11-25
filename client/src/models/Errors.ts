@@ -1,5 +1,4 @@
 export interface Errors {
-    imageUrl?: string;
     firstName?: string;
     lastName?: string;
     telephone?: string;
