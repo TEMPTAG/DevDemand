@@ -49,7 +49,6 @@ export default function ProfileForm() {
         if (data) {
             console.log("me", data.me); // Log the fetched profile data for debugging
             const { _id, imageUrl, firstName, lastName, telephone, email, city, state, portfolioLink, githubLink, hourlyRate, bio } = data.me;
-            const parsedHourlyRate: number = Number(hourlyRate); // Parse hourlyRate as a number
             const id = _id || '';
             const image = imageUrl || '';
             const fName = firstName || '';
@@ -60,6 +59,7 @@ export default function ProfileForm() {
             const sState = state || '';
             const pLink = portfolioLink || '';
             const gLink = githubLink || '';
+            const parsedHourlyRate = hourlyRate || '';
             const bInfo = bio || '';
 
             setFormData({
@@ -208,6 +208,19 @@ export default function ProfileForm() {
     // Trigger file input dialog when the profile picture is clicked
     function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target?.files?.[0];
+        // Validate file size
+        if (file && file.size > 1 * 1024 * 1024) {  // 1MB limit
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                imageUrl: "Profile image size must be less than 1MB.",
+            }));
+        return;  // Stop further processing if validation fails
+    } else {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            imageUrl: "",  // Clear the error if validation passes
+        }));
+    }
         setDeveloperPicture(file);
         convertFileToBase64(file).then((base64) => {
             console.log(base64);
@@ -247,6 +260,8 @@ export default function ProfileForm() {
                     <Form.Text className="text-muted">
                         <p>Click on the image to upload a new profile picture.</p>
                     </Form.Text>
+                    {errors.imageUrl && <div className="text-danger">{errors.imageUrl}</div>}
+
                 </Form.Group>
 
                 {/* Render input fields for developer profile */}
@@ -392,7 +407,7 @@ export default function ProfileForm() {
                             name="hourlyRate"
                             placeholder="Enter your hourly rate"
                             className="no-spinner form-control"
-                            value={formData.hourlyRate}
+                            value={formData.hourlyRate || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={!!errors.hourlyRate}
@@ -430,6 +445,7 @@ export default function ProfileForm() {
                             Delete Profile
                         </Button>
                         
+                        {/* Delete profile modal */}
                         <Modal show={showModal} onHide={handleCloseModal} centered>
                             <Modal.Header closeButton>
                                 <Modal.Title>Confirm Delete</Modal.Title>
@@ -449,16 +465,16 @@ export default function ProfileForm() {
                 
                 {/* Display profile update message */}
                 <div style={{ display: 'block', width: '100%',  paddingTop: '10px' }}>
-                {message && (
-                    <Form.Text
-                        className={`form-message ${message.type}`}
-                        style={{ color: message.type === 'success' ? 'green' : 'red', 
-                        }}
-                    >
-                        {message.text}
-                    </Form.Text>
-            )}
-            </div>
+                    {message && (
+                        <Form.Text
+                            className={`form-message ${message.type}`}
+                            style={{ color: message.type === 'success' ? 'green' : 'red', 
+                            }}
+                        >
+                            {message.text}
+                        </Form.Text>
+                    )}
+                </div>
             </Form>
         </Container>
     );
