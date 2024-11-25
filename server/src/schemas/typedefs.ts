@@ -13,7 +13,7 @@ const typeDefs = gql`
     state: String
     portfolioLink: String
     githubLink: String
-    hourlyRate: Int
+    hourlyRate: Float
     bio: String
   }
 
