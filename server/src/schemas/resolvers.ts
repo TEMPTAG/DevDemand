@@ -1,3 +1,4 @@
+// Import necessary modules and utilities
 import Developer from "../models/index.js";
 import { signToken, AuthenticationError } from "../utils/auth.js";
 
@@ -33,15 +34,19 @@ interface DeleteDeveloperArgs {
   id: string;
 }
 
+// Define GraphQL resolvers for queries and mutations
 const resolvers = {
   Query: {
+    // Retrieve the currently logged in developer's information
     me: async (_parent: any, _args: any, context: any) => {
       if (context.developer) {
+        // Find the developer by their ID from the context
         return Developer.findById(context.developer._id);
       }
       throw new AuthenticationError("You must be logged in.");
     },
 
+    // Fetch all developers from the database
     developers: async () => {
       try {
         return await Developer.find({});
@@ -52,6 +57,7 @@ const resolvers = {
   },
 
   Mutation: {
+    // Authenticate a developer and return a token
     login: async (_parent: any, { email, password }: LoginDeveloperArgs) => {
       const developer = await Developer.findOne({ email });
       if (!developer) {
@@ -67,6 +73,7 @@ const resolvers = {
       return { token, developer };
     },
 
+    // Create a new developer account
     addDeveloper: async (
       _parent: any,
       { email, password }: AddDeveloperArgs
@@ -81,6 +88,7 @@ const resolvers = {
       return { token, developer };
     },
 
+    // Update an existing developer's information
     updateDeveloper: async (
       _parent: any,
       { input }: UpdateDeveloperArgs,
@@ -105,6 +113,7 @@ const resolvers = {
       return updatedDeveloper;
     },
 
+    // Delete a developer's account
     deleteDeveloper: async (
       _parent: any,
       { id }: DeleteDeveloperArgs,
@@ -130,4 +139,5 @@ const resolvers = {
   },
 };
 
+// Export the resolvers for use in the GraphQL schema
 export default resolvers;
